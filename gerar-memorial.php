@@ -118,7 +118,6 @@ try {
                     </div>
                     <div class="post-body">
                         <div class="post-rich-text">
-                            <p><strong>memorial_key:</strong> <?= e($memorial['memorial_key']) ?></p>
                             <p>
                                 <strong>URL:</strong> <?= e(appUrl('?memorial_key=' . $memorial['memorial_key'])) ?>
                                 <button class="copy-button" type="button" data-copy-text="<?= e(appUrl('?memorial_key=' . $memorial['memorial_key'])) ?>">Copy</button>
