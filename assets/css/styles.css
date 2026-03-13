@@ -230,8 +230,8 @@ textarea {
 }
 
 .attachment-picker-button {
-  width: 60px;
-  height: 60px;
+  width: 45px;
+  height: 45px;
   border: none;
   background: transparent;
   color: #8e8e96;
@@ -242,8 +242,8 @@ textarea {
 }
 
 .attachment-picker-button svg {
-  width: 60px;
-  height: 60px;
+  width: 45px;
+  height: 45px;
   fill: currentColor;
 }
 
