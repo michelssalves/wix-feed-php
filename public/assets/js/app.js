@@ -13,6 +13,7 @@ const elements = {
   postEditor: document.getElementById('post-editor'),
   postText: document.getElementById('post-text'),
   postImage: document.getElementById('post-image'),
+  postImageTrigger: document.getElementById('post-image-trigger'),
   selectedFileName: document.getElementById('selected-file-name'),
   attachmentStatusText: document.getElementById('attachment-status-text'),
   feedList: document.getElementById('feed-list'),
@@ -349,6 +350,10 @@ document.querySelectorAll('[data-editor-emoji]').forEach((button) => {
     document.execCommand('insertText', false, emoji);
     syncEditorInput();
   });
+});
+
+elements.postImageTrigger.addEventListener('click', () => {
+  elements.postImage.click();
 });
 
 elements.postEditor.addEventListener('input', syncEditorInput);
