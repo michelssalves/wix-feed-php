@@ -184,19 +184,6 @@ textarea {
   flex: none;
 }
 
-.toolbar-upload {
-  margin-left: auto;
-  width: 42px;
-  height: 42px;
-  border-radius: 12px;
-}
-
-.toolbar-upload svg {
-  width: 22px;
-  height: 22px;
-  fill: currentColor;
-}
-
 .emoji-group {
   display: flex;
   align-items: center;
@@ -228,28 +215,38 @@ textarea {
 .attachment-status {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-}
-
-.attachment-status__icon {
-  width: 20px;
-  height: 20px;
-  display: inline-grid;
-  place-items: center;
-  color: #8e8e96;
-}
-
-.attachment-status__icon svg {
-  width: 18px;
-  height: 18px;
-  fill: currentColor;
+  gap: 6px;
 }
 
 .attachment-status.is-active {
   color: #5f5c56;
 }
 
-.attachment-status.is-active .attachment-status__icon {
+.attachment-status-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.attachment-picker-button {
+  width: 26px;
+  height: 26px;
+  border: none;
+  background: transparent;
+  color: #8e8e96;
+  display: inline-grid;
+  place-items: center;
+  padding: 0;
+  cursor: pointer;
+}
+
+.attachment-picker-button svg {
+  width: 18px;
+  height: 18px;
+  fill: currentColor;
+}
+
+.attachment-picker-button:hover {
   color: var(--accent);
 }
 
@@ -729,13 +726,6 @@ textarea {
     flex-wrap: nowrap;
   }
 
-  .toolbar-upload {
-    margin-left: auto;
-    width: 38px;
-    height: 38px;
-    min-width: 38px;
-  }
-
   .rich-editor {
     min-height: 160px;
     padding: 14px;
@@ -749,11 +739,6 @@ textarea {
     gap: 6px;
     padding: 0 14px 12px;
     flex-wrap: wrap;
-  }
-
-  .attachment-status__icon {
-    width: 18px;
-    height: 18px;
   }
 
   .user-session {

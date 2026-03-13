@@ -93,23 +93,20 @@ try {
                             <button class="toolbar-button" type="button" data-editor-emoji="🫂" title="Abraco">🫂</button>
                             <button class="toolbar-button" type="button" data-editor-emoji="😢" title="Choro">😢</button>
                         </div>
-                        <button class="toolbar-button toolbar-upload" id="post-image-trigger" type="button" title="Anexar imagem">
-                            <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
-                                <path d="M4 5.5A1.5 1.5 0 0 1 5.5 4h13A1.5 1.5 0 0 1 20 5.5v13a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 18.5v-13Zm1.5.5v8.336l3.624-3.624a1 1 0 0 1 1.414 0l2.208 2.208 2.71-3.388a1 1 0 0 1 1.562.01L18.5 11.52V6h-13ZM18.5 18.5v-3.78l-2.26-2.938-2.62 3.275a1 1 0 0 1-1.477.089l-2.312-2.312L5.5 17.164V18.5h13ZM8.75 10.25a1.75 1.75 0 1 0 0-3.5 1.75 1.75 0 0 0 0 3.5Z"/>
-                            </svg>
-                        </button>
                     </div>
                     <div id="post-editor" class="rich-editor" contenteditable="true" data-placeholder="Escreva aqui"></div>
                     <input type="hidden" id="post-text" name="text">
                     <input type="file" id="post-image" name="image" accept="image/*" hidden>
                     <div class="editor-footer">
-                        <div id="selected-file-name" class="attachment-status field-help">
-                            <span class="attachment-status__icon" aria-hidden="true">
+                        <div class="attachment-status-group">
+                            <button class="attachment-picker-button" id="post-image-trigger" type="button" title="Anexar imagem" aria-label="Anexar imagem">
                                 <svg viewBox="0 0 24 24" focusable="false">
                                     <path d="M16.5 6.5a4.5 4.5 0 0 0-6.364 0l-5.303 5.303a3 3 0 1 0 4.243 4.243l5.657-5.657 1.414 1.414-5.657 5.657a5 5 0 1 1-7.071-7.071l5.303-5.303a6.5 6.5 0 1 1 9.192 9.192l-6.364 6.364a4 4 0 1 1-5.657-5.657l5.657-5.657 1.414 1.414-5.657 5.657a2 2 0 1 0 2.828 2.828l6.364-6.364A4.5 4.5 0 0 0 16.5 6.5Z"/>
                                 </svg>
-                            </span>
-                            <span id="attachment-status-text">Nenhum anexo</span>
+                            </button>
+                            <div id="selected-file-name" class="attachment-status field-help">
+                                <span id="attachment-status-text">Nenhum anexo</span>
+                            </div>
                         </div>
                         <span class="field-help">Imagem opcional, ate 2 MB</span>
                     </div>
@@ -117,7 +114,7 @@ try {
             </div>
 
             <div class="form-actions">
-                <button class="primary-button" type="submit">Salvar</button>
+                <button class="primary-button" type="submit">Enviar</button>
             </div>
         </form>
     </section>
