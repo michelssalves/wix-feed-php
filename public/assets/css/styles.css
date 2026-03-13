@@ -687,7 +687,6 @@ textarea {
     border-radius: 16px;
   }
 
-  .field-row,
   .comment-field-row {
     grid-template-columns: 1fr;
   }
