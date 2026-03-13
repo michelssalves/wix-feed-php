@@ -677,6 +677,22 @@ textarea {
   cursor: pointer;
 }
 
+.copy-button {
+  margin-left: 8px;
+  padding: 4px 10px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.04);
+  color: #f4f0e7;
+  cursor: pointer;
+  font-size: 12px;
+  line-height: 1.2;
+}
+
+.copy-button:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
 @media (max-width: 760px) {
   .app-shell {
     width: min(100% - 18px, 980px);

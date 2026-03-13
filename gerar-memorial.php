@@ -75,11 +75,13 @@ try {
         <?php if ($created): ?>
             <div class="flash-message is-success">
                 Key criada com sucesso:
-                <strong><?= e($created['memorial_key']) ?></strong><br>
+                <strong><?= e($created['memorial_key']) ?></strong>
+                <button class="copy-button" type="button" data-copy-text="<?= e($created['memorial_key']) ?>">Copy</button><br>
                 URL:
                 <a href="<?= e(appUrl('?memorial_key=' . $created['memorial_key'])) ?>" style="color:#f4f0e7">
                     <?= e(appUrl('?memorial_key=' . $created['memorial_key'])) ?>
                 </a>
+                <button class="copy-button" type="button" data-copy-text="<?= e(appUrl('?memorial_key=' . $created['memorial_key'])) ?>">Copy</button>
             </div>
         <?php endif; ?>
 
@@ -117,8 +119,14 @@ try {
                     </div>
                     <div class="post-body">
                         <div class="post-rich-text">
-                            <p><strong>memorial_key:</strong> <?= e($memorial['memorial_key']) ?></p>
-                            <p><strong>URL:</strong> <?= e(appUrl('?memorial_key=' . $memorial['memorial_key'])) ?></p>
+                            <p>
+                                <strong>memorial_key:</strong> <?= e($memorial['memorial_key']) ?>
+                                <button class="copy-button" type="button" data-copy-text="<?= e($memorial['memorial_key']) ?>">Copy</button>
+                            </p>
+                            <p>
+                                <strong>URL:</strong> <?= e(appUrl('?memorial_key=' . $memorial['memorial_key'])) ?>
+                                <button class="copy-button" type="button" data-copy-text="<?= e(appUrl('?memorial_key=' . $memorial['memorial_key'])) ?>">Copy</button>
+                            </p>
                         </div>
                     </div>
                 </article>
@@ -141,5 +149,26 @@ try {
         <?php endif; ?>
     </section>
 </main>
+<script>
+document.querySelectorAll('[data-copy-text]').forEach((button) => {
+    button.addEventListener('click', async () => {
+        const text = button.getAttribute('data-copy-text') || '';
+        if (!text) return;
+        try {
+            await navigator.clipboard.writeText(text);
+            const oldText = button.textContent;
+            button.textContent = 'Copied';
+            setTimeout(() => {
+                button.textContent = oldText;
+            }, 1200);
+        } catch (error) {
+            button.textContent = 'Error';
+            setTimeout(() => {
+                button.textContent = 'Copy';
+            }, 1200);
+        }
+    });
+});
+</script>
 </body>
 </html>
