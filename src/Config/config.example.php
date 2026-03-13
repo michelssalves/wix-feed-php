@@ -22,7 +22,9 @@ return [
         'client_id' => 'SEU_GOOGLE_CLIENT_ID.apps.googleusercontent.com',
     ],
     'upload' => [
-        'directory' => __DIR__ . '/../../public/uploads',
+        'directory' => is_dir(__DIR__ . '/../../uploads')
+            ? __DIR__ . '/../../uploads'
+            : __DIR__ . '/../../public/uploads',
         'public_path' => 'uploads',
         'max_size' => 2 * 1024 * 1024,
         'allowed_extensions' => ['jpg', 'jpeg', 'png', 'gif', 'webp'],
