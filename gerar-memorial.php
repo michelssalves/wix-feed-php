@@ -75,8 +75,7 @@ try {
         <?php if ($created): ?>
             <div class="flash-message is-success">
                 Key criada com sucesso:
-                <strong><?= e($created['memorial_key']) ?></strong>
-                <button class="copy-button" type="button" data-copy-text="<?= e($created['memorial_key']) ?>">Copy</button><br>
+                <strong><?= e($created['memorial_key']) ?></strong><br>
                 URL:
                 <a href="<?= e(appUrl('?memorial_key=' . $created['memorial_key'])) ?>" style="color:#f4f0e7">
                     <?= e(appUrl('?memorial_key=' . $created['memorial_key'])) ?>
@@ -119,13 +118,9 @@ try {
                     </div>
                     <div class="post-body">
                         <div class="post-rich-text">
-                            <p>
-                                <strong>memorial_key:</strong> <?= e($memorial['memorial_key']) ?>
-                                <button class="copy-button" type="button" data-copy-text="<?= e($memorial['memorial_key']) ?>">Copy</button>
-                            </p>
+                            <p><strong>memorial_key:</strong> <?= e($memorial['memorial_key']) ?></p>
                             <p>
                                 <strong>URL:</strong> <?= e(appUrl('?memorial_key=' . $memorial['memorial_key'])) ?>
-                                <button class="copy-button" type="button" data-copy-text="<?= e(appUrl('?memorial_key=' . $memorial['memorial_key'])) ?>">Copy</button>
                             </p>
                         </div>
                     </div>
