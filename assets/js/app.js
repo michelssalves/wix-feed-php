@@ -3,6 +3,7 @@ const state = {
   posts: [],
   isEmbedded: window.self !== window.top,
   memorialKey: window.APP_CONFIG.memorialKey || '',
+  memorialExists: true,
 };
 
 const elements = {
@@ -14,6 +15,7 @@ const elements = {
   postText: document.getElementById('post-text'),
   postImage: document.getElementById('post-image'),
   postImageTrigger: document.getElementById('post-image-trigger'),
+  postSubmitButton: document.getElementById('post-submit-button'),
   selectedFileName: document.getElementById('selected-file-name'),
   attachmentStatusText: document.getElementById('attachment-status-text'),
   feedList: document.getElementById('feed-list'),
@@ -114,6 +116,14 @@ function syncSessionUI() {
   elements.sessionAvatar.innerHTML = avatarMarkup(user.name, user.photo_url, true);
   elements.postAuthorName.value = user.name || '';
   elements.postAuthorName.readOnly = true;
+}
+
+function syncMemorialState() {
+  const disabled = !state.memorialKey || !state.memorialExists;
+  elements.postEditor.setAttribute('contenteditable', disabled ? 'false' : 'true');
+  elements.postEditor.classList.toggle('is-disabled', disabled);
+  elements.postImageTrigger.disabled = disabled;
+  elements.postSubmitButton.disabled = disabled;
 }
 
 function commentFormMarkup(postId) {
@@ -274,8 +284,14 @@ async function loadFeed() {
     state.posts = response.data.posts || [];
     state.currentUser = response.data.current_user || null;
     state.memorialKey = response.data.memorial_key || state.memorialKey;
+    state.memorialExists = !!response.data.memorial_exists;
     syncSessionUI();
+    syncMemorialState();
     renderFeed();
+
+    if (!state.memorialExists) {
+      showMessage('Memorial invalido ou nao cadastrado.', 'error');
+    }
   } catch (error) {
     showMessage(error.message, 'error');
   }

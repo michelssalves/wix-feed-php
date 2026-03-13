@@ -114,7 +114,7 @@ try {
             </div>
 
             <div class="form-actions">
-                <button class="primary-button" type="submit">Enviar</button>
+                <button id="post-submit-button" class="primary-button" type="submit">Enviar</button>
             </div>
         </form>
     </section>

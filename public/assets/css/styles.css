@@ -204,6 +204,11 @@ textarea {
   color: #7f7f7f;
 }
 
+.rich-editor.is-disabled {
+  opacity: 0.55;
+  pointer-events: none;
+}
+
 .editor-footer {
   display: flex;
   justify-content: space-between;

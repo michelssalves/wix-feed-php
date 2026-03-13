@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Services\Database;
 use App\Services\FeedService;
+use App\Services\MemorialService;
 
 require_once __DIR__ . '/bootstrap.php';
 
@@ -37,6 +38,11 @@ if ($text === '') {
 
 try {
     $pdo = Database::connection($config);
+    $memorialService = new MemorialService($pdo);
+    if (!$memorialService->exists($memorialKey)) {
+        jsonResponse(['success' => false, 'message' => 'Memorial nao encontrado.'], 422);
+    }
+
     $feedService = new FeedService($pdo);
 
     if (!$feedService->postExists($postId, $memorialKey)) {

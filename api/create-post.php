@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Services\Database;
 use App\Services\FeedService;
+use App\Services\MemorialService;
 use App\Services\UploadService;
 
 require_once __DIR__ . '/bootstrap.php';
@@ -36,6 +37,11 @@ try {
     $imagePath = $uploadService->uploadImage($_FILES['image'] ?? []);
 
     $pdo = Database::connection($config);
+    $memorialService = new MemorialService($pdo);
+    if (!$memorialService->exists($memorialKey)) {
+        jsonResponse(['success' => false, 'message' => 'Memorial nao encontrado.'], 422);
+    }
+
     $feedService = new FeedService($pdo);
     $feedService->createPost(
         $memorialKey,
