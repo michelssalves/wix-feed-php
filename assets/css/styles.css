@@ -225,12 +225,13 @@ textarea {
 .attachment-status-group {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  gap: 4px;
+  margin-left: -2px;
 }
 
 .attachment-picker-button {
-  width: 24px;
-  height: 24px;
+  width: 60px;
+  height: 60px;
   border: none;
   background: transparent;
   color: #8e8e96;
@@ -241,8 +242,8 @@ textarea {
 }
 
 .attachment-picker-button svg {
-  width: 18px;
-  height: 18px;
+  width: 60px;
+  height: 60px;
   fill: currentColor;
 }
 
