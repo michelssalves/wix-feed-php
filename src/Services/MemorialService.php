@@ -19,32 +19,34 @@ class MemorialService
         return (bool) $statement->fetchColumn();
     }
 
-    public function create(string $deceasedName): array
+    public function create(string $deceasedName, ?string $photoPath = null): array
     {
         do {
             $memorialKey = $this->generateKey();
         } while ($this->exists($memorialKey));
 
         $statement = $this->pdo->prepare(
-            'INSERT INTO memorials (memorial_key, nome_falecido, criado_em)
-             VALUES (:memorial_key, :nome_falecido, NOW())'
+            'INSERT INTO memorials (memorial_key, nome_falecido, foto_falecido, criado_em)
+             VALUES (:memorial_key, :nome_falecido, :foto_falecido, NOW())'
         );
         $statement->execute([
             'memorial_key' => $memorialKey,
             'nome_falecido' => $deceasedName,
+            'foto_falecido' => $photoPath,
         ]);
 
         return [
             'id' => (int) $this->pdo->lastInsertId(),
             'memorial_key' => $memorialKey,
             'nome_falecido' => $deceasedName,
+            'foto_falecido' => $photoPath,
         ];
     }
 
     public function latest(int $limit = 20, int $offset = 0): array
     {
         $statement = $this->pdo->prepare(
-            'SELECT id, memorial_key, nome_falecido, criado_em
+            'SELECT id, memorial_key, nome_falecido, foto_falecido, criado_em
              FROM memorials
              ORDER BY id DESC
              LIMIT :limit OFFSET :offset'

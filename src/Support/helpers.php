@@ -143,3 +143,17 @@ function requestMemorialKey(): string
 
     return '';
 }
+
+function formatDateTimeBr(?string $value, string $format = 'd/m/Y H:i'): string
+{
+    $value = trim((string) $value);
+    if ($value === '') {
+        return '';
+    }
+
+    try {
+        return (new DateTimeImmutable($value))->format($format);
+    } catch (Throwable $throwable) {
+        return $value;
+    }
+}

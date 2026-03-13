@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Services\Database;
 use App\Services\MemorialService;
+use App\Services\UploadService;
 
 require_once __DIR__ . '/src/Support/helpers.php';
 require_once __DIR__ . '/src/Support/session.php';
@@ -27,6 +28,7 @@ try {
     startAppSession($config);
     $pdo = Database::connection($config);
     $memorialService = new MemorialService($pdo);
+    $uploadService = new UploadService($config['upload']);
     $perPage = 10;
     $page = max(1, (int) ($_GET['page'] ?? 1));
 
@@ -35,7 +37,8 @@ try {
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $deceasedName = trim((string) ($_POST['nome_falecido'] ?? ''));
-        $created = $memorialService->create(mb_substr($deceasedName, 0, 160));
+        $photoPath = $uploadService->uploadImage($_FILES['foto_falecido'] ?? []);
+        $created = $memorialService->create(mb_substr($deceasedName, 0, 160), $photoPath);
     }
 
     $total = $memorialService->count();
@@ -84,10 +87,15 @@ try {
             </div>
         <?php endif; ?>
 
-        <form method="post">
+        <form method="post" enctype="multipart/form-data">
             <label class="field">
                 <span>Nome do memorial</span>
                 <input type="text" name="nome_falecido" maxlength="160" placeholder="Opcional">
+            </label>
+            <label class="field">
+                <span>Foto da pessoa</span>
+                <input type="file" name="foto_falecido" accept="image/*">
+                <small class="field-help">Opcional. Aceita apenas imagem com ate 2 MB.</small>
             </label>
             <div class="form-actions">
                 <button class="primary-button" type="submit">Gerar key</button>
@@ -106,14 +114,20 @@ try {
         </div>
         <div class="feed-list">
             <?php foreach ($memorials as $memorial): ?>
+                <?php $memorialInitial = mb_strtoupper(mb_substr(trim((string) ($memorial['nome_falecido'] ?: 'M')), 0, 1)); ?>
                 <article class="post-card">
                     <div class="post-header">
-                        <div class="avatar avatar--fallback"><span class="avatar-fallback">M</span></div>
+                        <div class="avatar <?= empty($memorial['foto_falecido']) ? 'avatar--fallback' : '' ?>">
+                            <?php if (!empty($memorial['foto_falecido'])): ?>
+                                <img src="<?= e(appUrl($memorial['foto_falecido'])) ?>" alt="<?= e($memorial['nome_falecido'] !== '' ? $memorial['nome_falecido'] : 'Memorial') ?>">
+                            <?php endif; ?>
+                            <span class="avatar-fallback"><?= e($memorialInitial) ?></span>
+                        </div>
                         <div class="post-header-copy">
                             <div class="author-meta">
                                 <strong><?= e($memorial['nome_falecido'] !== '' ? $memorial['nome_falecido'] : 'Memorial sem nome') ?></strong>
                             </div>
-                            <span class="post-date"><?= e($memorial['criado_em']) ?></span>
+                            <span class="post-date"><?= e(formatDateTimeBr($memorial['criado_em'])) ?></span>
                         </div>
                     </div>
                     <div class="post-body">
