@@ -1,0 +1,9 @@
+/vendor/
+/src/Config/config.php
+/public/uploads/*
+!/public/uploads/.gitkeep
+/*.zip
+/.idea/
+/.vscode/
+Thumbs.db
+Desktop.ini

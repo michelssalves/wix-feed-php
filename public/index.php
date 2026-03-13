@@ -1,0 +1,152 @@
+<?php
+
+declare(strict_types=1);
+
+require_once dirname(__DIR__) . '/src/Support/helpers.php';
+require_once dirname(__DIR__) . '/src/Support/session.php';
+
+try {
+    $config = config();
+    date_default_timezone_set($config['timezone'] ?? 'UTC');
+    startAppSession($config);
+    $currentUser = currentUser();
+    $googleClientId = trim((string) ($config['google']['client_id'] ?? ''));
+    $googleEnabled = isGoogleConfigured();
+    $memorialKey = requestMemorialKey();
+} catch (Throwable $throwable) {
+    http_response_code(500);
+    ?>
+    <!doctype html>
+    <html lang="pt-BR">
+    <head>
+        <meta charset="utf-8">
+        <title>Erro de configuracao</title>
+        <style>
+            body { font-family: Arial, sans-serif; background: #111; color: #f5f5f5; padding: 24px; }
+            .box { max-width: 760px; margin: 40px auto; padding: 24px; border: 1px solid #444; background: #1b1b1b; }
+        </style>
+    </head>
+    <body>
+        <div class="box">
+            <h1>Configuracao pendente</h1>
+            <p><?= e($throwable->getMessage()) ?></p>
+            <p>Copie <strong>src/Config/config.example.php</strong> para <strong>src/Config/config.php</strong> e ajuste os dados.</p>
+        </div>
+    </body>
+    </html>
+    <?php
+    exit;
+}
+?>
+<!doctype html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title><?= e($config['app_name']) ?></title>
+    <link rel="stylesheet" href="./assets/css/styles.css">
+</head>
+<body>
+<main class="app-shell">
+    <section class="composer">
+        <div id="flash-message" class="flash-message" hidden></div>
+
+        <div id="user-session" class="user-session<?= $currentUser ? '' : ' is-hidden' ?>">
+            <div class="session-main">
+                <div id="session-avatar"></div>
+                <div>
+                    <strong id="session-name"><?= e($currentUser['name'] ?? '') ?></strong>
+                </div>
+            </div>
+            <button id="logout-button" class="logout-text-button" type="button">Sair</button>
+        </div>
+
+        <form id="post-form" class="post-form" enctype="multipart/form-data">
+            <input type="hidden" id="memorial-key" name="memorial_key" value="<?= e($memorialKey) ?>">
+            <div id="post-identity-row" class="field-row">
+                <label class="field compact-field">
+                    <input type="text" id="post-author-name" name="author_name" maxlength="120" placeholder="Digite seu nome">
+                </label>
+                <div class="field google-field compact-field">
+                    <div class="google-login-slot">
+                        <div class="google-button js-google-btn"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="field">
+                <span>Escreva sua mensagem de homenagem ou condolencia</span>
+                <div class="editor-shell">
+                    <div class="editor-toolbar">
+                        <button class="toolbar-button" type="button" data-editor-command="bold" title="Negrito"><strong>B</strong></button>
+                        <button class="toolbar-button" type="button" data-editor-command="italic" title="Italico"><em>I</em></button>
+                        <button class="toolbar-button" type="button" data-editor-command="insertUnorderedList" title="Lista">•</button>
+                        <div class="emoji-group" aria-label="Emocoes de condolencias">
+                            <button class="toolbar-button" type="button" data-editor-emoji="✞" title="Cruz">✞</button>
+                            <button class="toolbar-button" type="button" data-editor-emoji="🙏" title="Oracao">🙏</button>
+                            <button class="toolbar-button" type="button" data-editor-emoji="🕯️" title="Vela">🕯️</button>
+                            <button class="toolbar-button" type="button" data-editor-emoji="🌹" title="Flor">🌹</button>
+                            <button class="toolbar-button" type="button" data-editor-emoji="🥀" title="Flor murcha">🥀</button>
+                            <button class="toolbar-button" type="button" data-editor-emoji="🤍" title="Coracao branco">🤍</button>
+                            <button class="toolbar-button" type="button" data-editor-emoji="❤️" title="Coracao vermelho">❤️</button>
+                            <button class="toolbar-button" type="button" data-editor-emoji="🖤" title="Coracao preto">🖤</button>
+                            <button class="toolbar-button" type="button" data-editor-emoji="🫂" title="Abraco">🫂</button>
+                            <button class="toolbar-button" type="button" data-editor-emoji="😢" title="Choro">😢</button>
+                        </div>
+                        <label class="toolbar-button toolbar-upload" for="post-image" title="Anexar imagem">
+                            <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+                                <path d="M16.5 6.5a4.5 4.5 0 0 0-6.364 0l-5.303 5.303a3 3 0 1 0 4.243 4.243l5.657-5.657 1.414 1.414-5.657 5.657a5 5 0 1 1-7.071-7.071l5.303-5.303a6.5 6.5 0 1 1 9.192 9.192l-6.364 6.364a4 4 0 1 1-5.657-5.657l5.657-5.657 1.414 1.414-5.657 5.657a2 2 0 1 0 2.828 2.828l6.364-6.364A4.5 4.5 0 0 0 16.5 6.5Z"/>
+                            </svg>
+                        </label>
+                    </div>
+                    <div id="post-editor" class="rich-editor" contenteditable="true" data-placeholder="Escreva aqui"></div>
+                    <input type="hidden" id="post-text" name="text">
+                    <input type="file" id="post-image" name="image" accept="image/*" hidden>
+                    <div class="editor-footer">
+                        <div id="selected-file-name" class="attachment-status field-help">
+                            <span class="attachment-status__icon" aria-hidden="true">
+                                <svg viewBox="0 0 24 24" focusable="false">
+                                    <path d="M16.5 6.5a4.5 4.5 0 0 0-6.364 0l-5.303 5.303a3 3 0 1 0 4.243 4.243l5.657-5.657 1.414 1.414-5.657 5.657a5 5 0 1 1-7.071-7.071l5.303-5.303a6.5 6.5 0 1 1 9.192 9.192l-6.364 6.364a4 4 0 1 1-5.657-5.657l5.657-5.657 1.414 1.414-5.657 5.657a2 2 0 1 0 2.828 2.828l6.364-6.364A4.5 4.5 0 0 0 16.5 6.5Z"/>
+                                </svg>
+                            </span>
+                            <span id="attachment-status-text">Nenhum anexo</span>
+                        </div>
+                        <span class="field-help">Imagem opcional, ate 2 MB</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button class="primary-button" type="submit">Salvar</button>
+            </div>
+        </form>
+    </section>
+
+    <section class="feed-section">
+        <div class="section-divider"></div>
+        <div id="feed-list" class="feed-list"></div>
+        <div id="empty-feed" class="empty-state">Nenhuma postagem ainda. Publique a primeira.</div>
+    </section>
+</main>
+
+<div id="image-lightbox" class="image-lightbox is-hidden" aria-hidden="true">
+    <button id="lightbox-close" class="lightbox-close" type="button" aria-label="Fechar imagem">×</button>
+    <img id="lightbox-image" class="lightbox-image" src="" alt="Imagem ampliada">
+</div>
+
+<script>
+    window.APP_CONFIG = {
+        apiBase: <?= json_encode(appUrl('api'), JSON_UNESCAPED_SLASHES) ?>,
+        appBase: <?= json_encode(appUrl(), JSON_UNESCAPED_SLASHES) ?>,
+        googleClientId: <?= json_encode($googleClientId, JSON_UNESCAPED_SLASHES) ?>,
+        googleEnabled: <?= json_encode($googleEnabled) ?>,
+        memorialKey: <?= json_encode($memorialKey, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) ?>,
+        currentUser: <?= json_encode($currentUser, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) ?>
+    };
+</script>
+<?php if ($googleEnabled): ?>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+<?php endif; ?>
+<script src="./assets/js/app.js" defer></script>
+</body>
+</html>
