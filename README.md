@@ -2,6 +2,23 @@
 
 Aplicacao simples em PHP puro + MySQL para rodar sozinha ou dentro de um iframe no Wix, com postagens em feed, comentarios por post, nome manual ou login com Google e upload de imagem opcional com limite de 2 MB.
 
+## Historico
+
+- Consulte [`CHANGELOG.md`](./CHANGELOG.md) para acompanhar as entregas e ajustes principais do projeto.
+
+## Versionamento
+
+- Versao atual: `0.3.0`
+- Arquivo de referencia: [`VERSION`](./VERSION)
+- Padrao sugerido:
+  - `0.1.0`: base do mural e feed
+  - `0.2.0`: suporte a `memorial_key`
+  - `0.3.0`: cadastro e listagem de memoriais com foto opcional
+- Regra pratica:
+  - `PATCH` (`0.3.1`): correcao pequena ou ajuste visual
+  - `MINOR` (`0.4.0`): funcionalidade nova sem quebrar fluxo atual
+  - `MAJOR` (`1.0.0`): mudanca grande ou quebra de compatibilidade
+
 ## Estrutura
 
 ```text

@@ -603,13 +603,64 @@ textarea {
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
 }
 
+.comment-card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.comment-header {
+  align-items: center;
+}
+
+.comment-actions-menu {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.comment-action-button {
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.04);
+  color: #d9d5de;
+  border-radius: 999px;
+  padding: 6px 10px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.comment-action-button:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #ffffff;
+}
+
+.comment-action-button.is-danger {
+  color: #ffb8b8;
+  border-color: rgba(221, 113, 113, 0.28);
+}
+
+.comment-action-button.is-danger:hover {
+  background: rgba(211, 95, 95, 0.12);
+}
+
 .comment-form {
   margin: 12px 0 0 58px;
   background: rgba(255, 255, 255, 0.03);
 }
 
+.comment-edit-form {
+  margin-top: 2px;
+}
+
 .comment-form textarea {
   min-height: 84px;
+  background: rgba(255, 255, 255, 0.92);
+}
+
+.comment-edit-form textarea {
+  min-height: 92px;
   background: rgba(255, 255, 255, 0.92);
 }
 
@@ -860,6 +911,13 @@ textarea {
     border-radius: 14px;
   }
 
+  .comment-actions-menu {
+    width: 100%;
+    margin-left: 0;
+    margin-top: 8px;
+    justify-content: flex-end;
+  }
+
   .comment-form textarea {
     min-height: 76px;
     font-size: 16px;
@@ -991,6 +1049,11 @@ textarea {
   .comment-form {
     padding: 10px;
     border-radius: 12px;
+  }
+
+  .comment-action-button {
+    padding: 6px 9px;
+    font-size: 11px;
   }
 
   .flash-message {

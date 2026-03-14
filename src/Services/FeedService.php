@@ -47,6 +47,52 @@ class FeedService
         return (int) $this->pdo->lastInsertId();
     }
 
+    public function updateComment(int $commentId, int $userId, string $text): bool
+    {
+        $statement = $this->pdo->prepare(
+            'UPDATE comments
+             SET texto = :texto
+             WHERE id = :id AND user_id = :user_id'
+        );
+        $statement->execute([
+            'id' => $commentId,
+            'user_id' => $userId,
+            'texto' => $text,
+        ]);
+
+        return $statement->rowCount() > 0;
+    }
+
+    public function deleteComment(int $commentId, int $userId): bool
+    {
+        $statement = $this->pdo->prepare(
+            'DELETE FROM comments
+             WHERE id = :id AND user_id = :user_id'
+        );
+        $statement->execute([
+            'id' => $commentId,
+            'user_id' => $userId,
+        ]);
+
+        return $statement->rowCount() > 0;
+    }
+
+    public function commentExistsForUser(int $commentId, int $userId): bool
+    {
+        $statement = $this->pdo->prepare(
+            'SELECT 1
+             FROM comments
+             WHERE id = :id AND user_id = :user_id
+             LIMIT 1'
+        );
+        $statement->execute([
+            'id' => $commentId,
+            'user_id' => $userId,
+        ]);
+
+        return (bool) $statement->fetchColumn();
+    }
+
     public function postExists(int $postId, string $memorialKey = ''): bool
     {
         if ($memorialKey !== '') {

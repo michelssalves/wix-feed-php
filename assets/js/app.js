@@ -151,6 +151,10 @@ function commentFormMarkup(postId) {
   `;
 }
 
+function canManageComment(comment) {
+  return !!(state.currentUser && comment && Number(comment.user_id) > 0 && Number(comment.user_id) === Number(state.currentUser.id));
+}
+
 function renderFeed() {
   elements.feedList.innerHTML = '';
   elements.emptyFeed.hidden = state.posts.length > 0;
@@ -186,10 +190,27 @@ function renderFeed() {
                 </div>
                 <span class="comment-date">${escapeHtml(formatDate(comment.criado_em))}</span>
               </div>
+              ${canManageComment(comment) ? `
+                <div class="comment-actions-menu">
+                  <button class="comment-action-button" type="button" data-comment-edit-toggle="${comment.id}">Editar</button>
+                  <button class="comment-action-button is-danger" type="button" data-comment-delete="${comment.id}">Excluir</button>
+                </div>
+              ` : ''}
             </div>
             <div class="comment-body">
               <p>${escapeHtml(comment.texto)}</p>
             </div>
+            ${canManageComment(comment) ? `
+              <form class="comment-edit-form is-hidden" data-comment-edit-form="${comment.id}">
+                <label class="field">
+                  <textarea name="text" rows="3" placeholder="Edite seu comentario">${escapeHtml(comment.texto)}</textarea>
+                </label>
+                <div class="comment-form-actions">
+                  <button class="secondary-button" type="button" data-comment-edit-cancel="${comment.id}">Cancelar</button>
+                  <button class="primary-button" type="submit">Salvar</button>
+                </div>
+              </form>
+            ` : ''}
           </div>
         `).join('')}
       </div>
@@ -269,6 +290,73 @@ function bindCommentActions() {
           authorInput.value = state.currentUser.name || '';
         }
         form.classList.add('is-hidden');
+        await loadFeed();
+      } catch (error) {
+        showMessage(error.message, 'error');
+      }
+    };
+  });
+
+  document.querySelectorAll('[data-comment-edit-toggle]').forEach((button) => {
+    button.onclick = () => {
+      const commentId = button.getAttribute('data-comment-edit-toggle');
+      const form = document.querySelector(`[data-comment-edit-form="${commentId}"]`);
+      if (form) {
+        form.classList.toggle('is-hidden');
+      }
+    };
+  });
+
+  document.querySelectorAll('[data-comment-edit-cancel]').forEach((button) => {
+    button.onclick = () => {
+      const commentId = button.getAttribute('data-comment-edit-cancel');
+      const form = document.querySelector(`[data-comment-edit-form="${commentId}"]`);
+      if (form) {
+        form.classList.add('is-hidden');
+      }
+    };
+  });
+
+  document.querySelectorAll('[data-comment-edit-form]').forEach((form) => {
+    form.onsubmit = async (event) => {
+      event.preventDefault();
+      const commentId = Number(form.getAttribute('data-comment-edit-form'));
+      const textarea = form.querySelector('[name="text"]');
+      const text = textarea?.value?.trim() || '';
+
+      try {
+        await request(`${window.APP_CONFIG.apiBase}/update-comment.php`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            comment_id: commentId,
+            text,
+          }),
+        });
+        showMessage('Comentario atualizado com sucesso.');
+        await loadFeed();
+      } catch (error) {
+        showMessage(error.message, 'error');
+      }
+    };
+  });
+
+  document.querySelectorAll('[data-comment-delete]').forEach((button) => {
+    button.onclick = async () => {
+      const commentId = Number(button.getAttribute('data-comment-delete'));
+      if (!window.confirm('Deseja excluir este comentario?')) {
+        return;
+      }
+
+      try {
+        await request(`${window.APP_CONFIG.apiBase}/delete-comment.php`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            comment_id: commentId,
+          }),
+        });
+        showMessage('Comentario excluido com sucesso.');
         await loadFeed();
       } catch (error) {
         showMessage(error.message, 'error');
