@@ -149,10 +149,144 @@ textarea {
   gap: 14px;
 }
 
+.panel-tabs {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 20px;
+  padding: 6px;
+  border: 1px solid var(--theme-border);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.panel-tab {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+  padding: 0 16px;
+  color: var(--muted);
+  text-decoration: none;
+  font-weight: 600;
+  border: 1px solid transparent;
+  transition: background 0.16s ease, color 0.16s ease, border-color 0.16s ease;
+}
+
+.panel-tab:hover {
+  color: var(--theme-text);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.panel-tab.is-active {
+  color: #231c09;
+  background: var(--theme-submit-bg);
+  border-color: var(--theme-submit-bg);
+}
+
+.panel-tab-count {
+  display: inline-grid;
+  place-items: center;
+  min-width: 24px;
+  height: 24px;
+  margin-left: 8px;
+  padding: 0 6px;
+  background: rgba(0, 0, 0, 0.18);
+  color: inherit;
+  font-size: 12px;
+  font-weight: 700;
+}
+
 .field input[type="color"] {
   min-height: 46px;
   padding: 6px;
   cursor: pointer;
+}
+
+.theme-preview {
+  margin-top: 8px;
+  padding: 18px;
+  border: 1px solid;
+  display: grid;
+}
+
+.theme-preview__panel {
+  border: 1px solid;
+  padding: 16px;
+  display: grid;
+  gap: 10px;
+}
+
+.theme-preview__eyebrow {
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0.78;
+}
+
+.theme-preview__title {
+  font-size: 1.05rem;
+  line-height: 1.2;
+}
+
+.theme-preview__text {
+  margin: 0;
+  opacity: 0.86;
+  font-size: 0.93rem;
+}
+
+.theme-preview__button {
+  justify-self: start;
+  border: none;
+  padding: 10px 16px;
+  color: #231c09;
+  font-weight: 700;
+  cursor: default;
+}
+
+.theme-preview--small {
+  margin: 0 0 16px;
+  padding: 12px;
+}
+
+.theme-preview--small .theme-preview__panel {
+  padding: 12px;
+}
+
+.theme-preview--small .theme-preview__title {
+  font-size: 0.95rem;
+}
+
+.theme-preview--small .theme-preview__text {
+  display: none;
+}
+
+.theme-preview--small .theme-preview__button {
+  padding: 8px 12px;
+}
+
+.theme-swatches {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.theme-swatch {
+  display: inline-grid;
+  grid-template-columns: 18px auto;
+  align-items: center;
+  gap: 8px;
+}
+
+.theme-swatch__color {
+  width: 18px;
+  height: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.theme-swatch__label {
+  font-size: 12px;
+  color: var(--muted);
 }
 
 textarea {
@@ -767,6 +901,35 @@ textarea {
   background: rgba(255, 255, 255, 0.08);
 }
 
+.copy-icon-button {
+  margin-left: 0;
+  width: 40px;
+  min-width: 40px;
+  height: 40px;
+  min-height: 40px;
+  padding: 0;
+  display: inline-grid;
+  place-items: center;
+}
+
+.copy-icon-button svg {
+  width: 18px;
+  height: 18px;
+  fill: currentColor;
+}
+
+.copy-icon-button.is-copied {
+  color: #7ee39e;
+  border-color: rgba(126, 227, 158, 0.4);
+  background: rgba(126, 227, 158, 0.12);
+}
+
+.copy-icon-button.is-copy-error {
+  color: #ffb8b8;
+  border-color: rgba(221, 113, 113, 0.4);
+  background: rgba(221, 113, 113, 0.12);
+}
+
 .memorial-card {
   padding: 18px 20px;
   display: grid;
@@ -837,16 +1000,44 @@ textarea {
 }
 
 .memorial-copy-button {
-  margin-left: 0;
   flex: none;
-  min-width: 72px;
-  min-height: 38px;
-  font-weight: 700;
+  align-self: center;
 }
 
 .memorial-card__actions {
   margin-top: 0;
   justify-content: flex-end;
+}
+
+.memorial-card__actions--danger {
+  margin-top: 4px;
+}
+
+.memorial-edit-panel {
+  border: 1px solid var(--theme-border);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.memorial-edit-panel[open] {
+  padding: 0 14px 14px;
+}
+
+.memorial-edit-toggle {
+  list-style: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  width: auto;
+  margin: 0;
+}
+
+.memorial-edit-toggle::-webkit-details-marker {
+  display: none;
+}
+
+.memorial-edit-form {
+  padding-top: 14px;
 }
 
 .memorial-delete-button {
@@ -885,6 +1076,22 @@ textarea {
 
   .field {
     margin-bottom: 16px;
+  }
+
+  .panel-tabs {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .panel-tab {
+    width: 100%;
+    padding: 0 10px;
+    text-align: center;
+  }
+
+  .panel-tab-count {
+    margin-left: 6px;
   }
 
   .editor-shell {
@@ -1058,6 +1265,16 @@ textarea {
 
   .memorial-delete-button {
     width: 100%;
+  }
+
+  .memorial-edit-toggle,
+  .theme-preview__button {
+    width: 100%;
+    justify-self: stretch;
+  }
+
+  .theme-swatches {
+    gap: 8px;
   }
 
   .comment-actions-menu {

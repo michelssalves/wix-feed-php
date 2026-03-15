@@ -17,6 +17,10 @@ Este arquivo consolida a evolucao do projeto de forma legivel, ja que os primeir
 - Selecao de tema existente ou criacao de novo tema no cadastro do memorial.
 - Edicao posterior dos temas cadastrados.
 - Aplicacao automatica do tema do memorial no mural publico.
+- Abas para alternar entre memoriais cadastrados e temas cadastrados.
+- Preview visual ao vivo para o novo tema antes de salvar.
+- Edicao de memorial diretamente pela listagem.
+- Mini preview de cores na listagem de temas.
 
 ## [0.3.0] - 2026-03-14
 

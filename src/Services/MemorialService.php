@@ -86,6 +86,44 @@ class MemorialService
         return $memorial ?: null;
     }
 
+    public function findById(int $id): ?array
+    {
+        $statement = $this->pdo->prepare(
+            'SELECT id, memorial_key, nome_falecido, foto_falecido, theme_id, criado_em
+             FROM memorials
+             WHERE id = :id
+             LIMIT 1'
+        );
+        $statement->execute(['id' => $id]);
+        $memorial = $statement->fetch();
+
+        return $memorial ?: null;
+    }
+
+    public function updateById(int $id, string $deceasedName, ?string $photoPath, ?int $themeId): bool
+    {
+        $existing = $this->findById($id);
+        if (!$existing) {
+            return false;
+        }
+
+        $statement = $this->pdo->prepare(
+            'UPDATE memorials
+             SET nome_falecido = :nome_falecido,
+                 foto_falecido = :foto_falecido,
+                 theme_id = :theme_id
+             WHERE id = :id'
+        );
+        $statement->execute([
+            'id' => $id,
+            'nome_falecido' => $deceasedName,
+            'foto_falecido' => $photoPath ?? $existing['foto_falecido'],
+            'theme_id' => $themeId,
+        ]);
+
+        return true;
+    }
+
     public function deleteById(int $id): bool
     {
         $statement = $this->pdo->prepare(
