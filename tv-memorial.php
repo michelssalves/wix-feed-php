@@ -55,14 +55,24 @@ try {
 <body class="tv-body">
 <main class="tv-app">
     <header class="tv-header">
-        <div class="tv-header__copy">
-            <p class="tv-header__eyebrow">Mural de homenagens</p>
-            <h1 class="tv-header__title"><?= e(($memorial['nome_falecido'] ?? '') !== '' ? $memorial['nome_falecido'] : 'Memorial') ?></h1>
-            <p class="tv-header__text">Mensagens exibidas automaticamente para acompanhamento em TV.</p>
+        <div class="tv-header__tribute">
+            <?php if (!empty($memorial['foto_falecido'])): ?>
+                <div class="tv-header__portrait">
+                    <img src="<?= e(appUrl($memorial['foto_falecido'])) ?>" alt="<?= e(($memorial['nome_falecido'] ?? '') !== '' ? $memorial['nome_falecido'] : 'Memorial') ?>">
+                </div>
+            <?php endif; ?>
+            <div class="tv-header__copy">
+                <p class="tv-header__eyebrow">Mural de homenagens</p>
+                <h1 class="tv-header__title"><?= e(($memorial['nome_falecido'] ?? '') !== '' ? $memorial['nome_falecido'] : 'Memorial') ?></h1>
+                <p class="tv-header__text">Mensagens exibidas automaticamente para homenagem e acompanhamento em TV.</p>
+            </div>
         </div>
-        <div class="tv-header__actions">
+        <div class="tv-header__meta">
             <span class="tv-status" id="tv-status">Aguardando mensagens</span>
-            <button class="tv-fullscreen-button" id="tv-fullscreen-button" type="button">Tela cheia</button>
+            <div class="tv-header__submeta">
+                <span id="tv-counter">0 mensagens</span>
+                <span id="tv-last-update">Atualizando...</span>
+            </div>
         </div>
     </header>
 
@@ -77,10 +87,6 @@ try {
 
     <footer class="tv-footer">
         <div class="tv-progress" id="tv-progress"></div>
-        <div class="tv-footer__meta">
-            <span id="tv-counter">0 mensagens</span>
-            <span id="tv-last-update">Atualizando...</span>
-        </div>
     </footer>
 </main>
 

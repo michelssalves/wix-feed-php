@@ -6,7 +6,6 @@
   const counter = document.getElementById('tv-counter');
   const lastUpdate = document.getElementById('tv-last-update');
   const status = document.getElementById('tv-status');
-  const fullscreenButton = document.getElementById('tv-fullscreen-button');
 
   const ROTATION_MS = 9000;
   const REFRESH_MS = 20000;
@@ -92,6 +91,8 @@
     }
 
     const post = posts[currentIndex];
+    const hasImage = Boolean(post.imagem);
+    const hasText = Boolean(post.texto);
     const imageHtml = post.imagem
       ? `<div class="tv-slide__media"><img src="${absolutize(post.imagem)}" alt="Imagem da homenagem"></div>`
       : '';
@@ -101,18 +102,19 @@
       : `<span>${String(post.nome_autor || 'M').trim().charAt(0).toUpperCase()}</span>`;
 
     stage.innerHTML = `
-      <article class="tv-slide">
+      <article class="tv-slide${hasImage ? ' tv-slide--with-media' : ' tv-slide--text-only'}">
         <div class="tv-slide__header">
           <div class="tv-slide__author">
             <div class="tv-slide__avatar">${authorPhoto}</div>
             <div class="tv-slide__meta">
+              <span class="tv-slide__meta-label">Homenagem de</span>
               <strong>${post.nome_autor || 'Mensagem anonima'}</strong>
               <span>${formatDate(post.criado_em)}</span>
             </div>
           </div>
         </div>
         <div class="tv-slide__body">
-          ${post.texto ? `<div class="tv-slide__text">${post.texto}</div>` : ''}
+          ${hasText ? `<div class="tv-slide__text">${post.texto}</div>` : ''}
           ${imageHtml}
         </div>
       </article>
@@ -174,19 +176,6 @@
     } catch (error) {
       setStatus('Falha ao atualizar o mural');
     }
-  }
-
-  function toggleFullscreen() {
-    if (!document.fullscreenElement) {
-      document.documentElement.requestFullscreen?.();
-      return;
-    }
-
-    document.exitFullscreen?.();
-  }
-
-  if (fullscreenButton) {
-    fullscreenButton.addEventListener('click', toggleFullscreen);
   }
 
   loadFeed();
