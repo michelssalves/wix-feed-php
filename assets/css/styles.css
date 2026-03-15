@@ -1293,6 +1293,35 @@ textarea {
   gap: 16px;
 }
 
+.memorial-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 18px;
+  padding: 18px;
+  border: 1px solid var(--theme-border);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.memorial-toolbar__copy {
+  display: grid;
+  gap: 4px;
+}
+
+.memorial-toolbar__copy strong {
+  font-size: 1rem;
+}
+
+.memorial-toolbar__copy span {
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.memorial-toolbar__button {
+  min-width: 180px;
+}
+
 .empty-state {
   color: var(--muted);
   text-align: center;
@@ -2088,6 +2117,17 @@ textarea {
 
   .feed-list {
     gap: 12px;
+  }
+
+  .memorial-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 14px;
+  }
+
+  .memorial-toolbar__button {
+    width: 100%;
+    min-width: 0;
   }
 
   .post-card {

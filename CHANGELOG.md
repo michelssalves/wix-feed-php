@@ -12,6 +12,7 @@ Este arquivo consolida a evolucao do projeto de forma legivel, ja que os primeir
 - Adicionado suporte a cor do texto do botao nos temas visuais, com aplicacao real no preview e no mural renderizado.
 - Criada uma tela dedicada de mural TV com rotacao automatica das mensagens, atualizacao periodica e suporte ao tema do memorial.
 - Refinado o mural TV com foco em leitura a distancia, valorizacao do homenageado, mensagem centralizada e visual mais emocional para exibição em memorial.
+- Adicionado download de album do memorial em HTML, reunindo homenagens, imagens, autores e datas em um arquivo elegante para guardar ou compartilhar.
 
 ### Added
 - Edicao inline de comentarios para o autor logado com Google.

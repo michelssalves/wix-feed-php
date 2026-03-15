@@ -16,6 +16,8 @@ const elements = {
   postImage: document.getElementById('post-image'),
   postImageTrigger: document.getElementById('post-image-trigger'),
   postSubmitButton: document.getElementById('post-submit-button'),
+  memorialToolbar: document.getElementById('memorial-toolbar'),
+  downloadAlbumButton: document.getElementById('download-album-button'),
   selectedFileName: document.getElementById('selected-file-name'),
   attachmentStatusText: document.getElementById('attachment-status-text'),
   feedList: document.getElementById('feed-list'),
@@ -124,6 +126,12 @@ function syncMemorialState() {
   elements.postEditor.classList.toggle('is-disabled', disabled);
   elements.postImageTrigger.disabled = disabled;
   elements.postSubmitButton.disabled = disabled;
+  if (elements.memorialToolbar) {
+    elements.memorialToolbar.classList.toggle('is-hidden', !state.memorialKey || !state.memorialExists);
+  }
+  if (elements.downloadAlbumButton) {
+    elements.downloadAlbumButton.disabled = disabled;
+  }
 }
 
 function commentFormMarkup(postId) {
@@ -474,6 +482,52 @@ async function loadFeed() {
   }
 }
 
+async function downloadAlbum() {
+  if (!state.memorialKey || !state.memorialExists) {
+    showMessage('Memorial invalido para gerar o album.', 'error');
+    return;
+  }
+
+  const button = elements.downloadAlbumButton;
+  const originalText = button?.textContent || 'Baixar album';
+
+  if (button) {
+    button.disabled = true;
+    button.textContent = 'Gerando album...';
+  }
+
+  try {
+    const response = await fetch(`${window.APP_CONFIG.appBase}/album-memorial.php?memorial_key=${encodeURIComponent(state.memorialKey)}`, {
+      credentials: 'include',
+    });
+
+    if (!response.ok) {
+      throw new Error('Nao foi possivel gerar o album.');
+    }
+
+    const blob = await response.blob();
+    const downloadUrl = URL.createObjectURL(blob);
+    const disposition = response.headers.get('Content-Disposition') || '';
+    const fileNameMatch = disposition.match(/filename="([^"]+)"/i);
+    const fileName = fileNameMatch?.[1] || `album-memorial-${state.memorialKey}.html`;
+    const anchor = document.createElement('a');
+    anchor.href = downloadUrl;
+    anchor.download = fileName;
+    document.body.appendChild(anchor);
+    anchor.click();
+    anchor.remove();
+    URL.revokeObjectURL(downloadUrl);
+    showMessage('Album gerado com sucesso.');
+  } catch (error) {
+    showMessage(error.message || 'Falha ao gerar o album.', 'error');
+  } finally {
+    if (button) {
+      button.disabled = false;
+      button.textContent = originalText;
+    }
+  }
+}
+
 async function handleGoogleCredential(response) {
   try {
     const data = await request(`${window.APP_CONFIG.apiBase}/google-login.php`, {
@@ -586,6 +640,10 @@ elements.postForm.addEventListener('submit', async (event) => {
     showMessage(error.message, 'error');
   }
 });
+
+if (elements.downloadAlbumButton) {
+  elements.downloadAlbumButton.addEventListener('click', downloadAlbum);
+}
 
 elements.logoutButton.addEventListener('click', async () => {
   try {
