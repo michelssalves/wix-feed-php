@@ -219,10 +219,7 @@ try {
             <img src="<?= e($coverImage) ?>" alt="<?= e($memorialName) ?>">
         <?php endif; ?>
         <h1><?= e($memorialName) ?></h1>
-        <p class="cover__meta">
-            Registro gerado em <?= e(formatDateTimeBr(date('Y-m-d H:i:s'))) ?><br>
-            Memorial key: <?= e($memorialKey) ?>
-        </p>
+        <p class="cover__meta">Album de homenagens reunindo as mensagens e imagens publicadas neste memorial.</p>
     </section>
 
     <?php if (!$posts): ?>

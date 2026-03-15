@@ -131,13 +131,6 @@ try {
 
     <section class="feed-section">
         <div class="section-divider"></div>
-        <div id="memorial-toolbar" class="memorial-toolbar<?= $memorialKey !== '' ? '' : ' is-hidden' ?>">
-            <div class="memorial-toolbar__copy">
-                <strong>Album do memorial</strong>
-                <span>Baixe um arquivo com as homenagens publicadas, pronto para guardar ou compartilhar.</span>
-            </div>
-            <button id="download-album-button" class="secondary-button memorial-toolbar__button" type="button">Baixar album</button>
-        </div>
         <div id="feed-list" class="feed-list"></div>
         <div id="empty-feed" class="empty-state">Nenhuma postagem ainda. Publique a primeira.</div>
     </section>

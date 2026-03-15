@@ -1244,6 +1244,12 @@ textarea {
   flex-wrap: wrap;
 }
 
+.created-links__download-button,
+.memorial-album-button {
+  min-height: 40px;
+  padding: 0 16px;
+}
+
 .created-links__label,
 .memorial-link-box__meta {
   color: var(--muted);
@@ -1291,35 +1297,6 @@ textarea {
 .feed-list {
   display: grid;
   gap: 16px;
-}
-
-.memorial-toolbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 18px;
-  margin-bottom: 18px;
-  padding: 18px;
-  border: 1px solid var(--theme-border);
-  background: rgba(255, 255, 255, 0.03);
-}
-
-.memorial-toolbar__copy {
-  display: grid;
-  gap: 4px;
-}
-
-.memorial-toolbar__copy strong {
-  font-size: 1rem;
-}
-
-.memorial-toolbar__copy span {
-  color: var(--muted);
-  line-height: 1.5;
-}
-
-.memorial-toolbar__button {
-  min-width: 180px;
 }
 
 .empty-state {
@@ -1781,6 +1758,10 @@ textarea {
   gap: 12px;
 }
 
+.memorial-link-box__row--action {
+  justify-content: flex-start;
+}
+
 .memorial-link-box__value {
   min-width: 0;
   color: #f4f0e7;
@@ -2117,17 +2098,6 @@ textarea {
 
   .feed-list {
     gap: 12px;
-  }
-
-  .memorial-toolbar {
-    flex-direction: column;
-    align-items: stretch;
-    padding: 14px;
-  }
-
-  .memorial-toolbar__button {
-    width: 100%;
-    min-width: 0;
   }
 
   .post-card {

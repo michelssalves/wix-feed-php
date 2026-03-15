@@ -195,6 +195,10 @@ try {
                                 </svg>
                             </button>
                         </div>
+                        <div class="created-links__row">
+                            <span class="created-links__label">Album:</span>
+                            <button class="secondary-button created-links__download-button" type="button" data-download-album="<?= e($created['memorial_key']) ?>">Baixar album</button>
+                        </div>
                     </div>
                 </div>
             <?php endif; ?>
@@ -471,6 +475,10 @@ try {
                                                 </svg>
                                             </button>
                                         </div>
+                                        <div class="memorial-link-box__row memorial-link-box__row--action">
+                                            <span class="memorial-link-box__meta">Album</span>
+                                            <button class="secondary-button memorial-album-button" type="button" data-download-album="<?= e($memorial['memorial_key']) ?>">Baixar album</button>
+                                        </div>
                                     </div>
                                 </div>
                                 <details class="memorial-edit-panel">
@@ -582,6 +590,53 @@ try {
                     setTimeout(() => {
                         button.classList.remove('is-copy-error');
                     }, 1200);
+                }
+            });
+        });
+
+        document.querySelectorAll('[data-download-album]').forEach((button) => {
+            button.addEventListener('click', async () => {
+                const memorialKey = button.getAttribute('data-download-album') || '';
+                if (!memorialKey) return;
+
+                const originalText = button.textContent;
+                button.disabled = true;
+                button.textContent = 'Gerando album...';
+
+                try {
+                    const response = await fetch(`<?= e(appUrl('album-memorial.php')) ?>?memorial_key=${encodeURIComponent(memorialKey)}`, {
+                        credentials: 'include',
+                    });
+
+                    if (!response.ok) {
+                        throw new Error('Nao foi possivel gerar o album.');
+                    }
+
+                    const blob = await response.blob();
+                    const downloadUrl = URL.createObjectURL(blob);
+                    const disposition = response.headers.get('Content-Disposition') || '';
+                    const fileNameMatch = disposition.match(/filename="([^"]+)"/i);
+                    const fileName = fileNameMatch?.[1] || `album-memorial-${memorialKey}.html`;
+                    const anchor = document.createElement('a');
+                    anchor.href = downloadUrl;
+                    anchor.download = fileName;
+                    document.body.appendChild(anchor);
+                    anchor.click();
+                    anchor.remove();
+                    URL.revokeObjectURL(downloadUrl);
+                    button.textContent = 'Album pronto';
+                    setTimeout(() => {
+                        button.textContent = originalText;
+                    }, 1600);
+                } catch (error) {
+                    button.textContent = 'Falha ao gerar';
+                    setTimeout(() => {
+                        button.textContent = originalText;
+                    }, 1800);
+                } finally {
+                    setTimeout(() => {
+                        button.disabled = false;
+                    }, 300);
                 }
             });
         });
