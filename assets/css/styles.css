@@ -66,6 +66,29 @@ textarea {
   padding: 10px 0 56px;
 }
 
+.panel-eyebrow {
+  margin: 0 0 8px;
+  color: #e3c56e;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.panel-title {
+  margin: 0 0 10px;
+  font-size: clamp(30px, 4vw, 44px);
+  line-height: 1.05;
+}
+
+.panel-intro {
+  margin: 0 0 24px;
+  max-width: 840px;
+  color: var(--muted);
+  font-size: 1.02rem;
+  line-height: 1.55;
+}
+
 body.is-embedded .app-shell {
   width: min(100%, calc(100% - 12px));
   padding-top: 4px;
@@ -124,9 +147,102 @@ body.is-embedded::-webkit-scrollbar-track {
   margin-bottom: 22px;
 }
 
+.memorial-admin-form {
+  display: grid;
+  gap: 22px;
+}
+
+.admin-section {
+  border: 1px solid color-mix(in srgb, var(--theme-border) 86%, white 4%);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.038) 0%, rgba(255, 255, 255, 0.02) 100%);
+  padding: 22px;
+  display: grid;
+  gap: 20px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
+}
+
+.admin-section--theme-builder {
+  gap: 24px;
+}
+
+.admin-section__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.admin-section__header--compact {
+  margin-bottom: 2px;
+}
+
+.admin-section__title,
+.admin-section__subtitle {
+  margin: 0;
+  line-height: 1.15;
+}
+
+.admin-section__title {
+  font-size: 1.12rem;
+  font-weight: 700;
+}
+
+.admin-section__subtitle {
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.admin-section__text {
+  margin: 6px 0 0;
+  color: var(--muted);
+  line-height: 1.5;
+  max-width: 680px;
+}
+
+.admin-grid {
+  display: grid;
+  gap: 18px;
+}
+
+.admin-grid--memorial {
+  grid-template-columns: minmax(0, 1.25fr) minmax(280px, 0.75fr);
+}
+
+.admin-theme-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(300px, 0.85fr);
+  gap: 22px;
+  align-items: start;
+}
+
+.admin-theme-builder {
+  display: grid;
+  gap: 16px;
+}
+
+.admin-theme-preview-wrap {
+  display: grid;
+  gap: 14px;
+  align-content: start;
+}
+
+.theme-grid--builder {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
 .field span {
   color: var(--muted);
   font-weight: 600;
+}
+
+.admin-section .field {
+  margin-bottom: 0;
+}
+
+.field-help {
+  color: var(--muted);
+  line-height: 1.45;
 }
 
 input[type="text"],
@@ -143,10 +259,60 @@ textarea {
   outline: none;
 }
 
+input[type="text"]:focus,
+.field select:focus,
+.field input[type="color"]:focus,
+textarea:focus {
+  border-color: color-mix(in srgb, var(--theme-submit-bg) 70%, white 10%);
+  box-shadow: 0 0 0 3px rgba(227, 197, 110, 0.14);
+}
+
+.field input[type="file"] {
+  width: 100%;
+  min-height: 52px;
+  border: 1px solid var(--theme-border);
+  background: rgba(255, 255, 255, 0.04);
+  color: #d6d2db;
+  padding: 8px 10px;
+}
+
+.field input[type="file"]::file-selector-button {
+  margin-right: 12px;
+  border: 1px solid color-mix(in srgb, var(--theme-border) 82%, white 6%);
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--theme-text);
+  padding: 10px 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.field--file {
+  padding: 16px;
+  border: 1px dashed color-mix(in srgb, var(--theme-border) 76%, white 8%);
+  background: rgba(255, 255, 255, 0.03);
+}
+
 .theme-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: 14px;
+}
+
+.theme-grid--builder .field {
+  padding: 14px;
+  border: 1px solid color-mix(in srgb, var(--theme-border) 78%, white 6%);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.theme-grid--builder .field span {
+  min-height: 40px;
+  line-height: 1.4;
+}
+
+.theme-grid--builder .field input[type="color"] {
+  min-height: 60px;
+  padding: 8px;
+  background: #f3f1ec;
 }
 
 .panel-tabs {
@@ -211,17 +377,20 @@ textarea {
 }
 
 .theme-preview {
-  margin-top: 8px;
-  padding: 18px;
+  margin-top: 0;
+  min-height: 100%;
+  padding: 20px;
   border: 1px solid;
   display: grid;
+  align-content: start;
 }
 
 .theme-preview__panel {
   border: 1px solid;
-  padding: 16px;
+  padding: 18px;
   display: grid;
-  gap: 10px;
+  gap: 12px;
+  min-height: 100%;
 }
 
 .theme-preview__eyebrow {
@@ -232,7 +401,7 @@ textarea {
 }
 
 .theme-preview__title {
-  font-size: 1.05rem;
+  font-size: 1.1rem;
   line-height: 1.2;
 }
 
@@ -245,10 +414,34 @@ textarea {
 .theme-preview__button {
   justify-self: start;
   border: none;
-  padding: 10px 16px;
+  padding: 12px 18px;
   color: #231c09;
   font-weight: 700;
   cursor: default;
+}
+
+.admin-submit-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 20px 22px;
+  border: 1px solid color-mix(in srgb, var(--theme-border) 84%, white 4%);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.028) 0%, rgba(255, 255, 255, 0.014) 100%);
+}
+
+.admin-submit-bar__copy {
+  display: grid;
+  gap: 4px;
+}
+
+.admin-submit-bar__copy strong {
+  font-size: 1rem;
+}
+
+.admin-submit-bar__copy span {
+  color: var(--muted);
+  line-height: 1.5;
 }
 
 .theme-preview--small {
@@ -526,6 +719,13 @@ textarea {
   background: var(--theme-submit-bg);
   color: #231c09;
   font-weight: 700;
+}
+
+.primary-button--large {
+  min-width: 180px;
+  min-height: 52px;
+  padding-inline: 28px;
+  font-size: 1rem;
 }
 
 .secondary-button,
@@ -1140,6 +1340,44 @@ textarea {
     margin-bottom: 16px;
   }
 
+  .panel-title {
+    font-size: clamp(28px, 9vw, 38px);
+  }
+
+  .panel-intro {
+    margin-bottom: 18px;
+    font-size: 0.96rem;
+  }
+
+  .memorial-admin-form {
+    gap: 16px;
+  }
+
+  .admin-section {
+    padding: 16px;
+    gap: 16px;
+  }
+
+  .admin-grid--memorial,
+  .admin-theme-layout,
+  .theme-grid--builder {
+    grid-template-columns: 1fr;
+  }
+
+  .field--file {
+    padding: 14px;
+  }
+
+  .admin-submit-bar {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 16px;
+  }
+
+  .admin-submit-bar__copy {
+    gap: 6px;
+  }
+
   .panel-tabs {
     width: 100%;
     display: grid;
@@ -1381,6 +1619,12 @@ textarea {
   .form-actions .primary-button {
     width: 100%;
     min-height: 46px;
+  }
+
+  .primary-button--large {
+    width: 100%;
+    min-width: 0;
+    min-height: 48px;
   }
 
   .empty-state {
