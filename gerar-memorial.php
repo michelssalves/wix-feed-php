@@ -216,15 +216,20 @@ try {
                 </div>
             <?php endif; ?>
 
-            <form method="post" enctype="multipart/form-data" class="memorial-admin-form">
-                <input type="hidden" name="action" value="create">
-                <details class="admin-accordion" open>
-                    <summary class="admin-accordion__summary">
-                        <span class="admin-accordion__title">Dados do memorial</span>
-                        <span class="admin-accordion__icon" aria-hidden="true"></span>
-                    </summary>
-                    <div class="admin-accordion__content">
+            <details class="admin-accordion admin-accordion--composer">
+                <summary class="admin-accordion__summary">
+                    <span class="admin-accordion__title">Gerar Memorial Key</span>
+                    <span class="admin-accordion__icon" aria-hidden="true"></span>
+                </summary>
+                <div class="admin-accordion__content">
+                    <form method="post" enctype="multipart/form-data" class="memorial-admin-form">
+                        <input type="hidden" name="action" value="create">
                         <div class="admin-section">
+                            <div class="admin-section__header">
+                                <div>
+                                    <h2 class="admin-section__title">Dados do memorial</h2>
+                                </div>
+                            </div>
                             <div class="admin-grid admin-grid--memorial">
                                 <label class="field">
                                     <span>Nome do memorial</span>
@@ -237,16 +242,13 @@ try {
                                 </label>
                             </div>
                         </div>
-                    </div>
-                </details>
 
-                <details class="admin-accordion" open>
-                    <summary class="admin-accordion__summary">
-                        <span class="admin-accordion__title">Tema cadastrados</span>
-                        <span class="admin-accordion__icon" aria-hidden="true"></span>
-                    </summary>
-                    <div class="admin-accordion__content">
                         <div class="admin-section">
+                            <div class="admin-section__header">
+                                <div>
+                                    <h2 class="admin-section__title">Tema cadastrados</h2>
+                                </div>
+                            </div>
                             <label class="field">
                                 <span>Selecione um tema</span>
                                 <select name="theme_id">
@@ -257,16 +259,14 @@ try {
                                 </select>
                             </label>
                         </div>
-                    </div>
-                </details>
 
-                <details class="admin-accordion admin-accordion--theme-builder" open>
-                    <summary class="admin-accordion__summary">
-                        <span class="admin-accordion__title">Criacao de tema reutilizavel</span>
-                        <span class="admin-accordion__icon" aria-hidden="true"></span>
-                    </summary>
-                    <div class="admin-accordion__content">
                         <div class="admin-section admin-section--theme-builder">
+                            <div class="admin-section__header">
+                                <div>
+                                    <h2 class="admin-section__title">Criacao de tema reutilizavel</h2>
+                                </div>
+                            </div>
+
                             <div class="admin-theme-layout">
                                 <div class="admin-theme-builder">
                                     <div class="field">
@@ -319,19 +319,19 @@ try {
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </details>
 
-                <div class="admin-submit-bar">
-                    <div class="admin-submit-bar__copy">
-                        <strong>Gerar memorial</strong>
-                        <span>Crie a key final com os dados e tema definidos acima.</span>
-                    </div>
-                    <div class="form-actions">
-                        <button class="primary-button primary-button--large" type="submit">Gerar key</button>
-                    </div>
+                        <div class="admin-submit-bar">
+                            <div class="admin-submit-bar__copy">
+                                <strong>Gerar memorial</strong>
+                                <span>Crie a key final com os dados e tema definidos acima.</span>
+                            </div>
+                            <div class="form-actions">
+                                <button class="primary-button primary-button--large" type="submit">Gerar key</button>
+                            </div>
+                        </div>
+                    </form>
                 </div>
-            </form>
+            </details>
         </section>
 
         <section class="feed-section" id="memorial-panel">
@@ -480,16 +480,24 @@ try {
                     <form method="get" class="memorial-filter-form">
                         <input type="hidden" name="tab" value="memoriais">
                         <label class="field">
-                            <span>Pesquisar por nome</span>
+                            <span>Nome</span>
                             <input type="text" name="search_nome" value="<?= e($searchName) ?>" placeholder="Ex.: Maria Silva">
                         </label>
                         <label class="field">
-                            <span>Pesquisar por memorial key</span>
+                            <span>Memorial Key</span>
                             <input type="text" name="search_memorial_key" value="<?= e($searchMemorialKey) ?>" placeholder="Ex.: 13258757">
                         </label>
                         <div class="memorial-filter-form__actions">
-                            <button class="secondary-button" type="submit">Filtrar</button>
-                            <a class="ghost-button" href="?tab=memoriais#memorial-panel">Limpar</a>
+                            <button class="copy-button copy-icon-button memorial-filter-icon-button" type="submit" aria-label="Filtrar memoriais" title="Filtrar memoriais">
+                                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                                    <path d="M10 4a6 6 0 1 0 3.874 10.582l4.272 4.272 1.414-1.414-4.272-4.272A6 6 0 0 0 10 4Zm0 2a4 4 0 1 1 0 8 4 4 0 0 1 0-8Z" />
+                                </svg>
+                            </button>
+                            <a class="copy-button copy-icon-button memorial-filter-icon-button" href="?tab=memoriais#memorial-panel" aria-label="Limpar filtros" title="Limpar filtros">
+                                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                                    <path d="M6.225 4.811 4.811 6.225 10.586 12l-5.775 5.775 1.414 1.414L12 13.414l5.775 5.775 1.414-1.414L13.414 12l5.775-5.775-1.414-1.414L12 10.586 6.225 4.811Z" />
+                                </svg>
+                            </a>
                         </div>
                     </form>
                 </div>

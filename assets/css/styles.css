@@ -467,6 +467,10 @@ body.is-embedded::-webkit-scrollbar-track {
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
 }
 
+.admin-accordion--composer {
+  margin-top: 10px;
+}
+
 .admin-accordion[open] {
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03), 0 14px 30px rgba(0, 0, 0, 0.12);
 }
@@ -790,6 +794,22 @@ textarea:focus {
   align-items: center;
   gap: 10px;
   flex-wrap: wrap;
+}
+
+.memorial-filter-icon-button {
+  width: 44px;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0;
+  justify-content: center;
+  border-color: var(--theme-submit-bg);
+  color: var(--theme-submit-bg);
+}
+
+.memorial-filter-icon-button svg {
+  width: 18px;
+  height: 18px;
+  fill: currentColor;
 }
 
 .field input[type="color"] {
