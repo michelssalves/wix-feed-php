@@ -155,6 +155,10 @@ function canManageComment(comment) {
   return !!(state.currentUser && comment && Number(comment.user_id) > 0 && Number(comment.user_id) === Number(state.currentUser.id));
 }
 
+function canManagePost(post) {
+  return !!(state.currentUser && post && Number(post.user_id) > 0 && Number(post.user_id) === Number(state.currentUser.id));
+}
+
 function renderFeed() {
   elements.feedList.innerHTML = '';
   elements.emptyFeed.hidden = state.posts.length > 0;
@@ -171,11 +175,28 @@ function renderFeed() {
           </div>
           <span class="post-date">${escapeHtml(formatDate(post.criado_em))}</span>
         </div>
+        ${canManagePost(post) ? `
+          <div class="comment-actions-menu">
+            <button class="comment-action-button" type="button" data-post-edit-toggle="${post.id}">Editar</button>
+            <button class="comment-action-button is-danger" type="button" data-post-delete="${post.id}">Excluir</button>
+          </div>
+        ` : ''}
       </div>
       <div class="post-body">
         <div class="post-rich-text">${post.texto}</div>
         ${post.imagem ? `<button class="post-image-button" type="button" data-image-view="${escapeAttribute(post.imagem)}" aria-label="Abrir imagem em tela cheia"><img class="post-image" src="${escapeHtml(post.imagem)}" alt="Imagem da postagem"></button>` : ''}
       </div>
+      ${canManagePost(post) ? `
+        <form class="post-edit-form is-hidden" data-post-edit-form="${post.id}">
+          <label class="field">
+            <textarea name="text" rows="4" placeholder="Edite sua postagem">${plainTextFromHtml(post.texto)}</textarea>
+          </label>
+          <div class="comment-form-actions">
+            <button class="secondary-button" type="button" data-post-edit-cancel="${post.id}">Cancelar</button>
+            <button class="primary-button" type="submit">Salvar</button>
+          </div>
+        </form>
+      ` : ''}
       <div class="post-actions">
         <button class="reply-toggle" type="button" data-reply-toggle="${post.id}">Responder</button>
       </div>
@@ -290,6 +311,74 @@ function bindCommentActions() {
           authorInput.value = state.currentUser.name || '';
         }
         form.classList.add('is-hidden');
+        await loadFeed();
+      } catch (error) {
+        showMessage(error.message, 'error');
+      }
+    };
+  });
+
+  document.querySelectorAll('[data-post-edit-toggle]').forEach((button) => {
+    button.onclick = () => {
+      const postId = button.getAttribute('data-post-edit-toggle');
+      const form = document.querySelector(`[data-post-edit-form="${postId}"]`);
+      if (form) {
+        form.classList.toggle('is-hidden');
+      }
+    };
+  });
+
+  document.querySelectorAll('[data-post-edit-cancel]').forEach((button) => {
+    button.onclick = () => {
+      const postId = button.getAttribute('data-post-edit-cancel');
+      const form = document.querySelector(`[data-post-edit-form="${postId}"]`);
+      if (form) {
+        form.classList.add('is-hidden');
+      }
+    };
+  });
+
+  document.querySelectorAll('[data-post-edit-form]').forEach((form) => {
+    form.onsubmit = async (event) => {
+      event.preventDefault();
+      const postId = Number(form.getAttribute('data-post-edit-form'));
+      const textarea = form.querySelector('[name="text"]');
+      const text = textarea?.value?.trim() || '';
+
+      try {
+        await request(`${window.APP_CONFIG.apiBase}/update-post.php`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            post_id: postId,
+            memorial_key: state.memorialKey,
+            text,
+          }),
+        });
+        showMessage('Postagem atualizada com sucesso.');
+        await loadFeed();
+      } catch (error) {
+        showMessage(error.message, 'error');
+      }
+    };
+  });
+
+  document.querySelectorAll('[data-post-delete]').forEach((button) => {
+    button.onclick = async () => {
+      const postId = Number(button.getAttribute('data-post-delete'));
+      if (!window.confirm('Deseja excluir esta postagem?')) {
+        return;
+      }
+
+      try {
+        await request(`${window.APP_CONFIG.apiBase}/delete-post.php`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            post_id: postId,
+          }),
+        });
+        showMessage('Postagem excluida com sucesso.');
         await loadFeed();
       } catch (error) {
         showMessage(error.message, 'error');

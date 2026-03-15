@@ -30,6 +30,52 @@ class FeedService
         return (int) $this->pdo->lastInsertId();
     }
 
+    public function updatePostText(int $postId, int $userId, string $text): bool
+    {
+        $statement = $this->pdo->prepare(
+            'UPDATE posts
+             SET texto = :texto
+             WHERE id = :id AND user_id = :user_id'
+        );
+        $statement->execute([
+            'id' => $postId,
+            'user_id' => $userId,
+            'texto' => $text,
+        ]);
+
+        return $statement->rowCount() > 0;
+    }
+
+    public function deletePost(int $postId, int $userId): bool
+    {
+        $statement = $this->pdo->prepare(
+            'DELETE FROM posts
+             WHERE id = :id AND user_id = :user_id'
+        );
+        $statement->execute([
+            'id' => $postId,
+            'user_id' => $userId,
+        ]);
+
+        return $statement->rowCount() > 0;
+    }
+
+    public function postExistsForUser(int $postId, int $userId): bool
+    {
+        $statement = $this->pdo->prepare(
+            'SELECT 1
+             FROM posts
+             WHERE id = :id AND user_id = :user_id
+             LIMIT 1'
+        );
+        $statement->execute([
+            'id' => $postId,
+            'user_id' => $userId,
+        ]);
+
+        return (bool) $statement->fetchColumn();
+    }
+
     public function createComment(int $postId, ?int $userId, string $authorName, ?string $authorPhoto, string $text): int
     {
         $statement = $this->pdo->prepare(

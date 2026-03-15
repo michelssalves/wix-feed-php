@@ -650,8 +650,13 @@ textarea {
   background: rgba(255, 255, 255, 0.03);
 }
 
+.post-edit-form,
 .comment-edit-form {
-  margin-top: 2px;
+  margin: 12px 0 0 58px;
+  padding: 12px 14px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .comment-form textarea {
@@ -659,6 +664,7 @@ textarea {
   background: rgba(255, 255, 255, 0.92);
 }
 
+.post-edit-form textarea,
 .comment-edit-form textarea {
   min-height: 92px;
   background: rgba(255, 255, 255, 0.92);
@@ -832,6 +838,7 @@ textarea {
 
   .post-body,
   .post-actions,
+  .post-edit-form,
   .comment-form,
   .comments-list,
   .reply-toggle {
@@ -906,6 +913,7 @@ textarea {
   }
 
   .comment-card,
+  .post-edit-form,
   .comment-form {
     padding: 12px;
     border-radius: 14px;
@@ -1046,6 +1054,7 @@ textarea {
   }
 
   .comment-card,
+  .post-edit-form,
   .comment-form {
     padding: 10px;
     border-radius: 12px;

@@ -11,6 +11,7 @@ Este arquivo consolida a evolucao do projeto de forma legivel, ja que os primeir
 - Edicao inline de comentarios para o autor logado com Google.
 - Exclusao de comentarios para o autor logado com Google.
 - Endpoints dedicados para atualizar e excluir comentarios com validacao de propriedade.
+- Edicao e exclusao da propria postagem para o autor logado com Google.
 
 ## [0.3.0] - 2026-03-14
 
