@@ -197,7 +197,8 @@ try {
                         </div>
                         <div class="created-links__row">
                             <span class="created-links__label">Album:</span>
-                            <button class="copy-button copy-icon-button memorial-download-button" type="button" data-download-album="<?= e($created['memorial_key']) ?>" aria-label="Baixar album" title="Baixar album">
+                            <span class="created-links__spacer" aria-hidden="true"></span>
+                            <button class="copy-button copy-icon-button memorial-download-button memorial-album-button" type="button" data-download-album="<?= e($created['memorial_key']) ?>" aria-label="Baixar album" title="Baixar album">
                                 <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                                     <path d="M12 3a1 1 0 0 1 1 1v8.586l2.293-2.293 1.414 1.414-4.707 4.707-4.707-4.707 1.414-1.414L11 12.586V4a1 1 0 0 1 1-1Zm-7 14h14v2H5v-2Z"/>
                                 </svg>
@@ -481,7 +482,8 @@ try {
                                         </div>
                                         <div class="memorial-link-box__row memorial-link-box__row--action">
                                             <span class="memorial-link-box__meta">Album</span>
-                                            <button class="copy-button copy-icon-button memorial-download-button" type="button" data-download-album="<?= e($memorial['memorial_key']) ?>" aria-label="Baixar album" title="Baixar album">
+                                            <span class="memorial-link-box__value memorial-link-box__value--empty" aria-hidden="true"></span>
+                                            <button class="copy-button copy-icon-button memorial-download-button memorial-album-button" type="button" data-download-album="<?= e($memorial['memorial_key']) ?>" aria-label="Baixar album" title="Baixar album">
                                                 <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                                                     <path d="M12 3a1 1 0 0 1 1 1v8.586l2.293-2.293 1.414 1.414-4.707 4.707-4.707-4.707 1.414-1.414L11 12.586V4a1 1 0 0 1 1-1Zm-7 14h14v2H5v-2Z"/>
                                                 </svg>

@@ -1299,6 +1299,11 @@ textarea {
   flex-wrap: wrap;
 }
 
+.created-links__spacer {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
 .memorial-album-button {
   min-height: 40px;
   padding: 0;
