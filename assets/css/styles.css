@@ -1559,6 +1559,13 @@ textarea {
   line-height: 1.65;
   color: #d6d2db;
   white-space: pre-wrap;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+.comment-body {
+  word-break: break-word;
+  overflow-wrap: anywhere;
 }
 
 .post-rich-text {

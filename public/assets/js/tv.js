@@ -9,23 +9,27 @@
 
   const ROTATION_MS = 9000;
   const REFRESH_MS = 20000;
+  const TEXT_SCROLL_START_DELAY_MS = 1600;
+  const TEXT_SCROLL_END_DELAY_MS = 1800;
+  const TEXT_SCROLL_PIXELS_PER_MS = 0.03;
 
   let posts = [];
   let currentIndex = 0;
   let rotationTimer = null;
   let refreshTimer = null;
-  let textScrollTimer = null;
   let textScrollFrame = null;
 
   function clearTextScroll() {
-    if (textScrollTimer) {
-      window.clearTimeout(textScrollTimer);
-      textScrollTimer = null;
-    }
-
     if (textScrollFrame) {
       window.cancelAnimationFrame(textScrollFrame);
       textScrollFrame = null;
+    }
+  }
+
+  function clearRotation() {
+    if (rotationTimer) {
+      window.clearTimeout(rotationTimer);
+      rotationTimer = null;
     }
   }
 
@@ -89,6 +93,7 @@
     if (!stage) return;
 
     clearTextScroll();
+    clearRotation();
 
     if (!posts.length) {
       stage.innerHTML = '';
@@ -144,22 +149,22 @@
     renderProgress();
     renderCounter();
     setStatus(`Exibindo ${currentIndex + 1} de ${posts.length}`);
-    setupTextScroll();
+    scheduleNextSlide(setupTextScroll());
   }
 
   function setupTextScroll() {
     const textElement = stage?.querySelector('.tv-slide__text');
-    if (!textElement) return;
+    if (!textElement) return ROTATION_MS;
 
     textElement.scrollTop = 0;
     const overflow = textElement.scrollHeight - textElement.clientHeight;
     if (overflow <= 12) {
-      return;
+      return ROTATION_MS;
     }
 
-    const startDelay = 1200;
-    const duration = Math.max(4200, Math.min(ROTATION_MS - 1800, overflow * 18));
-    const startTime = performance.now() + startDelay;
+    const duration = Math.max(7000, overflow / TEXT_SCROLL_PIXELS_PER_MS);
+    const totalDuration = TEXT_SCROLL_START_DELAY_MS + duration + TEXT_SCROLL_END_DELAY_MS;
+    const startTime = performance.now() + TEXT_SCROLL_START_DELAY_MS;
 
     const animate = (timestamp) => {
       if (!document.body.contains(textElement)) {
@@ -184,6 +189,7 @@
     };
 
     textScrollFrame = window.requestAnimationFrame(animate);
+    return totalDuration;
   }
 
   function goToNext() {
@@ -192,10 +198,10 @@
     renderCurrentPost();
   }
 
-  function startRotation() {
-    clearInterval(rotationTimer);
+  function scheduleNextSlide(delay) {
+    clearRotation();
     if (posts.length > 1) {
-      rotationTimer = window.setInterval(goToNext, ROTATION_MS);
+      rotationTimer = window.setTimeout(goToNext, Math.max(ROTATION_MS, delay || ROTATION_MS));
     }
   }
 
@@ -233,7 +239,6 @@
 
       renderCurrentPost();
       renderLastUpdate();
-      startRotation();
     } catch (error) {
       setStatus('Falha ao atualizar o mural');
     }
@@ -243,7 +248,7 @@
   refreshTimer = window.setInterval(loadFeed, REFRESH_MS);
 
   window.addEventListener('beforeunload', () => {
-    clearInterval(rotationTimer);
+    clearRotation();
     clearInterval(refreshTimer);
     clearTextScroll();
   });

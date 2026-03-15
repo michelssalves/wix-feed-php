@@ -200,8 +200,8 @@ try {
             .entry__text {
                 font-size: 24px;
                 line-height: 1.7;
-                word-break: normal;
-                overflow-wrap: break-word;
+                word-break: break-word;
+                overflow-wrap: anywhere;
                 white-space: normal;
             }
 
@@ -226,6 +226,8 @@ try {
             .entry__text ul,
             .entry__text ol {
                 margin: 0 0 14px;
+                word-break: break-word;
+                overflow-wrap: anywhere;
             }
 
             .entry__text p:last-child,
