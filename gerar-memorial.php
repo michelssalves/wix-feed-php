@@ -207,8 +207,7 @@ try {
                 <div class="admin-section">
                     <div class="admin-section__header">
                         <div>
-                            <h2 class="admin-section__title">Tema existente</h2>
-                            <p class="admin-section__text">Selecione um tema pronto para reutilizar ou deixe o padrao do sistema.</p>
+                            <h2 class="admin-section__title">Tema cadastrados</h2>
                         </div>
                     </div>
                     <label class="field">
