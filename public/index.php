@@ -53,8 +53,8 @@ try {
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title><?= e($config['app_name']) ?></title>
-    <style><?= $themeCss ?? memorialThemeCssVariables(null) ?></style>
     <link rel="stylesheet" href="./assets/css/styles.css">
+    <style><?= $themeCss ?? memorialThemeCssVariables(null) ?></style>
 </head>
 <body>
 <main class="app-shell">
