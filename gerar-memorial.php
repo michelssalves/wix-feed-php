@@ -172,15 +172,30 @@ try {
                 <div class="flash-message is-success">
                     Key criada com sucesso:
                     <strong><?= e($created['memorial_key']) ?></strong><br>
-                    URL:
-                    <a href="<?= e(appUrl('?memorial_key=' . $created['memorial_key'])) ?>" style="color:#f4f0e7">
-                        <?= e(appUrl('?memorial_key=' . $created['memorial_key'])) ?>
-                    </a>
-                    <button class="copy-button copy-icon-button" type="button" data-copy-text="<?= e(appUrl('?memorial_key=' . $created['memorial_key'])) ?>" aria-label="Copiar URL do memorial" title="Copiar URL do memorial">
-                        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                            <path d="M16 1H6a2 2 0 0 0-2 2v12h2V3h10V1Zm3 4H10a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h9a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2Zm0 16H10V7h9v14Z" />
-                        </svg>
-                    </button>
+                    <div class="created-links">
+                        <div class="created-links__row">
+                            <span class="created-links__label">Mural:</span>
+                            <a href="<?= e(appUrl('?memorial_key=' . $created['memorial_key'])) ?>" style="color:#f4f0e7">
+                                <?= e(appUrl('?memorial_key=' . $created['memorial_key'])) ?>
+                            </a>
+                            <button class="copy-button copy-icon-button" type="button" data-copy-text="<?= e(appUrl('?memorial_key=' . $created['memorial_key'])) ?>" aria-label="Copiar URL do memorial" title="Copiar URL do memorial">
+                                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                                    <path d="M16 1H6a2 2 0 0 0-2 2v12h2V3h10V1Zm3 4H10a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h9a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2Zm0 16H10V7h9v14Z" />
+                                </svg>
+                            </button>
+                        </div>
+                        <div class="created-links__row">
+                            <span class="created-links__label">TV:</span>
+                            <a href="<?= e(appUrl('tv-memorial.php?memorial_key=' . $created['memorial_key'])) ?>" style="color:#f4f0e7">
+                                <?= e(appUrl('tv-memorial.php?memorial_key=' . $created['memorial_key'])) ?>
+                            </a>
+                            <button class="copy-button copy-icon-button" type="button" data-copy-text="<?= e(appUrl('tv-memorial.php?memorial_key=' . $created['memorial_key'])) ?>" aria-label="Copiar URL da TV" title="Copiar URL da TV">
+                                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                                    <path d="M16 1H6a2 2 0 0 0-2 2v12h2V3h10V1Zm3 4H10a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h9a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2Zm0 16H10V7h9v14Z" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
                 </div>
             <?php endif; ?>
 
@@ -437,10 +452,20 @@ try {
                             <div class="post-body memorial-card__body">
                                 <div class="post-rich-text memorial-card__content">
                                     <div class="memorial-link-box">
-                                        <span class="memorial-link-box__label">URL do memorial</span>
+                                        <span class="memorial-link-box__label">Links do memorial</span>
                                         <div class="memorial-link-box__row">
+                                            <span class="memorial-link-box__meta">Mural</span>
                                             <span class="memorial-link-box__value"><?= e(appUrl('?memorial_key=' . $memorial['memorial_key'])) ?></span>
                                             <button class="copy-button copy-icon-button memorial-copy-button" type="button" data-copy-text="<?= e(appUrl('?memorial_key=' . $memorial['memorial_key'])) ?>" aria-label="Copiar URL do memorial" title="Copiar URL do memorial">
+                                                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                                                    <path d="M16 1H6a2 2 0 0 0-2 2v12h2V3h10V1Zm3 4H10a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h9a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2Zm0 16H10V7h9v14Z" />
+                                                </svg>
+                                            </button>
+                                        </div>
+                                        <div class="memorial-link-box__row">
+                                            <span class="memorial-link-box__meta">TV</span>
+                                            <span class="memorial-link-box__value"><?= e(appUrl('tv-memorial.php?memorial_key=' . $memorial['memorial_key'])) ?></span>
+                                            <button class="copy-button copy-icon-button memorial-copy-button" type="button" data-copy-text="<?= e(appUrl('tv-memorial.php?memorial_key=' . $memorial['memorial_key'])) ?>" aria-label="Copiar URL da TV" title="Copiar URL da TV">
                                                 <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                                                     <path d="M16 1H6a2 2 0 0 0-2 2v12h2V3h10V1Zm3 4H10a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h9a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2Zm0 16H10V7h9v14Z" />
                                                 </svg>

@@ -1225,6 +1225,28 @@ textarea {
   border-color: rgba(211, 95, 95, 0.22);
 }
 
+.created-links {
+  display: grid;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.created-links__row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.created-links__label,
+.memorial-link-box__meta {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
 .user-session {
   display: flex;
   align-items: center;
