@@ -1822,7 +1822,7 @@ textarea {
 }
 
 .memorial-link-box__row--action {
-  grid-template-columns: 72px minmax(0, 1fr);
+  grid-template-columns: 72px minmax(0, 1fr) 40px;
 }
 
 .memorial-link-box__value {
@@ -1840,7 +1840,7 @@ textarea {
 }
 
 .memorial-album-button {
-  justify-self: start;
+  justify-self: end;
   min-width: 40px;
 }
 
@@ -2277,7 +2277,7 @@ textarea {
 
   .memorial-album-button {
     width: 40px;
-    justify-self: start;
+    justify-self: end;
     min-width: 40px;
   }
 
