@@ -14,6 +14,20 @@
   let currentIndex = 0;
   let rotationTimer = null;
   let refreshTimer = null;
+  let textScrollTimer = null;
+  let textScrollFrame = null;
+
+  function clearTextScroll() {
+    if (textScrollTimer) {
+      window.clearTimeout(textScrollTimer);
+      textScrollTimer = null;
+    }
+
+    if (textScrollFrame) {
+      window.cancelAnimationFrame(textScrollFrame);
+      textScrollFrame = null;
+    }
+  }
 
   function formatDate(value) {
     if (!value) return '';
@@ -74,6 +88,8 @@
   function renderCurrentPost() {
     if (!stage) return;
 
+    clearTextScroll();
+
     if (!posts.length) {
       stage.innerHTML = '';
       if (emptyState) {
@@ -128,6 +144,46 @@
     renderProgress();
     renderCounter();
     setStatus(`Exibindo ${currentIndex + 1} de ${posts.length}`);
+    setupTextScroll();
+  }
+
+  function setupTextScroll() {
+    const textElement = stage?.querySelector('.tv-slide__text');
+    if (!textElement) return;
+
+    textElement.scrollTop = 0;
+    const overflow = textElement.scrollHeight - textElement.clientHeight;
+    if (overflow <= 12) {
+      return;
+    }
+
+    const startDelay = 1200;
+    const duration = Math.max(4200, Math.min(ROTATION_MS - 1800, overflow * 18));
+    const startTime = performance.now() + startDelay;
+
+    const animate = (timestamp) => {
+      if (!document.body.contains(textElement)) {
+        clearTextScroll();
+        return;
+      }
+
+      if (timestamp < startTime) {
+        textScrollFrame = window.requestAnimationFrame(animate);
+        return;
+      }
+
+      const elapsed = timestamp - startTime;
+      const progressValue = Math.min(1, elapsed / duration);
+      textElement.scrollTop = overflow * progressValue;
+
+      if (progressValue < 1) {
+        textScrollFrame = window.requestAnimationFrame(animate);
+      } else {
+        textScrollFrame = null;
+      }
+    };
+
+    textScrollFrame = window.requestAnimationFrame(animate);
   }
 
   function goToNext() {
@@ -189,5 +245,6 @@
   window.addEventListener('beforeunload', () => {
     clearInterval(rotationTimer);
     clearInterval(refreshTimer);
+    clearTextScroll();
   });
 })();
