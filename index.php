@@ -53,6 +53,8 @@ try {
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title><?= e($config['app_name']) ?></title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/quill@1.3.7/dist/quill.snow.css">
     <link rel="stylesheet" href="./assets/css/styles.css">
     <style><?= $themeCss ?? memorialThemeCssVariables(null) ?></style>
 </head>
@@ -73,58 +75,69 @@ try {
 
         <form id="post-form" class="post-form" enctype="multipart/form-data">
             <input type="hidden" id="memorial-key" name="memorial_key" value="<?= e($memorialKey) ?>">
-            <div id="post-identity-row" class="field-row">
-                <label class="field compact-field">
-                    <input type="text" id="post-author-name" name="author_name" maxlength="120" placeholder="Digite seu nome">
-                </label>
-                <div class="field google-field compact-field">
-                    <div class="google-login-slot">
-                        <div class="google-button js-google-btn"></div>
-                    </div>
-                </div>
-            </div>
 
-            <div class="field">
-                <span>Escreva sua mensagem de homenagem ou condolencia</span>
-                <div class="editor-shell">
-                    <div class="editor-toolbar">
-                        <button class="toolbar-button" type="button" data-editor-command="bold" title="Negrito"><strong>B</strong></button>
-                        <button class="toolbar-button" type="button" data-editor-command="italic" title="Italico"><em>I</em></button>
-                        <button class="toolbar-button" type="button" data-editor-command="insertUnorderedList" title="Lista">&bull;</button>
-                        <div class="emoji-group" aria-label="Emocoes de condolencias">
-                            <button class="toolbar-button" type="button" data-editor-emoji="✞" title="Cruz">✞</button>
-                            <button class="toolbar-button" type="button" data-editor-emoji="🙏" title="Oracao">🙏</button>
-                            <button class="toolbar-button" type="button" data-editor-emoji="🕯️" title="Vela">🕯️</button>
-                            <button class="toolbar-button" type="button" data-editor-emoji="🌹" title="Flor">🌹</button>
-                            <button class="toolbar-button" type="button" data-editor-emoji="🥀" title="Flor murcha">🥀</button>
-                            <button class="toolbar-button" type="button" data-editor-emoji="🤍" title="Coracao branco">🤍</button>
-                            <button class="toolbar-button" type="button" data-editor-emoji="❤️" title="Coracao vermelho">❤️</button>
-                            <button class="toolbar-button" type="button" data-editor-emoji="🖤" title="Coracao preto">🖤</button>
-                            <button class="toolbar-button" type="button" data-editor-emoji="🫂" title="Abraco">🫂</button>
-                            <button class="toolbar-button" type="button" data-editor-emoji="😢" title="Choro">😢</button>
-                        </div>
+            <div class="tribute-composer-card">
+                <div id="post-identity-row" class="row g-3 align-items-end composer-identity-row">
+                    <div class="col">
+                        <label class="field compact-field mb-0">
+                            <input type="text" id="post-author-name" name="author_name" maxlength="120" placeholder="Digite seu nome">
+                        </label>
                     </div>
-                    <div id="post-editor" class="rich-editor" contenteditable="true" data-placeholder="Escreva aqui"></div>
-                    <input type="hidden" id="post-text" name="text">
-                    <input type="file" id="post-image" class="visually-hidden-file-input" name="image" accept="image/*">
-                    <div class="editor-footer">
-                        <div class="attachment-status-group">
-                            <button class="attachment-picker-button" id="post-image-trigger" type="button" title="Anexar imagem" aria-label="Anexar imagem">
-                                <svg viewBox="0 0 24 24" focusable="false">
-                                    <path d="M4 5.5A1.5 1.5 0 0 1 5.5 4h13A1.5 1.5 0 0 1 20 5.5v13a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 18.5v-13Zm1.5.5v8.336l3.624-3.624a1 1 0 0 1 1.414 0l2.208 2.208 2.71-3.388a1 1 0 0 1 1.562.01L18.5 11.52V6h-13ZM18.5 18.5v-3.78l-2.26-2.938-2.62 3.275a1 1 0 0 1-1.477.089l-2.312-2.312L5.5 17.164V18.5h13ZM8.75 10.25a1.75 1.75 0 1 0 0-3.5 1.75 1.75 0 0 0 0 3.5Z"/>
-                                </svg>
-                            </button>
-                            <div id="selected-file-name" class="attachment-status field-help">
-                                <span id="attachment-status-text">Nenhum anexo</span>
+                    <div class="col-auto">
+                        <div class="field google-field compact-field mb-0">
+                            <div class="google-login-slot">
+                                <div class="google-button js-google-btn"></div>
                             </div>
                         </div>
-                        <span class="field-help">Imagem opcional, ate 2 MB</span>
                     </div>
                 </div>
-            </div>
 
-            <div class="form-actions">
-                <button id="post-submit-button" class="primary-button" type="submit">Enviar</button>
+                <div class="field tribute-composer-field mb-0">
+                    <span class="composer-field-label">Escreva sua mensagem de homenagem ou condolencia</span>
+                    <div class="editor-shell quill-shell">
+                        <div id="quill-toolbar" class="editor-toolbar quill-toolbar">
+                            <span class="ql-formats">
+                                <button class="ql-bold" type="button" title="Negrito"></button>
+                                <button class="ql-italic" type="button" title="Italico"></button>
+                                <button class="ql-list" type="button" value="bullet" title="Lista"></button>
+                            </span>
+                            <div class="emoji-group quill-emoji-group" aria-label="Emocoes de condolencias">
+                                <button class="toolbar-button" type="button" data-quill-emoji="&#10014;" title="Cruz">&#10014;</button>
+                                <button class="toolbar-button" type="button" data-quill-emoji="&#128591;" title="Oracao">&#128591;</button>
+                                <button class="toolbar-button" type="button" data-quill-emoji="&#128367;&#65039;" title="Vela">&#128367;&#65039;</button>
+                                <button class="toolbar-button" type="button" data-quill-emoji="&#127801;" title="Flor">&#127801;</button>
+                                <button class="toolbar-button" type="button" data-quill-emoji="&#129704;" title="Flor murcha">&#129704;</button>
+                                <button class="toolbar-button" type="button" data-quill-emoji="&#129293;" title="Coracao branco">&#129293;</button>
+                                <button class="toolbar-button" type="button" data-quill-emoji="&#10084;&#65039;" title="Coracao vermelho">&#10084;&#65039;</button>
+                                <button class="toolbar-button" type="button" data-quill-emoji="&#128420;" title="Coracao preto">&#128420;</button>
+                                <button class="toolbar-button" type="button" data-quill-emoji="&#129730;" title="Abraco">&#129730;</button>
+                                <button class="toolbar-button" type="button" data-quill-emoji="&#128546;" title="Choro">&#128546;</button>
+                            </div>
+                        </div>
+
+                        <div id="post-editor" class="rich-editor quill-editor"></div>
+                        <input type="hidden" id="post-text" name="text">
+                        <input type="file" id="post-image" class="visually-hidden-file-input" name="image" accept="image/*">
+
+                        <div class="editor-footer quill-footer">
+                            <div class="attachment-status-group quill-upload-status">
+                                <button class="attachment-picker-button" id="post-image-trigger" type="button" title="Anexar imagem" aria-label="Anexar imagem">
+                                    <svg viewBox="0 0 24 24" focusable="false">
+                                        <path d="M4 5.5A1.5 1.5 0 0 1 5.5 4h13A1.5 1.5 0 0 1 20 5.5v13a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 18.5v-13Zm1.5.5v8.336l3.624-3.624a1 1 0 0 1 1.414 0l2.208 2.208 2.71-3.388a1 1 0 0 1 1.562.01L18.5 11.52V6h-13ZM18.5 18.5v-3.78l-2.26-2.938-2.62 3.275a1 1 0 0 1-1.477.089l-2.312-2.312L5.5 17.164V18.5h13ZM8.75 10.25a1.75 1.75 0 1 0 0-3.5 1.75 1.75 0 0 0 0 3.5Z"/>
+                                    </svg>
+                                </button>
+                                <div id="selected-file-name" class="attachment-status field-help">
+                                    <span id="attachment-status-text">Nenhum anexo</span>
+                                </div>
+                            </div>
+                            <span class="field-help quill-upload-help">Imagem opcional, ate 2 MB</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-actions composer-submit-row">
+                    <button id="post-submit-button" class="primary-button" type="submit">Enviar</button>
+                </div>
             </div>
         </form>
     </section>
@@ -154,6 +167,7 @@ try {
 <?php if ($googleEnabled): ?>
     <script src="https://accounts.google.com/gsi/client" async defer></script>
 <?php endif; ?>
+<script src="https://cdn.jsdelivr.net/npm/quill@1.3.7/dist/quill.min.js" defer></script>
 <script src="./assets/js/app.js" defer></script>
 </body>
 </html>
