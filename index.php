@@ -88,20 +88,18 @@ try {
                 <span>Escreva sua mensagem de homenagem ou condolencia</span>
                 <div class="editor-shell">
                     <div class="editor-toolbar">
-                        <button class="toolbar-button" type="button" data-editor-command="bold" title="Negrito"><strong>B</strong></button>
-                        <button class="toolbar-button" type="button" data-editor-command="italic" title="Italico"><em>I</em></button>
-                        <button class="toolbar-button" type="button" data-editor-command="insertUnorderedList" title="Lista">&bull;</button>
                         <div class="emoji-group" aria-label="Emocoes de condolencias">
-                            <button class="toolbar-button" type="button" data-editor-emoji="✞" title="Cruz">✞</button>
-                            <button class="toolbar-button" type="button" data-editor-emoji="🙏" title="Oracao">🙏</button>
-                            <button class="toolbar-button" type="button" data-editor-emoji="🕯️" title="Vela">🕯️</button>
-                            <button class="toolbar-button" type="button" data-editor-emoji="🌹" title="Flor">🌹</button>
-                            <button class="toolbar-button" type="button" data-editor-emoji="🥀" title="Flor murcha">🥀</button>
-                            <button class="toolbar-button" type="button" data-editor-emoji="🤍" title="Coracao branco">🤍</button>
-                            <button class="toolbar-button" type="button" data-editor-emoji="❤️" title="Coracao vermelho">❤️</button>
-                            <button class="toolbar-button" type="button" data-editor-emoji="🖤" title="Coracao preto">🖤</button>
-                            <button class="toolbar-button" type="button" data-editor-emoji="🫂" title="Abraco">🫂</button>
-                            <button class="toolbar-button" type="button" data-editor-emoji="😢" title="Choro">😢</button>
+                            <button class="toolbar-button" type="button" data-editor-emoji="&#128330;" title="Pomba">&#128330;</button>
+                            <button class="toolbar-button" type="button" data-editor-emoji="âœž" title="Cruz">âœž</button>
+                            <button class="toolbar-button" type="button" data-editor-emoji="ðŸ™" title="Oracao">ðŸ™</button>
+                            <button class="toolbar-button" type="button" data-editor-emoji="ðŸ•¯ï¸" title="Vela">ðŸ•¯ï¸</button>
+                            <button class="toolbar-button" type="button" data-editor-emoji="ðŸŒ¹" title="Flor">ðŸŒ¹</button>
+                            <button class="toolbar-button" type="button" data-editor-emoji="ðŸ¥€" title="Flor murcha">ðŸ¥€</button>
+                            <button class="toolbar-button" type="button" data-editor-emoji="ðŸ¤" title="Coracao branco">ðŸ¤</button>
+                            <button class="toolbar-button" type="button" data-editor-emoji="â¤ï¸" title="Coracao vermelho">â¤ï¸</button>
+                            <button class="toolbar-button" type="button" data-editor-emoji="ðŸ–¤" title="Coracao preto">ðŸ–¤</button>
+                            <button class="toolbar-button" type="button" data-editor-emoji="ðŸ«‚" title="Abraco">ðŸ«‚</button>
+                            <button class="toolbar-button" type="button" data-editor-emoji="ðŸ˜¢" title="Choro">ðŸ˜¢</button>
                         </div>
                     </div>
                     <div id="post-editor" class="rich-editor" contenteditable="true" data-placeholder="Escreva aqui"></div>
@@ -157,3 +155,5 @@ try {
 <script src="./assets/js/app.js" defer></script>
 </body>
 </html>
+
+

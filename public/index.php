@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-require_once dirname(__DIR__) . '/src/Support/helpers.php';
-require_once dirname(__DIR__) . '/src/Support/session.php';
-require_once dirname(__DIR__) . '/src/Services/Database.php';
-require_once dirname(__DIR__) . '/src/Services/MemorialService.php';
+require_once __DIR__ . '/src/Support/helpers.php';
+require_once __DIR__ . '/src/Support/session.php';
+require_once __DIR__ . '/src/Services/Database.php';
+require_once __DIR__ . '/src/Services/MemorialService.php';
 
 use App\Services\Database;
 use App\Services\MemorialService;
@@ -88,20 +88,18 @@ try {
                 <span>Escreva sua mensagem de homenagem ou condolencia</span>
                 <div class="editor-shell">
                     <div class="editor-toolbar">
-                        <button class="toolbar-button" type="button" data-editor-command="bold" title="Negrito"><strong>B</strong></button>
-                        <button class="toolbar-button" type="button" data-editor-command="italic" title="Italico"><em>I</em></button>
-                        <button class="toolbar-button" type="button" data-editor-command="insertUnorderedList" title="Lista">•</button>
                         <div class="emoji-group" aria-label="Emocoes de condolencias">
-                            <button class="toolbar-button" type="button" data-editor-emoji="✞" title="Cruz">✞</button>
-                            <button class="toolbar-button" type="button" data-editor-emoji="🙏" title="Oracao">🙏</button>
-                            <button class="toolbar-button" type="button" data-editor-emoji="🕯️" title="Vela">🕯️</button>
-                            <button class="toolbar-button" type="button" data-editor-emoji="🌹" title="Flor">🌹</button>
-                            <button class="toolbar-button" type="button" data-editor-emoji="🥀" title="Flor murcha">🥀</button>
-                            <button class="toolbar-button" type="button" data-editor-emoji="🤍" title="Coracao branco">🤍</button>
-                            <button class="toolbar-button" type="button" data-editor-emoji="❤️" title="Coracao vermelho">❤️</button>
-                            <button class="toolbar-button" type="button" data-editor-emoji="🖤" title="Coracao preto">🖤</button>
-                            <button class="toolbar-button" type="button" data-editor-emoji="🫂" title="Abraco">🫂</button>
-                            <button class="toolbar-button" type="button" data-editor-emoji="😢" title="Choro">😢</button>
+                            <button class="toolbar-button" type="button" data-editor-emoji="&#128330;" title="Pomba">&#128330;</button>
+                            <button class="toolbar-button" type="button" data-editor-emoji="Ã¢Å“Å¾" title="Cruz">Ã¢Å“Å¾</button>
+                            <button class="toolbar-button" type="button" data-editor-emoji="Ã°Å¸â„¢Â" title="Oracao">Ã°Å¸â„¢Â</button>
+                            <button class="toolbar-button" type="button" data-editor-emoji="Ã°Å¸â€¢Â¯Ã¯Â¸Â" title="Vela">Ã°Å¸â€¢Â¯Ã¯Â¸Â</button>
+                            <button class="toolbar-button" type="button" data-editor-emoji="Ã°Å¸Å’Â¹" title="Flor">Ã°Å¸Å’Â¹</button>
+                            <button class="toolbar-button" type="button" data-editor-emoji="Ã°Å¸Â¥â‚¬" title="Flor murcha">Ã°Å¸Â¥â‚¬</button>
+                            <button class="toolbar-button" type="button" data-editor-emoji="Ã°Å¸Â¤Â" title="Coracao branco">Ã°Å¸Â¤Â</button>
+                            <button class="toolbar-button" type="button" data-editor-emoji="Ã¢ÂÂ¤Ã¯Â¸Â" title="Coracao vermelho">Ã¢ÂÂ¤Ã¯Â¸Â</button>
+                            <button class="toolbar-button" type="button" data-editor-emoji="Ã°Å¸â€“Â¤" title="Coracao preto">Ã°Å¸â€“Â¤</button>
+                            <button class="toolbar-button" type="button" data-editor-emoji="Ã°Å¸Â«â€š" title="Abraco">Ã°Å¸Â«â€š</button>
+                            <button class="toolbar-button" type="button" data-editor-emoji="Ã°Å¸ËœÂ¢" title="Choro">Ã°Å¸ËœÂ¢</button>
                         </div>
                     </div>
                     <div id="post-editor" class="rich-editor" contenteditable="true" data-placeholder="Escreva aqui"></div>
@@ -137,7 +135,7 @@ try {
 </main>
 
 <div id="image-lightbox" class="image-lightbox is-hidden" aria-hidden="true">
-    <button id="lightbox-close" class="lightbox-close" type="button" aria-label="Fechar imagem">×</button>
+    <button id="lightbox-close" class="lightbox-close" type="button" aria-label="Fechar imagem">&times;</button>
     <img id="lightbox-image" class="lightbox-image" src="" alt="Imagem ampliada">
 </div>
 
@@ -157,3 +155,5 @@ try {
 <script src="./assets/js/app.js" defer></script>
 </body>
 </html>
+
+
