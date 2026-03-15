@@ -804,6 +804,7 @@ textarea:focus {
   min-height: 44px;
   padding: 0;
   justify-content: center;
+  cursor: pointer;
   border-color: var(--theme-submit-bg);
   color: var(--theme-submit-bg);
 }
@@ -1926,7 +1927,16 @@ textarea {
   color: #f4f0e7;
   font-size: 0.95rem;
   line-height: 1.45;
+  cursor: pointer;
+  text-decoration: none;
+  transition: color 0.16s ease, opacity 0.16s ease;
   word-break: break-all;
+}
+
+a.memorial-link-box__value:hover,
+a.memorial-link-box__value:focus-visible {
+  color: var(--theme-submit-bg);
+  outline: none;
 }
 
 .memorial-copy-button {

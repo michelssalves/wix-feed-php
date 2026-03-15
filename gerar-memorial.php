@@ -523,7 +523,7 @@ try {
                                         <span class="memorial-link-box__label">Links do memorial</span>
                                         <div class="memorial-link-box__row">
                                             <span class="memorial-link-box__meta">Mural</span>
-                                            <span class="memorial-link-box__value"><?= e(appUrl('?memorial_key=' . $memorial['memorial_key'])) ?></span>
+                                            <a class="memorial-link-box__value" href="<?= e(appUrl('?memorial_key=' . $memorial['memorial_key'])) ?>" target="_blank" rel="noopener noreferrer"><?= e(appUrl('?memorial_key=' . $memorial['memorial_key'])) ?></a>
                                             <button class="copy-button copy-icon-button memorial-copy-button" type="button" data-copy-text="<?= e(appUrl('?memorial_key=' . $memorial['memorial_key'])) ?>" aria-label="Copiar URL do memorial" title="Copiar URL do memorial">
                                                 <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                                                     <path d="M16 1H6a2 2 0 0 0-2 2v12h2V3h10V1Zm3 4H10a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h9a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2Zm0 16H10V7h9v14Z" />
@@ -532,7 +532,7 @@ try {
                                         </div>
                                         <div class="memorial-link-box__row">
                                             <span class="memorial-link-box__meta">TV</span>
-                                            <span class="memorial-link-box__value"><?= e(appUrl('tv-memorial.php?memorial_key=' . $memorial['memorial_key'])) ?></span>
+                                            <a class="memorial-link-box__value" href="<?= e(appUrl('tv-memorial.php?memorial_key=' . $memorial['memorial_key'])) ?>" target="_blank" rel="noopener noreferrer"><?= e(appUrl('tv-memorial.php?memorial_key=' . $memorial['memorial_key'])) ?></a>
                                             <button class="copy-button copy-icon-button memorial-copy-button" type="button" data-copy-text="<?= e(appUrl('tv-memorial.php?memorial_key=' . $memorial['memorial_key'])) ?>" aria-label="Copiar URL da TV" title="Copiar URL da TV">
                                                 <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                                                     <path d="M16 1H6a2 2 0 0 0-2 2v12h2V3h10V1Zm3 4H10a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h9a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2Zm0 16H10V7h9v14Z" />

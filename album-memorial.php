@@ -12,6 +12,37 @@ use App\Services\Database;
 use App\Services\FeedService;
 use App\Services\MemorialService;
 
+function albumTextHtml(string $html): string
+{
+    $normalized = trim($html);
+    if ($normalized === '') {
+        return '';
+    }
+
+    $normalized = preg_replace('/<(script|style)\b[^>]*>.*?<\/\1>/is', '', $normalized) ?? $normalized;
+    $normalized = preg_replace('/<br\s*\/?>/i', "\n", $normalized) ?? $normalized;
+    $normalized = preg_replace('/<\/(p|div|li|h[1-6]|blockquote|ul|ol)>/i', "\n\n", $normalized) ?? $normalized;
+    $normalized = strip_tags($normalized);
+    $normalized = html_entity_decode($normalized, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+    $normalized = str_replace(["\r\n", "\r"], "\n", $normalized);
+    $normalized = preg_replace("/\n{3,}/", "\n\n", $normalized) ?? $normalized;
+
+    $parts = preg_split("/\n\s*\n/", trim($normalized)) ?: [];
+    $parts = array_values(array_filter(array_map(static fn(string $part): string => trim($part), $parts), static fn(string $part): bool => $part !== ''));
+
+    if ($parts === []) {
+        return '';
+    }
+
+    $paragraphs = array_map(static function (string $part): string {
+        $safe = e($part);
+        $safe = nl2br($safe, false);
+        return '<p>' . $safe . '</p>';
+    }, $parts);
+
+    return implode('', $paragraphs);
+}
+
 function albumSlug(string $value): string
 {
     $value = mb_strtolower(trim($value));
@@ -169,6 +200,9 @@ try {
             .entry__text {
                 font-size: 24px;
                 line-height: 1.7;
+                word-break: normal;
+                overflow-wrap: break-word;
+                white-space: normal;
             }
 
             .entry--text-only .entry__text {
@@ -321,22 +355,23 @@ try {
             <?php if (!$posts): ?>
                 <section class="empty">Nenhuma homenagem foi publicada neste memorial ate o momento.</section>
             <?php else: ?>
-                <?php foreach ($posts as $post): ?>
-                    <?php
-                    $hasText = trim((string) ($post['texto'] ?? '')) !== '';
-                    $hasImage = !empty($post['imagem']);
-                    ?>
-                    <article class="entry<?= $hasText && !$hasImage ? ' entry--text-only' : '' ?>">
+                  <?php foreach ($posts as $post): ?>
+                      <?php
+                      $hasText = trim((string) ($post['texto'] ?? '')) !== '';
+                      $hasImage = !empty($post['imagem']);
+                      $albumText = $hasText ? albumTextHtml((string) $post['texto']) : '';
+                      ?>
+                      <article class="entry<?= $hasText && !$hasImage ? ' entry--text-only' : '' ?>">
                         <div class="entry__meta">
                             <div class="entry__author"><?= e($post['nome_autor'] !== '' ? $post['nome_autor'] : 'Homenagem anonima') ?></div>
                             <?php if (!empty($post['criado_em'])): ?>
                                 <div class="entry__date"><?= e(formatDateTimeBr($post['criado_em'])) ?></div>
                             <?php endif; ?>
                         </div>
-                        <div class="entry__body">
-                            <?php if ($hasText): ?>
-                                <div class="entry__text"><?= $post['texto'] ?></div>
-                            <?php endif; ?>
+                          <div class="entry__body">
+                              <?php if ($hasText): ?>
+                                <div class="entry__text"><?= $albumText ?></div>
+                              <?php endif; ?>
                             <?php if ($hasImage): ?>
                                 <div class="entry__image">
                                     <img src="<?= e(appUrl($post['imagem'])) ?>" alt="Imagem da homenagem">
