@@ -106,7 +106,7 @@ try {
                     </div>
                     <div id="post-editor" class="rich-editor" contenteditable="true" data-placeholder="Escreva aqui"></div>
                     <input type="hidden" id="post-text" name="text">
-                    <input type="file" id="post-image" name="image" accept="image/*" hidden>
+                    <input type="file" id="post-image" class="visually-hidden-file-input" name="image" accept="image/*">
                     <div class="editor-footer">
                         <div class="attachment-status-group">
                             <button class="attachment-picker-button" id="post-image-trigger" type="button" title="Anexar imagem" aria-label="Anexar imagem">

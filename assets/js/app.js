@@ -546,7 +546,22 @@ document.querySelectorAll('[data-editor-emoji]').forEach((button) => {
   });
 });
 
-elements.postImageTrigger.addEventListener('click', () => {
+elements.postImageTrigger.addEventListener('click', (event) => {
+  event.preventDefault();
+
+  if (elements.postImage.disabled) {
+    return;
+  }
+
+  if (typeof elements.postImage.showPicker === 'function') {
+    try {
+      elements.postImage.showPicker();
+      return;
+    } catch (error) {
+      // Fallback below for browsers/embeds that block showPicker.
+    }
+  }
+
   elements.postImage.click();
 });
 
