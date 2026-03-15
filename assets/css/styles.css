@@ -461,6 +461,54 @@ body.is-embedded::-webkit-scrollbar-track {
   gap: 22px;
 }
 
+.admin-accordion {
+  border: 1px solid color-mix(in srgb, var(--theme-border) 86%, white 4%);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.038) 0%, rgba(255, 255, 255, 0.02) 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
+}
+
+.admin-accordion[open] {
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03), 0 14px 30px rgba(0, 0, 0, 0.12);
+}
+
+.admin-accordion__summary {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px 22px;
+  cursor: pointer;
+}
+
+.admin-accordion__summary::-webkit-details-marker {
+  display: none;
+}
+
+.admin-accordion__title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #f3ede2;
+}
+
+.admin-accordion__icon {
+  width: 12px;
+  height: 12px;
+  border-right: 2px solid var(--muted);
+  border-bottom: 2px solid var(--muted);
+  transform: rotate(45deg);
+  transition: transform 0.18s ease;
+  flex: 0 0 auto;
+}
+
+.admin-accordion[open] .admin-accordion__icon {
+  transform: rotate(225deg);
+}
+
+.admin-accordion__content {
+  padding: 0 22px 22px;
+}
+
 .admin-section {
   border: 1px solid color-mix(in srgb, var(--theme-border) 86%, white 4%);
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.038) 0%, rgba(255, 255, 255, 0.02) 100%);
@@ -721,6 +769,27 @@ textarea:focus {
   color: #f3ede2;
   font-weight: 700;
   white-space: nowrap;
+}
+
+.memorial-filter-bar {
+  margin-bottom: 18px;
+  border: 1px solid color-mix(in srgb, var(--theme-border) 78%, white 6%);
+  background: rgba(255, 255, 255, 0.03);
+  padding: 18px;
+}
+
+.memorial-filter-form {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto;
+  gap: 14px;
+  align-items: end;
+}
+
+.memorial-filter-form__actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
 }
 
 .field input[type="color"] {
@@ -2016,6 +2085,14 @@ textarea {
     gap: 16px;
   }
 
+  .admin-accordion__summary {
+    padding: 16px;
+  }
+
+  .admin-accordion__content {
+    padding: 0 16px 16px;
+  }
+
   .admin-section {
     padding: 16px;
     gap: 16px;
@@ -2071,6 +2148,20 @@ textarea {
   .panel-section-header__badge {
     width: 100%;
     justify-content: flex-start;
+  }
+
+  .memorial-filter-form {
+    grid-template-columns: 1fr;
+  }
+
+  .memorial-filter-form__actions {
+    width: 100%;
+  }
+
+  .memorial-filter-form__actions .secondary-button,
+  .memorial-filter-form__actions .ghost-button {
+    flex: 1 1 0;
+    justify-content: center;
   }
 
   .theme-manager-card__header,

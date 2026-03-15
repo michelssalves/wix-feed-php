@@ -45,24 +45,34 @@ class MemorialService
         ];
     }
 
-    public function latest(int $limit = 20, int $offset = 0): array
+    public function latest(int $limit = 20, int $offset = 0, array $filters = []): array
     {
+        [$whereSql, $params] = $this->buildFilters($filters);
         $statement = $this->pdo->prepare(
             'SELECT m.id, m.memorial_key, m.nome_falecido, m.foto_falecido, m.theme_id, m.criado_em, t.nome AS theme_nome
              FROM memorials m
-             LEFT JOIN themes t ON t.id = m.theme_id
+             LEFT JOIN themes t ON t.id = m.theme_id' . $whereSql . '
              ORDER BY m.id DESC
              LIMIT :limit OFFSET :offset'
         );
+        foreach ($params as $key => $value) {
+            $statement->bindValue($key, $value);
+        }
         $statement->bindValue('limit', $limit, PDO::PARAM_INT);
         $statement->bindValue('offset', $offset, PDO::PARAM_INT);
         $statement->execute();
         return $statement->fetchAll();
     }
 
-    public function count(): int
+    public function count(array $filters = []): int
     {
-        return (int) $this->pdo->query('SELECT COUNT(*) FROM memorials')->fetchColumn();
+        [$whereSql, $params] = $this->buildFilters($filters);
+        $statement = $this->pdo->prepare('SELECT COUNT(*) FROM memorials m' . $whereSql);
+        foreach ($params as $key => $value) {
+            $statement->bindValue($key, $value);
+        }
+        $statement->execute();
+        return (int) $statement->fetchColumn();
     }
 
     public function findByKey(string $memorialKey): ?array
@@ -163,5 +173,32 @@ class MemorialService
     private function generateKey(): string
     {
         return (string) random_int(100000, 99999999);
+    }
+
+    private function buildFilters(array $filters): array
+    {
+        $conditions = [];
+        $params = [];
+
+        $name = trim((string) ($filters['nome_falecido'] ?? ''));
+        if ($name !== '') {
+            $conditions[] = 'm.nome_falecido LIKE :nome_falecido';
+            $params['nome_falecido'] = '%' . $name . '%';
+        }
+
+        $memorialKey = trim((string) ($filters['memorial_key'] ?? ''));
+        if ($memorialKey !== '') {
+            $conditions[] = 'm.memorial_key LIKE :memorial_key';
+            $params['memorial_key'] = '%' . $memorialKey . '%';
+        }
+
+        $whereSql = $conditions !== [] ? ' WHERE ' . implode(' AND ', $conditions) : '';
+
+        $normalizedParams = [];
+        foreach ($params as $key => $value) {
+            $normalizedParams[':' . $key] = $value;
+        }
+
+        return [$whereSql, $normalizedParams];
     }
 }

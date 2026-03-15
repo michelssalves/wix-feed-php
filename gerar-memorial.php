@@ -35,6 +35,8 @@ try {
     $page = max(1, (int) ($_GET['page'] ?? 1));
     $defaultTheme = defaultThemeConfig();
     $activeTab = (string) ($_GET['tab'] ?? 'memoriais');
+    $searchName = trim((string) ($_GET['search_nome'] ?? ''));
+    $searchMemorialKey = trim((string) ($_GET['search_memorial_key'] ?? ''));
     if (!in_array($activeTab, ['memoriais', 'temas'], true)) {
         $activeTab = 'memoriais';
     }
@@ -125,13 +127,17 @@ try {
     }
 
     $themes = $themeService->all();
-    $total = $memorialService->count();
+    $memorialFilters = [
+        'nome_falecido' => $searchName,
+        'memorial_key' => $searchMemorialKey,
+    ];
+    $total = $memorialService->count($memorialFilters);
     $totalPages = max(1, (int) ceil($total / $perPage));
     $page = min($page, $totalPages);
     $offset = ($page - 1) * $perPage;
     $resultStart = $total > 0 ? $offset + 1 : 0;
     $resultEnd = min($offset + $perPage, $total);
-    $memorials = $memorialService->latest($perPage, $offset);
+    $memorials = $memorialService->latest($perPage, $offset, $memorialFilters);
 } catch (Throwable $throwable) {
     http_response_code(500);
     $error = $throwable->getMessage();
@@ -142,6 +148,8 @@ try {
     $page = 1;
     $activeTab = 'memoriais';
     $defaultTheme = defaultThemeConfig();
+    $searchName = '';
+    $searchMemorialKey = '';
 }
 ?>
 <!doctype html>
@@ -210,101 +218,109 @@ try {
 
             <form method="post" enctype="multipart/form-data" class="memorial-admin-form">
                 <input type="hidden" name="action" value="create">
-                <div class="admin-section">
-                    <div class="admin-section__header">
-                        <div>
-                            <h2 class="admin-section__title">Dados do memorial</h2>
-                        </div>
-                    </div>
-                    <div class="admin-grid admin-grid--memorial">
-                        <label class="field">
-                            <span>Nome do memorial</span>
-                            <input type="text" name="nome_falecido" maxlength="160" placeholder="Opcional">
-                        </label>
-                        <label class="field field--file">
-                            <span>Foto da pessoa</span>
-                            <input type="file" name="foto_falecido" accept="image/*">
-                            <small class="field-help">Opcional. Aceita apenas imagem com ate 2 MB.</small>
-                        </label>
-                    </div>
-                </div>
-
-                <div class="admin-section">
-                    <div class="admin-section__header">
-                        <div>
-                            <h2 class="admin-section__title">Tema cadastrados</h2>
-                        </div>
-                    </div>
-                    <label class="field">
-                        <span>Selecione um tema</span>
-                        <select name="theme_id">
-                            <option value="">Usar tema padrao do sistema</option>
-                            <?php foreach ($themes as $theme): ?>
-                                <option value="<?= (int) $theme['id'] ?>"><?= e($theme['nome']) ?></option>
-                            <?php endforeach; ?>
-                        </select>
-                    </label>
-                </div>
-
-                <div class="admin-section admin-section--theme-builder">
-                    <div class="admin-section__header">
-                        <div>
-                            <h2 class="admin-section__title">Criacao de tema reutilizavel</h2>
-                        </div>
-                    </div>
-
-                    <div class="admin-theme-layout">
-                        <div class="admin-theme-builder">
-                            <div class="field">
-                                <span>Nome do tema</span>
-                                <input type="text" name="new_theme_name" maxlength="120" placeholder="Ex.: Funeraria Central">
-                            </div>
-                            <div class="theme-grid theme-grid--builder">
+                <details class="admin-accordion" open>
+                    <summary class="admin-accordion__summary">
+                        <span class="admin-accordion__title">Dados do memorial</span>
+                        <span class="admin-accordion__icon" aria-hidden="true"></span>
+                    </summary>
+                    <div class="admin-accordion__content">
+                        <div class="admin-section">
+                            <div class="admin-grid admin-grid--memorial">
                                 <label class="field">
-                                    <span>Cor de fundo da pagina</span>
-                                    <input type="color" name="new_cor_fundo_pagina" value="<?= e($defaultTheme['cor_fundo_pagina']) ?>">
+                                    <span>Nome do memorial</span>
+                                    <input type="text" name="nome_falecido" maxlength="160" placeholder="Opcional">
                                 </label>
-                                <label class="field">
-                                    <span>Cor de fundo do formulario</span>
-                                    <input type="color" name="new_cor_fundo_formulario" value="<?= e($defaultTheme['cor_fundo_formulario']) ?>">
-                                </label>
-                                <label class="field">
-                                    <span>Cor das fontes principais</span>
-                                    <input type="color" name="new_cor_fontes_principais" value="<?= e($defaultTheme['cor_fontes_principais']) ?>">
-                                </label>
-                                <label class="field">
-                                    <span>Cor das bordas</span>
-                                    <input type="color" name="new_cor_bordas" value="<?= e($defaultTheme['cor_bordas']) ?>">
-                                </label>
-                                <label class="field">
-                                    <span>Cor do botao Enviar</span>
-                                    <input type="color" name="new_cor_botao_enviar" value="<?= e($defaultTheme['cor_botao_enviar']) ?>">
-                                </label>
-                                <label class="field">
-                                    <span>Cor do texto do botao</span>
-                                    <input type="color" name="new_cor_texto_botao_enviar" value="<?= e($defaultTheme['cor_texto_botao_enviar']) ?>">
+                                <label class="field field--file">
+                                    <span>Foto da pessoa</span>
+                                    <input type="file" name="foto_falecido" accept="image/*">
+                                    <small class="field-help">Opcional. Aceita apenas imagem com ate 2 MB.</small>
                                 </label>
                             </div>
                         </div>
+                    </div>
+                </details>
 
-                        <div class="admin-theme-preview-wrap">
-                            <div class="admin-section__header admin-section__header--compact">
-                                <div>
-                                    <h3 class="admin-section__subtitle">Preview ao vivo</h3>
-                                    <p class="admin-section__text">Veja como o memorial vai ficar antes de salvar.</p>
+                <details class="admin-accordion" open>
+                    <summary class="admin-accordion__summary">
+                        <span class="admin-accordion__title">Tema cadastrados</span>
+                        <span class="admin-accordion__icon" aria-hidden="true"></span>
+                    </summary>
+                    <div class="admin-accordion__content">
+                        <div class="admin-section">
+                            <label class="field">
+                                <span>Selecione um tema</span>
+                                <select name="theme_id">
+                                    <option value="">Usar tema padrao do sistema</option>
+                                    <?php foreach ($themes as $theme): ?>
+                                        <option value="<?= (int) $theme['id'] ?>"><?= e($theme['nome']) ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </label>
+                        </div>
+                    </div>
+                </details>
+
+                <details class="admin-accordion admin-accordion--theme-builder" open>
+                    <summary class="admin-accordion__summary">
+                        <span class="admin-accordion__title">Criacao de tema reutilizavel</span>
+                        <span class="admin-accordion__icon" aria-hidden="true"></span>
+                    </summary>
+                    <div class="admin-accordion__content">
+                        <div class="admin-section admin-section--theme-builder">
+                            <div class="admin-theme-layout">
+                                <div class="admin-theme-builder">
+                                    <div class="field">
+                                        <span>Nome do tema</span>
+                                        <input type="text" name="new_theme_name" maxlength="120" placeholder="Ex.: Funeraria Central">
+                                    </div>
+                                    <div class="theme-grid theme-grid--builder">
+                                        <label class="field">
+                                            <span>Cor de fundo da pagina</span>
+                                            <input type="color" name="new_cor_fundo_pagina" value="<?= e($defaultTheme['cor_fundo_pagina']) ?>">
+                                        </label>
+                                        <label class="field">
+                                            <span>Cor de fundo do formulario</span>
+                                            <input type="color" name="new_cor_fundo_formulario" value="<?= e($defaultTheme['cor_fundo_formulario']) ?>">
+                                        </label>
+                                        <label class="field">
+                                            <span>Cor das fontes principais</span>
+                                            <input type="color" name="new_cor_fontes_principais" value="<?= e($defaultTheme['cor_fontes_principais']) ?>">
+                                        </label>
+                                        <label class="field">
+                                            <span>Cor das bordas</span>
+                                            <input type="color" name="new_cor_bordas" value="<?= e($defaultTheme['cor_bordas']) ?>">
+                                        </label>
+                                        <label class="field">
+                                            <span>Cor do botao Enviar</span>
+                                            <input type="color" name="new_cor_botao_enviar" value="<?= e($defaultTheme['cor_botao_enviar']) ?>">
+                                        </label>
+                                        <label class="field">
+                                            <span>Cor do texto do botao</span>
+                                            <input type="color" name="new_cor_texto_botao_enviar" value="<?= e($defaultTheme['cor_texto_botao_enviar']) ?>">
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="admin-theme-preview-wrap">
+                                    <div class="admin-section__header admin-section__header--compact">
+                                        <div>
+                                            <h3 class="admin-section__subtitle">Preview ao vivo</h3>
+                                            <p class="admin-section__text">Veja como o memorial vai ficar antes de salvar.</p>
+                                        </div>
+                                    </div>
+                                    <div class="theme-preview" id="new-theme-preview" style="<?= e('background:' . $defaultTheme['cor_fundo_pagina'] . ';border-color:' . $defaultTheme['cor_bordas'] . ';color:' . $defaultTheme['cor_fontes_principais']) ?>">
+                                        <div class="theme-preview__panel" style="<?= e('background:' . $defaultTheme['cor_fundo_formulario'] . ';border-color:' . $defaultTheme['cor_bordas']) ?>">
+                                            <span class="theme-preview__eyebrow">Preview ao vivo</span>
+                                            <strong class="theme-preview__title" id="new-theme-preview-name">Tema padrao</strong>
+                                            <p class="theme-preview__text">Assim o mural sera exibido para esse memorial.</p>
+                                            <button type="button" class="theme-preview__button" id="new-theme-preview-button" style="<?= e('background:' . $defaultTheme['cor_botao_enviar'] . ';color:' . $defaultTheme['cor_texto_botao_enviar']) ?>">Enviar</button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="theme-preview" id="new-theme-preview" style="<?= e('background:' . $defaultTheme['cor_fundo_pagina'] . ';border-color:' . $defaultTheme['cor_bordas'] . ';color:' . $defaultTheme['cor_fontes_principais']) ?>">
-                                <div class="theme-preview__panel" style="<?= e('background:' . $defaultTheme['cor_fundo_formulario'] . ';border-color:' . $defaultTheme['cor_bordas']) ?>">
-                                    <span class="theme-preview__eyebrow">Preview ao vivo</span>
-                                    <strong class="theme-preview__title" id="new-theme-preview-name">Tema padrao</strong>
-                                    <p class="theme-preview__text">Assim o mural sera exibido para esse memorial.</p>
-                                    <button type="button" class="theme-preview__button" id="new-theme-preview-button" style="<?= e('background:' . $defaultTheme['cor_botao_enviar'] . ';color:' . $defaultTheme['cor_texto_botao_enviar']) ?>">Enviar</button>
-                                </div>
-                            </div>
                         </div>
                     </div>
-                </div>
+                </details>
 
                 <div class="admin-submit-bar">
                     <div class="admin-submit-bar__copy">
@@ -320,9 +336,29 @@ try {
 
         <section class="feed-section" id="memorial-panel">
             <div class="section-divider"></div>
+            <?php
+            $memorialTabQuery = ['tab' => 'memoriais'];
+            if ($page > 1) {
+                $memorialTabQuery['page'] = $page;
+            }
+            if ($searchName !== '') {
+                $memorialTabQuery['search_nome'] = $searchName;
+            }
+            if ($searchMemorialKey !== '') {
+                $memorialTabQuery['search_memorial_key'] = $searchMemorialKey;
+            }
+
+            $themeTabQuery = ['tab' => 'temas'];
+            if ($searchName !== '') {
+                $themeTabQuery['search_nome'] = $searchName;
+            }
+            if ($searchMemorialKey !== '') {
+                $themeTabQuery['search_memorial_key'] = $searchMemorialKey;
+            }
+            ?>
             <div class="panel-tabs" role="tablist" aria-label="Navegacao de memoriais e temas">
-                <a class="panel-tab<?= $activeTab === 'memoriais' ? ' is-active' : '' ?>" href="?tab=memoriais<?= $page > 1 ? '&page=' . $page : '' ?>#memorial-panel">Memoriais cadastrados <span class="panel-tab-count"><?= count($memorials) ?></span></a>
-                <a class="panel-tab<?= $activeTab === 'temas' ? ' is-active' : '' ?>" href="?tab=temas#memorial-panel">Temas cadastrados <span class="panel-tab-count"><?= count($themes) ?></span></a>
+                <a class="panel-tab<?= $activeTab === 'memoriais' ? ' is-active' : '' ?>" href="?<?= e(http_build_query($memorialTabQuery)) ?>#memorial-panel">Memoriais cadastrados <span class="panel-tab-count"><?= $total ?></span></a>
+                <a class="panel-tab<?= $activeTab === 'temas' ? ' is-active' : '' ?>" href="?<?= e(http_build_query($themeTabQuery)) ?>#memorial-panel">Temas cadastrados <span class="panel-tab-count"><?= count($themes) ?></span></a>
             </div>
 
             <?php if ($activeTab === 'temas'): ?>
@@ -440,6 +476,23 @@ try {
                     </div>
                     <div class="field-help">Pagina <?= (int) $page ?> de <?= (int) $totalPages ?></div>
                 </div>
+                <div class="memorial-filter-bar">
+                    <form method="get" class="memorial-filter-form">
+                        <input type="hidden" name="tab" value="memoriais">
+                        <label class="field">
+                            <span>Pesquisar por nome</span>
+                            <input type="text" name="search_nome" value="<?= e($searchName) ?>" placeholder="Ex.: Maria Silva">
+                        </label>
+                        <label class="field">
+                            <span>Pesquisar por memorial key</span>
+                            <input type="text" name="search_memorial_key" value="<?= e($searchMemorialKey) ?>" placeholder="Ex.: 13258757">
+                        </label>
+                        <div class="memorial-filter-form__actions">
+                            <button class="secondary-button" type="submit">Filtrar</button>
+                            <a class="ghost-button" href="?tab=memoriais#memorial-panel">Limpar</a>
+                        </div>
+                    </form>
+                </div>
                 <div class="feed-list">
                     <?php foreach ($memorials as $memorial): ?>
                         <?php $memorialInitial = mb_strtoupper(mb_substr(trim((string) ($memorial['nome_falecido'] ?: 'M')), 0, 1)); ?>
@@ -530,16 +583,25 @@ try {
                 </div>
 
                 <?php if ($totalPages > 1): ?>
+                    <?php
+                    $paginationBase = ['tab' => 'memoriais'];
+                    if ($searchName !== '') {
+                        $paginationBase['search_nome'] = $searchName;
+                    }
+                    if ($searchMemorialKey !== '') {
+                        $paginationBase['search_memorial_key'] = $searchMemorialKey;
+                    }
+                    ?>
                     <nav class="pagination-bar" aria-label="Paginacao dos memoriais">
                         <span class="pagination-summary">Showing <?= (int) $resultStart ?> to <?= (int) $resultEnd ?> of <?= (int) $total ?> results</span>
                         <div class="pagination-controls">
-                            <a class="pagination-button<?= $page <= 1 ? ' is-disabled' : '' ?>" href="<?= $page > 1 ? '?tab=memoriais&page=' . ($page - 1) . '#memorial-panel' : '#' ?>" aria-label="Pagina anterior" <?= $page <= 1 ? ' tabindex="-1" aria-disabled="true"' : '' ?>>
+                            <a class="pagination-button<?= $page <= 1 ? ' is-disabled' : '' ?>" href="<?= $page > 1 ? '?' . e(http_build_query(array_merge($paginationBase, ['page' => $page - 1]))) . '#memorial-panel' : '#' ?>" aria-label="Pagina anterior" <?= $page <= 1 ? ' tabindex="-1" aria-disabled="true"' : '' ?>>
                                 <span aria-hidden="true">&lsaquo;</span>
                             </a>
                             <?php for ($i = 1; $i <= $totalPages; $i++): ?>
-                                <a class="pagination-button<?= $i === $page ? ' is-active' : '' ?>" href="?tab=memoriais&page=<?= $i ?>#memorial-panel" aria-current="<?= $i === $page ? 'page' : 'false' ?>"><?= $i ?></a>
+                                <a class="pagination-button<?= $i === $page ? ' is-active' : '' ?>" href="?<?= e(http_build_query(array_merge($paginationBase, ['page' => $i]))) ?>#memorial-panel" aria-current="<?= $i === $page ? 'page' : 'false' ?>"><?= $i ?></a>
                             <?php endfor; ?>
-                            <a class="pagination-button<?= $page >= $totalPages ? ' is-disabled' : '' ?>" href="<?= $page < $totalPages ? '?tab=memoriais&page=' . ($page + 1) . '#memorial-panel' : '#' ?>" aria-label="Proxima pagina" <?= $page >= $totalPages ? ' tabindex="-1" aria-disabled="true"' : '' ?>>
+                            <a class="pagination-button<?= $page >= $totalPages ? ' is-disabled' : '' ?>" href="<?= $page < $totalPages ? '?' . e(http_build_query(array_merge($paginationBase, ['page' => $page + 1]))) . '#memorial-panel' : '#' ?>" aria-label="Proxima pagina" <?= $page >= $totalPages ? ' tabindex="-1" aria-disabled="true"' : '' ?>>
                                 <span aria-hidden="true">&rsaquo;</span>
                             </a>
                         </div>
