@@ -10,6 +10,7 @@ Este arquivo consolida a evolucao do projeto de forma legivel, ja que os primeir
 - Ajustado o fuso horario da conexao MySQL para respeitar a timezone configurada na aplicacao, evitando gravacao em UTC quando o painel da hospedagem estiver diferente.
 - Refinada a tela de gerenciamento de temas com abas mais fortes, cards mais organizados, preview melhor integrado e acoes de edicao com visual de painel administrativo premium.
 - Adicionado suporte a cor do texto do botao nos temas visuais, com aplicacao real no preview e no mural renderizado.
+- Criada uma tela dedicada de mural TV com rotacao automatica das mensagens, atualizacao periodica e suporte ao tema do memorial.
 
 ### Added
 - Edicao inline de comentarios para o autor logado com Google.
