@@ -7,6 +7,11 @@
   --accent: #e3c56e;
   --success: #6dcc8c;
   --shadow: 0 18px 60px rgba(0, 0, 0, 0.35);
+  --theme-page-bg: #020202;
+  --theme-form-bg: #0a0a0a;
+  --theme-text: #f4f0e7;
+  --theme-border: #3f3a2c;
+  --theme-submit-bg: #e3c56e;
 }
 
 * {
@@ -16,10 +21,8 @@
 body {
   margin: 0;
   min-height: 100vh;
-  background:
-    radial-gradient(circle at top right, rgba(227, 197, 110, 0.14), transparent 32%),
-    linear-gradient(180deg, #070707 0%, #020202 100%);
-  color: var(--text);
+  background: var(--theme-page-bg);
+  color: var(--theme-text);
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
@@ -36,15 +39,15 @@ body::-webkit-scrollbar,
 
 body::-webkit-scrollbar-track,
 .rich-editor::-webkit-scrollbar-track {
-  background: #050505;
-  border-left: 1px solid rgba(227, 197, 110, 0.75);
+  background: var(--theme-page-bg);
+  border-left: 1px solid var(--theme-submit-bg);
 }
 
 body::-webkit-scrollbar-thumb,
 .rich-editor::-webkit-scrollbar-thumb {
   background: #8a8a8a;
   border-radius: 0;
-  border: 2px solid #050505;
+  border: 2px solid var(--theme-page-bg);
 }
 
 body.is-lightbox-open {
@@ -88,8 +91,8 @@ body.is-embedded::-webkit-scrollbar-track {
 
 .composer,
 .feed-section {
-  background: rgba(0, 0, 0, 0.55);
-  border: 1px solid var(--line);
+  background: var(--theme-form-bg);
+  border: 1px solid var(--theme-border);
   border-radius: 0;
   padding: 28px 24px;
   box-shadow: var(--shadow);
@@ -103,7 +106,7 @@ body.is-embedded::-webkit-scrollbar-track {
 
 .section-divider {
   height: 1px;
-  background: var(--line);
+  background: var(--theme-border);
   margin-bottom: 24px;
 }
 
@@ -127,15 +130,29 @@ body.is-embedded::-webkit-scrollbar-track {
 }
 
 input[type="text"],
+.field select,
+.field input[type="color"],
 .rich-editor,
 textarea {
   width: 100%;
-  border: 1px solid rgba(255, 255, 255, 0.18);
+  border: 1px solid var(--theme-border);
   border-radius: 0;
   background: #efefef;
   color: #111;
   padding: 14px 16px;
   outline: none;
+}
+
+.theme-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 14px;
+}
+
+.field input[type="color"] {
+  min-height: 46px;
+  padding: 6px;
+  cursor: pointer;
 }
 
 textarea {
@@ -155,7 +172,7 @@ textarea {
 }
 
 .editor-shell {
-  border: 1px solid rgba(255, 255, 255, 0.18);
+  border: 1px solid var(--theme-border);
   border-radius: 0;
   background: #efefef;
   overflow: hidden;
@@ -310,7 +327,7 @@ textarea {
 }
 
 .primary-button {
-  background: var(--accent);
+  background: var(--theme-submit-bg);
   color: #231c09;
   font-weight: 700;
 }
@@ -318,8 +335,8 @@ textarea {
 .secondary-button,
 .ghost-button {
   background: transparent;
-  color: var(--accent);
-  border-color: var(--accent);
+  color: var(--theme-submit-bg);
+  border-color: var(--theme-submit-bg);
 }
 
 .flash-message {
@@ -347,7 +364,7 @@ textarea {
   justify-content: space-between;
   gap: 18px;
   background: rgba(255, 255, 255, 0.04);
-  border: 1px solid var(--line);
+  border: 1px solid var(--theme-border);
   border-radius: 0;
   padding: 14px 16px;
   margin-bottom: 24px;
@@ -389,7 +406,7 @@ textarea {
 
 .post-card {
   background: rgba(255, 255, 255, 0.025);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--theme-border);
   border-radius: 0;
   padding: 16px 16px 14px;
   box-shadow: 0 10px 24px rgba(0, 0, 0, 0.16);
@@ -514,7 +531,7 @@ textarea {
   width: 100%;
   max-height: 460px;
   border-radius: 0;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--theme-border);
   display: block;
   object-fit: contain;
   background: #111;
@@ -565,7 +582,7 @@ textarea {
 .post-actions {
   margin: 14px 0 0 58px;
   padding-top: 8px;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  border-top: 1px solid var(--theme-border);
 }
 
 .reply-toggle {
@@ -595,7 +612,7 @@ textarea {
   padding: 12px 14px;
   border-radius: 0;
   background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--theme-border);
 }
 
 .comment-card {
@@ -621,7 +638,7 @@ textarea {
 }
 
 .comment-action-button {
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  border: 1px solid var(--theme-border);
   background: rgba(255, 255, 255, 0.04);
   color: #d9d5de;
   border-radius: 0;
@@ -656,7 +673,7 @@ textarea {
   padding: 12px 14px;
   border-radius: 0;
   background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--theme-border);
 }
 
 .comment-form textarea {
@@ -748,6 +765,100 @@ textarea {
 
 .copy-button:hover {
   background: rgba(255, 255, 255, 0.08);
+}
+
+.memorial-card {
+  padding: 18px 20px;
+  display: grid;
+  gap: 18px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.028) 0%, rgba(255, 255, 255, 0.018) 100%);
+  transition: border-color 0.18s ease, transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.memorial-card:hover {
+  border-color: color-mix(in srgb, var(--theme-submit-bg) 40%, var(--theme-border));
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.24);
+  transform: translateY(-1px);
+}
+
+.memorial-card__header {
+  align-items: center;
+  gap: 16px;
+}
+
+.memorial-card__identity {
+  gap: 6px;
+}
+
+.memorial-card__identity .author-meta strong {
+  font-size: 1.15rem;
+  line-height: 1.2;
+}
+
+.memorial-card__body {
+  margin: 0;
+  display: grid;
+  gap: 16px;
+}
+
+.memorial-card__content {
+  margin: 0;
+}
+
+.memorial-link-box {
+  display: grid;
+  gap: 10px;
+  padding: 14px 16px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--theme-border);
+}
+
+.memorial-link-box__label {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.memorial-link-box__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.memorial-link-box__value {
+  min-width: 0;
+  color: #f4f0e7;
+  font-size: 0.98rem;
+  line-height: 1.5;
+  word-break: break-all;
+}
+
+.memorial-copy-button {
+  margin-left: 0;
+  flex: none;
+  min-width: 72px;
+  min-height: 38px;
+  font-weight: 700;
+}
+
+.memorial-card__actions {
+  margin-top: 0;
+  justify-content: flex-end;
+}
+
+.memorial-delete-button {
+  border-color: rgba(214, 96, 96, 0.4);
+  color: #f2b2b2;
+  background: rgba(120, 18, 18, 0.12);
+}
+
+.memorial-delete-button:hover {
+  background: rgba(171, 38, 38, 0.16);
+  border-color: rgba(214, 96, 96, 0.68);
+  color: #ffd6d6;
 }
 
 @media (max-width: 760px) {
@@ -919,6 +1030,36 @@ textarea {
     border-radius: 0;
   }
 
+  .memorial-card {
+    padding: 14px;
+    gap: 14px;
+  }
+
+  .memorial-card__header {
+    gap: 12px;
+  }
+
+  .memorial-link-box {
+    padding: 12px;
+  }
+
+  .memorial-link-box__row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .memorial-copy-button {
+    width: 100%;
+  }
+
+  .memorial-card__actions {
+    justify-content: stretch;
+  }
+
+  .memorial-delete-button {
+    width: 100%;
+  }
+
   .comment-actions-menu {
     width: 100%;
     margin-left: 0;
@@ -1058,6 +1199,14 @@ textarea {
   .comment-form {
     padding: 10px;
     border-radius: 0;
+  }
+
+  .memorial-card__identity .author-meta strong {
+    font-size: 1rem;
+  }
+
+  .memorial-link-box__value {
+    font-size: 0.92rem;
   }
 
   .comment-action-button {

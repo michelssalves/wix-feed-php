@@ -13,6 +13,10 @@ Este arquivo consolida a evolucao do projeto de forma legivel, ja que os primeir
 - Endpoints dedicados para atualizar e excluir comentarios com validacao de propriedade.
 - Edicao e exclusao da propria postagem para o autor logado com Google.
 - Opcao para excluir memorial criado na tela de listagem, removendo tambem posts e comentarios vinculados.
+- Estrutura de temas visuais reutilizaveis para memoriais.
+- Selecao de tema existente ou criacao de novo tema no cadastro do memorial.
+- Edicao posterior dos temas cadastrados.
+- Aplicacao automatica do tema do memorial no mural publico.
 
 ## [0.3.0] - 2026-03-14
 

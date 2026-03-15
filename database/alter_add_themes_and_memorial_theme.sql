@@ -12,15 +12,8 @@ CREATE TABLE IF NOT EXISTS themes (
   atualizado_em DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-CREATE TABLE IF NOT EXISTS memorials (
-  id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-  memorial_key VARCHAR(120) NOT NULL,
-  nome_falecido VARCHAR(160) NOT NULL,
-  foto_falecido VARCHAR(255) NULL,
-  theme_id INT UNSIGNED NULL,
-  criado_em DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  CONSTRAINT fk_memorials_theme
+ALTER TABLE memorials
+  ADD COLUMN theme_id INT UNSIGNED NULL AFTER foto_falecido,
+  ADD CONSTRAINT fk_memorials_theme
     FOREIGN KEY (theme_id) REFERENCES themes(id)
-    ON DELETE SET NULL,
-  UNIQUE KEY uk_memorials_memorial_key (memorial_key)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+    ON DELETE SET NULL;

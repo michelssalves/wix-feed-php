@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Services\Database;
 use App\Services\MemorialService;
+use App\Services\ThemeService;
 use App\Services\UploadService;
 
 require_once __DIR__ . '/src/Support/helpers.php';
@@ -28,9 +29,11 @@ try {
     startAppSession($config);
     $pdo = Database::connection($config);
     $memorialService = new MemorialService($pdo);
+    $themeService = new ThemeService($pdo);
     $uploadService = new UploadService($config['upload']);
     $perPage = 10;
     $page = max(1, (int) ($_GET['page'] ?? 1));
+    $defaultTheme = defaultThemeConfig();
 
     $created = null;
     $error = '';
@@ -51,13 +54,49 @@ try {
             }
 
             $success = 'Memorial excluido com sucesso.';
+        } elseif ($action === 'update-theme') {
+            $themeId = (int) ($_POST['theme_id'] ?? 0);
+
+            if ($themeId <= 0) {
+                throw new RuntimeException('Tema invalido para edicao.');
+            }
+
+            $existingTheme = $themeService->findById($themeId);
+            if (!$existingTheme) {
+                throw new RuntimeException('Tema nao encontrado para edicao.');
+            }
+
+            $themePayload = themePayloadFromRequest($_POST, $existingTheme);
+            if ($themePayload['nome'] === '') {
+                throw new RuntimeException('Informe um nome para o tema.');
+            }
+
+            $themeService->update($themeId, $themePayload);
+            $success = 'Tema atualizado com sucesso.';
         } else {
             $deceasedName = trim((string) ($_POST['nome_falecido'] ?? ''));
             $photoPath = $uploadService->uploadImage($_FILES['foto_falecido'] ?? []);
-            $created = $memorialService->create(mb_substr($deceasedName, 0, 160), $photoPath);
+            $selectedThemeId = (int) ($_POST['theme_id'] ?? 0);
+            $newThemeName = trim((string) ($_POST['new_theme_name'] ?? ''));
+            $themeId = $selectedThemeId > 0 ? $selectedThemeId : null;
+
+            if ($newThemeName !== '') {
+                $themePayload = themePayloadFromRequest([
+                    'nome' => $newThemeName,
+                    'cor_fundo_pagina' => $_POST['new_cor_fundo_pagina'] ?? null,
+                    'cor_fundo_formulario' => $_POST['new_cor_fundo_formulario'] ?? null,
+                    'cor_fontes_principais' => $_POST['new_cor_fontes_principais'] ?? null,
+                    'cor_bordas' => $_POST['new_cor_bordas'] ?? null,
+                    'cor_botao_enviar' => $_POST['new_cor_botao_enviar'] ?? null,
+                ], $defaultTheme);
+                $themeId = $themeService->create($themePayload);
+            }
+
+            $created = $memorialService->create(mb_substr($deceasedName, 0, 160), $photoPath, $themeId);
         }
     }
 
+    $themes = $themeService->all();
     $total = $memorialService->count();
     $totalPages = max(1, (int) ceil($total / $perPage));
     $page = min($page, $totalPages);
@@ -119,10 +158,107 @@ try {
                 <input type="file" name="foto_falecido" accept="image/*">
                 <small class="field-help">Opcional. Aceita apenas imagem com ate 2 MB.</small>
             </label>
+            <label class="field">
+                <span>Tema existente</span>
+                <select name="theme_id">
+                    <option value="">Usar tema padrao do sistema</option>
+                    <?php foreach ($themes as $theme): ?>
+                        <option value="<?= (int) $theme['id'] ?>"><?= e($theme['nome']) ?></option>
+                    <?php endforeach; ?>
+                </select>
+                <small class="field-help">Selecione um tema ja cadastrado ou crie um novo logo abaixo.</small>
+            </label>
+
+            <div class="post-card" style="margin-bottom:22px">
+                <div class="post-header-copy">
+                    <div class="author-meta"><strong>Novo tema reutilizavel</strong></div>
+                    <span class="post-date">Se preencher um nome aqui, o tema sera salvo para uso futuro.</span>
+                </div>
+                <div class="field" style="margin-top:16px">
+                    <span>Nome do tema</span>
+                    <input type="text" name="new_theme_name" maxlength="120" placeholder="Ex.: Funeraria Central">
+                </div>
+                <div class="theme-grid">
+                    <label class="field">
+                        <span>Cor de fundo da pagina</span>
+                        <input type="color" name="new_cor_fundo_pagina" value="<?= e($defaultTheme['cor_fundo_pagina']) ?>">
+                    </label>
+                    <label class="field">
+                        <span>Cor de fundo do formulario</span>
+                        <input type="color" name="new_cor_fundo_formulario" value="<?= e($defaultTheme['cor_fundo_formulario']) ?>">
+                    </label>
+                    <label class="field">
+                        <span>Cor das fontes principais</span>
+                        <input type="color" name="new_cor_fontes_principais" value="<?= e($defaultTheme['cor_fontes_principais']) ?>">
+                    </label>
+                    <label class="field">
+                        <span>Cor das bordas</span>
+                        <input type="color" name="new_cor_bordas" value="<?= e($defaultTheme['cor_bordas']) ?>">
+                    </label>
+                    <label class="field">
+                        <span>Cor do botao Enviar</span>
+                        <input type="color" name="new_cor_botao_enviar" value="<?= e($defaultTheme['cor_botao_enviar']) ?>">
+                    </label>
+                </div>
+            </div>
             <div class="form-actions">
                 <button class="primary-button" type="submit">Gerar key</button>
             </div>
         </form>
+    </section>
+
+    <section class="feed-section">
+        <div class="section-divider"></div>
+        <div style="display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:16px">
+            <div>
+                <h2 style="margin:0">Temas cadastrados</h2>
+                <p class="field-help" style="margin:6px 0 0">Edite seus temas para reutilizar em novos memoriais.</p>
+            </div>
+            <div class="field-help"><?= count($themes) ?> tema(s)</div>
+        </div>
+        <div class="feed-list">
+            <?php foreach ($themes as $theme): ?>
+                <article class="post-card">
+                    <form method="post">
+                        <input type="hidden" name="action" value="update-theme">
+                        <input type="hidden" name="theme_id" value="<?= (int) $theme['id'] ?>">
+                        <div class="post-header-copy" style="margin-bottom:16px">
+                            <div class="author-meta"><strong><?= e($theme['nome']) ?></strong></div>
+                            <span class="post-date">Atualizado em <?= e(formatDateTimeBr($theme['atualizado_em'] ?? $theme['criado_em'])) ?></span>
+                        </div>
+                        <label class="field">
+                            <span>Nome do tema</span>
+                            <input type="text" name="nome" maxlength="120" value="<?= e($theme['nome']) ?>">
+                        </label>
+                        <div class="theme-grid">
+                            <label class="field">
+                                <span>Cor de fundo da pagina</span>
+                                <input type="color" name="cor_fundo_pagina" value="<?= e($theme['cor_fundo_pagina']) ?>">
+                            </label>
+                            <label class="field">
+                                <span>Cor de fundo do formulario</span>
+                                <input type="color" name="cor_fundo_formulario" value="<?= e($theme['cor_fundo_formulario']) ?>">
+                            </label>
+                            <label class="field">
+                                <span>Cor das fontes principais</span>
+                                <input type="color" name="cor_fontes_principais" value="<?= e($theme['cor_fontes_principais']) ?>">
+                            </label>
+                            <label class="field">
+                                <span>Cor das bordas</span>
+                                <input type="color" name="cor_bordas" value="<?= e($theme['cor_bordas']) ?>">
+                            </label>
+                            <label class="field">
+                                <span>Cor do botao Enviar</span>
+                                <input type="color" name="cor_botao_enviar" value="<?= e($theme['cor_botao_enviar']) ?>">
+                            </label>
+                        </div>
+                        <div class="form-actions">
+                            <button class="primary-button" type="submit">Salvar tema</button>
+                        </div>
+                    </form>
+                </article>
+            <?php endforeach; ?>
+        </div>
     </section>
 
     <section class="feed-section">
@@ -137,32 +273,35 @@ try {
         <div class="feed-list">
             <?php foreach ($memorials as $memorial): ?>
                 <?php $memorialInitial = mb_strtoupper(mb_substr(trim((string) ($memorial['nome_falecido'] ?: 'M')), 0, 1)); ?>
-                <article class="post-card">
-                    <div class="post-header">
+                <article class="post-card memorial-card">
+                    <div class="post-header memorial-card__header">
                         <div class="avatar <?= empty($memorial['foto_falecido']) ? 'avatar--fallback' : '' ?>">
                             <?php if (!empty($memorial['foto_falecido'])): ?>
                                 <img src="<?= e(appUrl($memorial['foto_falecido'])) ?>" alt="<?= e($memorial['nome_falecido'] !== '' ? $memorial['nome_falecido'] : 'Memorial') ?>">
                             <?php endif; ?>
                             <span class="avatar-fallback"><?= e($memorialInitial) ?></span>
                         </div>
-                        <div class="post-header-copy">
+                        <div class="post-header-copy memorial-card__identity">
                             <div class="author-meta">
                                 <strong><?= e($memorial['nome_falecido'] !== '' ? $memorial['nome_falecido'] : 'Memorial sem nome') ?></strong>
                             </div>
-                            <span class="post-date"><?= e(formatDateTimeBr($memorial['criado_em'])) ?></span>
+                            <span class="post-date"><?= e(formatDateTimeBr($memorial['criado_em'])) ?><?= !empty($memorial['theme_nome']) ? ' · Tema: ' . e($memorial['theme_nome']) : '' ?></span>
                         </div>
                     </div>
-                    <div class="post-body">
-                        <div class="post-rich-text">
-                            <p>
-                                <strong>URL:</strong> <?= e(appUrl('?memorial_key=' . $memorial['memorial_key'])) ?>
-                                <button class="copy-button" type="button" data-copy-text="<?= e(appUrl('?memorial_key=' . $memorial['memorial_key'])) ?>">Copy</button>
-                            </p>
+                    <div class="post-body memorial-card__body">
+                        <div class="post-rich-text memorial-card__content">
+                            <div class="memorial-link-box">
+                                <span class="memorial-link-box__label">URL do memorial</span>
+                                <div class="memorial-link-box__row">
+                                    <span class="memorial-link-box__value"><?= e(appUrl('?memorial_key=' . $memorial['memorial_key'])) ?></span>
+                                    <button class="copy-button memorial-copy-button" type="button" data-copy-text="<?= e(appUrl('?memorial_key=' . $memorial['memorial_key'])) ?>">Copy</button>
+                                </div>
+                            </div>
                         </div>
-                        <form method="post" class="form-actions" style="justify-content:flex-start;margin-top:14px" onsubmit="return window.confirm('Deseja excluir este memorial? Isso tambem removera as postagens e comentarios vinculados.');">
+                        <form method="post" class="form-actions memorial-card__actions" onsubmit="return window.confirm('Deseja excluir este memorial? Isso tambem removera as postagens e comentarios vinculados.');">
                             <input type="hidden" name="action" value="delete">
                             <input type="hidden" name="memorial_id" value="<?= (int) $memorial['id'] ?>">
-                            <button class="secondary-button" type="submit">Excluir memorial</button>
+                            <button class="secondary-button memorial-delete-button" type="submit">Excluir memorial</button>
                         </form>
                     </div>
                 </article>

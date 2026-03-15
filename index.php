@@ -4,6 +4,11 @@ declare(strict_types=1);
 
 require_once __DIR__ . '/src/Support/helpers.php';
 require_once __DIR__ . '/src/Support/session.php';
+require_once __DIR__ . '/src/Services/Database.php';
+require_once __DIR__ . '/src/Services/MemorialService.php';
+
+use App\Services\Database;
+use App\Services\MemorialService;
 
 try {
     $config = config();
@@ -13,6 +18,10 @@ try {
     $googleClientId = trim((string) ($config['google']['client_id'] ?? ''));
     $googleEnabled = isGoogleConfigured();
     $memorialKey = requestMemorialKey();
+    $pdo = Database::connection($config);
+    $memorialService = new MemorialService($pdo);
+    $memorial = $memorialKey !== '' ? $memorialService->findByKey($memorialKey) : null;
+    $themeCss = memorialThemeCssVariables($memorial);
 } catch (Throwable $throwable) {
     http_response_code(500);
     ?>
@@ -44,6 +53,7 @@ try {
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title><?= e($config['app_name']) ?></title>
+    <style><?= $themeCss ?? memorialThemeCssVariables(null) ?></style>
     <link rel="stylesheet" href="./assets/css/styles.css">
 </head>
 <body>

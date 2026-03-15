@@ -157,3 +157,59 @@ function formatDateTimeBr(?string $value, string $format = 'd/m/Y H:i'): string
         return $value;
     }
 }
+
+function defaultThemeConfig(): array
+{
+    return [
+        'nome' => 'Tema padrao',
+        'cor_fundo_pagina' => '#020202',
+        'cor_fundo_formulario' => '#0a0a0a',
+        'cor_fontes_principais' => '#f4f0e7',
+        'cor_bordas' => '#3f3a2c',
+        'cor_botao_enviar' => '#e3c56e',
+    ];
+}
+
+function normalizedThemeColor(?string $value, string $fallback): string
+{
+    $value = strtoupper(trim((string) $value));
+    if (preg_match('/^#[0-9A-F]{6}$/', $value) === 1) {
+        return $value;
+    }
+
+    return strtoupper($fallback);
+}
+
+function themePayloadFromRequest(array $payload, ?array $fallback = null): array
+{
+    $defaults = $fallback ?? defaultThemeConfig();
+
+    return [
+        'nome' => mb_substr(trim((string) ($payload['nome'] ?? $defaults['nome'] ?? 'Tema')), 0, 120),
+        'cor_fundo_pagina' => normalizedThemeColor($payload['cor_fundo_pagina'] ?? null, $defaults['cor_fundo_pagina']),
+        'cor_fundo_formulario' => normalizedThemeColor($payload['cor_fundo_formulario'] ?? null, $defaults['cor_fundo_formulario']),
+        'cor_fontes_principais' => normalizedThemeColor($payload['cor_fontes_principais'] ?? null, $defaults['cor_fontes_principais']),
+        'cor_bordas' => normalizedThemeColor($payload['cor_bordas'] ?? null, $defaults['cor_bordas']),
+        'cor_botao_enviar' => normalizedThemeColor($payload['cor_botao_enviar'] ?? null, $defaults['cor_botao_enviar']),
+    ];
+}
+
+function memorialThemeCssVariables(?array $theme): string
+{
+    $theme = $theme ?: defaultThemeConfig();
+    $pageBg = normalizedThemeColor($theme['cor_fundo_pagina'] ?? null, '#020202');
+    $formBg = normalizedThemeColor($theme['cor_fundo_formulario'] ?? null, '#0A0A0A');
+    $text = normalizedThemeColor($theme['cor_fontes_principais'] ?? null, '#F4F0E7');
+    $border = normalizedThemeColor($theme['cor_bordas'] ?? null, '#3F3A2C');
+    $button = normalizedThemeColor($theme['cor_botao_enviar'] ?? null, '#E3C56E');
+
+    return implode("\n", [
+        ':root {',
+        '  --theme-page-bg: ' . $pageBg . ';',
+        '  --theme-form-bg: ' . $formBg . ';',
+        '  --theme-text: ' . $text . ';',
+        '  --theme-border: ' . $border . ';',
+        '  --theme-submit-bg: ' . $button . ';',
+        '}',
+    ]);
+}

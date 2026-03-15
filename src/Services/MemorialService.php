@@ -19,20 +19,21 @@ class MemorialService
         return (bool) $statement->fetchColumn();
     }
 
-    public function create(string $deceasedName, ?string $photoPath = null): array
+    public function create(string $deceasedName, ?string $photoPath = null, ?int $themeId = null): array
     {
         do {
             $memorialKey = $this->generateKey();
         } while ($this->exists($memorialKey));
 
         $statement = $this->pdo->prepare(
-            'INSERT INTO memorials (memorial_key, nome_falecido, foto_falecido, criado_em)
-             VALUES (:memorial_key, :nome_falecido, :foto_falecido, NOW())'
+            'INSERT INTO memorials (memorial_key, nome_falecido, foto_falecido, theme_id, criado_em)
+             VALUES (:memorial_key, :nome_falecido, :foto_falecido, :theme_id, NOW())'
         );
         $statement->execute([
             'memorial_key' => $memorialKey,
             'nome_falecido' => $deceasedName,
             'foto_falecido' => $photoPath,
+            'theme_id' => $themeId,
         ]);
 
         return [
@@ -40,15 +41,17 @@ class MemorialService
             'memorial_key' => $memorialKey,
             'nome_falecido' => $deceasedName,
             'foto_falecido' => $photoPath,
+            'theme_id' => $themeId,
         ];
     }
 
     public function latest(int $limit = 20, int $offset = 0): array
     {
         $statement = $this->pdo->prepare(
-            'SELECT id, memorial_key, nome_falecido, foto_falecido, criado_em
-             FROM memorials
-             ORDER BY id DESC
+            'SELECT m.id, m.memorial_key, m.nome_falecido, m.foto_falecido, m.theme_id, m.criado_em, t.nome AS theme_nome
+             FROM memorials m
+             LEFT JOIN themes t ON t.id = m.theme_id
+             ORDER BY m.id DESC
              LIMIT :limit OFFSET :offset'
         );
         $statement->bindValue('limit', $limit, PDO::PARAM_INT);
@@ -60,6 +63,27 @@ class MemorialService
     public function count(): int
     {
         return (int) $this->pdo->query('SELECT COUNT(*) FROM memorials')->fetchColumn();
+    }
+
+    public function findByKey(string $memorialKey): ?array
+    {
+        $statement = $this->pdo->prepare(
+            'SELECT m.id, m.memorial_key, m.nome_falecido, m.foto_falecido, m.theme_id, m.criado_em,
+                    t.nome AS theme_nome,
+                    t.cor_fundo_pagina,
+                    t.cor_fundo_formulario,
+                    t.cor_fontes_principais,
+                    t.cor_bordas,
+                    t.cor_botao_enviar
+             FROM memorials m
+             LEFT JOIN themes t ON t.id = m.theme_id
+             WHERE m.memorial_key = :memorial_key
+             LIMIT 1'
+        );
+        $statement->execute(['memorial_key' => $memorialKey]);
+        $memorial = $statement->fetch();
+
+        return $memorial ?: null;
     }
 
     public function deleteById(int $id): bool
