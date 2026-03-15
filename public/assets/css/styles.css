@@ -57,10 +57,16 @@ body.is-lightbox-open {
 
 .tv-body {
   overflow: hidden;
+  color: #f5f5f2;
+  --tv-bg: #050505;
+  --tv-text: #f5f5f2;
+  --tv-muted: #9a9a9a;
+  --tv-accent: #d7b75a;
+  --tv-surface: rgba(255, 255, 255, 0.03);
   background:
     radial-gradient(circle at top, rgba(227, 197, 110, 0.14), transparent 28%),
     radial-gradient(circle at bottom, rgba(255, 255, 255, 0.04), transparent 26%),
-    var(--theme-page-bg);
+    var(--tv-bg);
   --tv-line: rgba(255, 255, 255, 0.08);
   --tv-line-strong: rgba(255, 255, 255, 0.11);
 }
@@ -77,7 +83,7 @@ body.is-lightbox-open {
 .tv-stage-shell,
 .tv-footer {
   border: 1px solid var(--tv-line);
-  background: rgba(255, 255, 255, 0.03);
+  background: var(--tv-surface);
   box-shadow: var(--shadow);
 }
 
@@ -135,7 +141,7 @@ body.is-lightbox-open {
 
 .tv-header__text {
   margin: 0;
-  color: var(--muted);
+  color: var(--tv-muted);
   font-size: 1.08rem;
   max-width: 720px;
 }
@@ -154,7 +160,7 @@ body.is-lightbox-open {
   padding: 0 14px;
   border: 1px solid var(--tv-line);
   background: rgba(255, 255, 255, 0.04);
-  color: var(--theme-text);
+  color: var(--tv-text);
   font-weight: 600;
   font-size: 0.92rem;
 }
@@ -162,7 +168,7 @@ body.is-lightbox-open {
 .tv-header__submeta {
   display: grid;
   gap: 4px;
-  color: var(--muted);
+  color: var(--tv-muted);
   font-size: 0.94rem;
 }
 
@@ -187,12 +193,12 @@ body.is-lightbox-open {
   place-items: center;
   gap: 12px;
   text-align: center;
-  color: var(--muted);
+  color: var(--tv-muted);
   padding: 40px;
 }
 
 .tv-empty-state strong {
-  color: var(--theme-text);
+  color: var(--tv-text);
   font-size: 1.5rem;
 }
 
@@ -246,7 +252,7 @@ body.is-lightbox-open {
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  color: var(--muted);
+  color: var(--tv-muted);
   font-size: 1rem;
   padding-left: 6px;
 }
@@ -299,8 +305,8 @@ body.is-lightbox-open {
 
 .tv-progress__dot.is-active {
   width: 34px;
-  background: var(--theme-submit-bg);
-  border-color: var(--theme-submit-bg);
+  background: var(--tv-accent);
+  border-color: var(--tv-accent);
 }
 
 .tv-footer__meta {
@@ -308,7 +314,7 @@ body.is-lightbox-open {
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  color: var(--muted);
+  color: var(--tv-muted);
   font-size: 0.95rem;
 }
 

@@ -18,7 +18,6 @@ try {
     $pdo = Database::connection($config);
     $memorialService = new MemorialService($pdo);
     $memorial = $memorialKey !== '' ? $memorialService->findByKey($memorialKey) : null;
-    $themeCss = memorialThemeCssVariables($memorial);
 } catch (Throwable $throwable) {
     http_response_code(500);
 ?>
@@ -66,9 +65,6 @@ try {
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Mural TV | <?= e($memorial['nome_falecido'] ?? $config['app_name']) ?></title>
     <link rel="stylesheet" href="./assets/css/styles.css">
-    <style>
-        <?= $themeCss ?? memorialThemeCssVariables(null) ?>
-    </style>
 </head>
 
 <body class="tv-body">
