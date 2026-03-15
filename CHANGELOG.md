@@ -8,6 +8,7 @@ Este arquivo consolida a evolucao do projeto de forma legivel, ja que os primeir
 - Espaco reservado para as proximas entregas, correcoes e ajustes visuais do projeto.
 - Reestruturado o formulario de criacao de memorial em secoes mais claras, com melhor hierarquia visual, agrupamento de cores, preview mais integrado e CTA final mais evidente.
 - Ajustado o fuso horario da conexao MySQL para respeitar a timezone configurada na aplicacao, evitando gravacao em UTC quando o painel da hospedagem estiver diferente.
+- Refinada a tela de gerenciamento de temas com abas mais fortes, cards mais organizados, preview melhor integrado e acoes de edicao com visual de painel administrativo premium.
 
 ### Added
 - Edicao inline de comentarios para o autor logado com Google.
