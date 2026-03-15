@@ -228,7 +228,6 @@ try {
                     <div class="admin-section__header">
                         <div>
                             <h2 class="admin-section__title">Criacao de tema reutilizavel</h2>
-                            <p class="admin-section__text">Monte um novo tema visual para funerarias diferentes. Se informar um nome, ele fica salvo para uso futuro.</p>
                         </div>
                     </div>
 
@@ -303,9 +302,7 @@ try {
             <?php if ($activeTab === 'temas'): ?>
                 <div class="panel-section-header panel-section-header--themes">
                     <div>
-                        <p class="panel-section-header__eyebrow">Biblioteca visual</p>
-                        <h2 class="panel-section-header__title">Temas cadastrados</h2>
-                        <p class="panel-section-header__text">Edite seus temas para reutilizar em novos memoriais e manter um padrao visual consistente para cada funeraria.</p>
+                        <h2 class="panel-section-header__eyebrow">Biblioteca visual</h2>
                     </div>
                     <div class="panel-section-header__badge"><?= count($themes) ?> tema(s)</div>
                 </div>
@@ -392,10 +389,6 @@ try {
                                 </div>
 
                                 <div class="theme-manager-actions">
-                                    <div class="theme-manager-actions__copy">
-                                        <strong>Salvar alteracoes</strong>
-                                        <span>As novas cores ficarao disponiveis para os proximos memoriais que usarem este tema.</span>
-                                    </div>
                                     <button class="primary-button primary-button--large" type="submit">Salvar tema</button>
                                 </div>
                             </form>
