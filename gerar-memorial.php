@@ -293,11 +293,11 @@ try {
             </form>
         </section>
 
-        <section class="feed-section">
+        <section class="feed-section" id="memorial-panel">
             <div class="section-divider"></div>
             <div class="panel-tabs" role="tablist" aria-label="Navegacao de memoriais e temas">
-                <a class="panel-tab<?= $activeTab === 'memoriais' ? ' is-active' : '' ?>" href="?tab=memoriais<?= $page > 1 ? '&page=' . $page : '' ?>">Memoriais cadastrados <span class="panel-tab-count"><?= count($memorials) ?></span></a>
-                <a class="panel-tab<?= $activeTab === 'temas' ? ' is-active' : '' ?>" href="?tab=temas">Temas cadastrados <span class="panel-tab-count"><?= count($themes) ?></span></a>
+                <a class="panel-tab<?= $activeTab === 'memoriais' ? ' is-active' : '' ?>" href="?tab=memoriais<?= $page > 1 ? '&page=' . $page : '' ?>#memorial-panel">Memoriais cadastrados <span class="panel-tab-count"><?= count($memorials) ?></span></a>
+                <a class="panel-tab<?= $activeTab === 'temas' ? ' is-active' : '' ?>" href="?tab=temas#memorial-panel">Temas cadastrados <span class="panel-tab-count"><?= count($themes) ?></span></a>
             </div>
 
             <?php if ($activeTab === 'temas'): ?>
@@ -461,13 +461,13 @@ try {
                     <nav class="pagination-bar" aria-label="Paginacao dos memoriais">
                         <span class="pagination-summary">Showing <?= (int) $resultStart ?> to <?= (int) $resultEnd ?> of <?= (int) $total ?> results</span>
                         <div class="pagination-controls">
-                            <a class="pagination-button<?= $page <= 1 ? ' is-disabled' : '' ?>" href="<?= $page > 1 ? '?tab=memoriais&page=' . ($page - 1) : '#' ?>" aria-label="Pagina anterior" <?= $page <= 1 ? ' tabindex="-1" aria-disabled="true"' : '' ?>>
+                            <a class="pagination-button<?= $page <= 1 ? ' is-disabled' : '' ?>" href="<?= $page > 1 ? '?tab=memoriais&page=' . ($page - 1) . '#memorial-panel' : '#' ?>" aria-label="Pagina anterior" <?= $page <= 1 ? ' tabindex="-1" aria-disabled="true"' : '' ?>>
                                 <span aria-hidden="true">&lsaquo;</span>
                             </a>
                             <?php for ($i = 1; $i <= $totalPages; $i++): ?>
-                                <a class="pagination-button<?= $i === $page ? ' is-active' : '' ?>" href="?tab=memoriais&page=<?= $i ?>" aria-current="<?= $i === $page ? 'page' : 'false' ?>"><?= $i ?></a>
+                                <a class="pagination-button<?= $i === $page ? ' is-active' : '' ?>" href="?tab=memoriais&page=<?= $i ?>#memorial-panel" aria-current="<?= $i === $page ? 'page' : 'false' ?>"><?= $i ?></a>
                             <?php endfor; ?>
-                            <a class="pagination-button<?= $page >= $totalPages ? ' is-disabled' : '' ?>" href="<?= $page < $totalPages ? '?tab=memoriais&page=' . ($page + 1) : '#' ?>" aria-label="Proxima pagina" <?= $page >= $totalPages ? ' tabindex="-1" aria-disabled="true"' : '' ?>>
+                            <a class="pagination-button<?= $page >= $totalPages ? ' is-disabled' : '' ?>" href="<?= $page < $totalPages ? '?tab=memoriais&page=' . ($page + 1) . '#memorial-panel' : '#' ?>" aria-label="Proxima pagina" <?= $page >= $totalPages ? ' tabindex="-1" aria-disabled="true"' : '' ?>>
                                 <span aria-hidden="true">&rsaquo;</span>
                             </a>
                         </div>
