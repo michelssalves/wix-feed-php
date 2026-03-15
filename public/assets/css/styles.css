@@ -217,15 +217,10 @@ body.is-lightbox-open {
   align-items: center;
 }
 
-.tv-slide--text-only .tv-slide__body {
-  grid-template-columns: minmax(0, 1fr);
-  max-width: 1220px;
-  margin: 0 auto;
-}
-
 .tv-slide__text-wrap {
   display: grid;
   gap: 14px;
+  min-width: 0;
 }
 
 .tv-slide__text-wrap--meta-only {
@@ -241,6 +236,8 @@ body.is-lightbox-open {
   font-size: clamp(34px, 3.9vw, 58px);
   line-height: 1.28;
   white-space: pre-wrap;
+  word-break: break-word;
+  overflow-wrap: anywhere;
   overflow: hidden;
   display: -webkit-box;
   -webkit-line-clamp: 8;
@@ -274,6 +271,12 @@ body.is-lightbox-open {
   display: grid;
   place-items: center;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+.tv-slide__media--empty {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.02) 0%, rgba(255, 255, 255, 0.01) 100%),
+    #080808;
 }
 
 .tv-slide__media img {

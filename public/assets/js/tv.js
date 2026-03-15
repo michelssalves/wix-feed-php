@@ -95,7 +95,7 @@
     const hasText = Boolean(post.texto);
     const imageHtml = post.imagem
       ? `<div class="tv-slide__media"><img src="${absolutize(post.imagem)}" alt="Imagem da homenagem"></div>`
-      : '';
+      : `<div class="tv-slide__media tv-slide__media--empty" aria-hidden="true"></div>`;
 
     const bylineHtml = `
       <div class="tv-slide__byline">
@@ -106,7 +106,7 @@
     `;
 
     stage.innerHTML = `
-      <article class="tv-slide${hasImage ? ' tv-slide--with-media' : ' tv-slide--text-only'}">
+      <article class="tv-slide${hasImage ? ' tv-slide--with-media' : ' tv-slide--without-media'}">
         <div class="tv-slide__body">
           ${hasText ? `<div class="tv-slide__text-wrap"><div class="tv-slide__text">${post.texto}</div>${bylineHtml}</div>` : `<div class="tv-slide__text-wrap tv-slide__text-wrap--meta-only">${bylineHtml}</div>`}
           ${imageHtml}
