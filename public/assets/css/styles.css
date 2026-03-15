@@ -43,7 +43,7 @@ body::-webkit-scrollbar-track,
 body::-webkit-scrollbar-thumb,
 .rich-editor::-webkit-scrollbar-thumb {
   background: #8a8a8a;
-  border-radius: 999px;
+  border-radius: 0;
   border: 2px solid #050505;
 }
 
@@ -71,7 +71,7 @@ body.is-embedded .app-shell {
 
 body.is-embedded .composer,
 body.is-embedded .feed-section {
-  border-radius: 16px;
+  border-radius: 0;
 }
 
 body.is-embedded .feed-section {
@@ -90,7 +90,7 @@ body.is-embedded::-webkit-scrollbar-track {
 .feed-section {
   background: rgba(0, 0, 0, 0.55);
   border: 1px solid var(--line);
-  border-radius: 24px;
+  border-radius: 0;
   padding: 28px 24px;
   box-shadow: var(--shadow);
   backdrop-filter: blur(6px);
@@ -131,7 +131,7 @@ input[type="text"],
 textarea {
   width: 100%;
   border: 1px solid rgba(255, 255, 255, 0.18);
-  border-radius: 12px;
+  border-radius: 0;
   background: #efefef;
   color: #111;
   padding: 14px 16px;
@@ -156,7 +156,7 @@ textarea {
 
 .editor-shell {
   border: 1px solid rgba(255, 255, 255, 0.18);
-  border-radius: 16px;
+  border-radius: 0;
   background: #efefef;
   overflow: hidden;
 }
@@ -175,7 +175,7 @@ textarea {
   width: 34px;
   height: 34px;
   border: 1px solid rgba(17, 17, 17, 0.12);
-  border-radius: 10px;
+  border-radius: 0;
   background: #f5f5f5;
   color: #111;
   display: grid;
@@ -260,7 +260,7 @@ textarea {
   width: 120px;
   height: 120px;
   border: 1px dashed rgba(255, 255, 255, 0.7);
-  border-radius: 14px;
+  border-radius: 0;
   display: inline-flex;
   flex-direction: column;
   justify-content: center;
@@ -302,7 +302,7 @@ textarea {
 .primary-button,
 .secondary-button,
 .ghost-button {
-  border-radius: 999px;
+  border-radius: 0;
   padding: 12px 22px;
   border: 1px solid transparent;
   cursor: pointer;
@@ -325,7 +325,7 @@ textarea {
 .flash-message {
   margin-bottom: 18px;
   padding: 12px 14px;
-  border-radius: 12px;
+  border-radius: 0;
   border: 1px solid transparent;
 }
 
@@ -348,7 +348,7 @@ textarea {
   gap: 18px;
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid var(--line);
-  border-radius: 16px;
+  border-radius: 0;
   padding: 14px 16px;
   margin-bottom: 24px;
 }
@@ -390,7 +390,7 @@ textarea {
 .post-card {
   background: rgba(255, 255, 255, 0.025);
   border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 18px;
+  border-radius: 0;
   padding: 16px 16px 14px;
   box-shadow: 0 10px 24px rgba(0, 0, 0, 0.16);
 }
@@ -412,7 +412,7 @@ textarea {
 .avatar {
   width: 44px;
   height: 44px;
-  border-radius: 50%;
+  border-radius: 0;
   background: linear-gradient(135deg, #f5da8f 0%, #b58a23 100%);
   color: #fff7dd;
   display: grid;
@@ -513,7 +513,7 @@ textarea {
   margin-top: 14px;
   width: 100%;
   max-height: 460px;
-  border-radius: 14px;
+  border-radius: 0;
   border: 1px solid rgba(255, 255, 255, 0.08);
   display: block;
   object-fit: contain;
@@ -529,7 +529,7 @@ textarea {
   display: inline-block;
   width: 100%;
   position: relative;
-  border-radius: 14px;
+  border-radius: 0;
 }
 
 .post-image-button .post-image {
@@ -543,7 +543,7 @@ textarea {
   right: 14px;
   bottom: 14px;
   padding: 6px 10px;
-  border-radius: 999px;
+  border-radius: 0;
   background: rgba(0, 0, 0, 0.58);
   color: #fff;
   font-size: 12px;
@@ -576,7 +576,7 @@ textarea {
   cursor: pointer;
   padding: 8px 10px;
   letter-spacing: 0.01em;
-  border-radius: 10px;
+  border-radius: 0;
 }
 
 .reply-toggle:hover {
@@ -593,7 +593,7 @@ textarea {
 .comment-card,
 .comment-form {
   padding: 12px 14px;
-  border-radius: 18px;
+  border-radius: 0;
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.08);
 }
@@ -624,7 +624,7 @@ textarea {
   border: 1px solid rgba(255, 255, 255, 0.12);
   background: rgba(255, 255, 255, 0.04);
   color: #d9d5de;
-  border-radius: 999px;
+  border-radius: 0;
   padding: 6px 10px;
   font-size: 12px;
   font-weight: 600;
@@ -654,7 +654,7 @@ textarea {
 .comment-edit-form {
   margin: 12px 0 0 58px;
   padding: 12px 14px;
-  border-radius: 18px;
+  border-radius: 0;
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid rgba(255, 255, 255, 0.08);
 }
@@ -714,7 +714,7 @@ textarea {
 .lightbox-image {
   max-width: min(96vw, 1280px);
   max-height: 90vh;
-  border-radius: 14px;
+  border-radius: 0;
   object-fit: contain;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
 }
@@ -726,7 +726,7 @@ textarea {
   width: 42px;
   height: 42px;
   border: none;
-  border-radius: 50%;
+  border-radius: 0;
   background: rgba(255, 255, 255, 0.12);
   color: #fff;
   font-size: 28px;
@@ -738,7 +738,7 @@ textarea {
   margin-left: 8px;
   padding: 4px 10px;
   border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 8px;
+  border-radius: 0;
   background: rgba(255, 255, 255, 0.04);
   color: #f4f0e7;
   cursor: pointer;
@@ -760,7 +760,7 @@ textarea {
   .composer,
   .feed-section {
     padding: 14px;
-    border-radius: 16px;
+    border-radius: 0;
   }
 
   .comment-field-row {
@@ -777,7 +777,7 @@ textarea {
   }
 
   .editor-shell {
-    border-radius: 14px;
+    border-radius: 0;
   }
 
   .editor-toolbar {
@@ -796,7 +796,7 @@ textarea {
   .toolbar-button {
     width: 32px;
     height: 32px;
-    border-radius: 9px;
+    border-radius: 0;
     font-size: 14px;
   }
 
@@ -824,7 +824,7 @@ textarea {
     flex-wrap: wrap;
     padding: 12px;
     gap: 12px;
-    border-radius: 14px;
+    border-radius: 0;
   }
 
   .session-main {
@@ -851,7 +851,7 @@ textarea {
 
   .post-card {
     padding: 14px;
-    border-radius: 16px;
+    border-radius: 0;
   }
 
   .post-header,
@@ -884,7 +884,7 @@ textarea {
 
   .post-image {
     max-height: 320px;
-    border-radius: 12px;
+    border-radius: 0;
   }
 
   .post-image-button::after {
@@ -916,7 +916,7 @@ textarea {
   .post-edit-form,
   .comment-form {
     padding: 12px;
-    border-radius: 14px;
+    border-radius: 0;
   }
 
   .comment-actions-menu {
@@ -961,7 +961,7 @@ textarea {
   .lightbox-image {
     max-width: 100%;
     max-height: 82vh;
-    border-radius: 10px;
+    border-radius: 0;
   }
 
   .lightbox-close {
@@ -988,7 +988,7 @@ textarea {
   .composer,
   .feed-section {
     padding: 12px;
-    border-radius: 14px;
+    border-radius: 0;
   }
 
   #post-identity-row {
@@ -1027,7 +1027,7 @@ textarea {
 
   .post-card {
     padding: 12px;
-    border-radius: 14px;
+    border-radius: 0;
   }
 
   .post-header,
@@ -1057,7 +1057,7 @@ textarea {
   .post-edit-form,
   .comment-form {
     padding: 10px;
-    border-radius: 12px;
+    border-radius: 0;
   }
 
   .comment-action-button {
