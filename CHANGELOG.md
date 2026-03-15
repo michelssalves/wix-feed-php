@@ -12,6 +12,7 @@ Este arquivo consolida a evolucao do projeto de forma legivel, ja que os primeir
 - Exclusao de comentarios para o autor logado com Google.
 - Endpoints dedicados para atualizar e excluir comentarios com validacao de propriedade.
 - Edicao e exclusao da propria postagem para o autor logado com Google.
+- Opcao para excluir memorial criado na tela de listagem, removendo tambem posts e comentarios vinculados.
 
 ## [0.3.0] - 2026-03-14
 

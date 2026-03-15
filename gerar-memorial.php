@@ -34,11 +34,28 @@ try {
 
     $created = null;
     $error = '';
+    $success = '';
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $deceasedName = trim((string) ($_POST['nome_falecido'] ?? ''));
-        $photoPath = $uploadService->uploadImage($_FILES['foto_falecido'] ?? []);
-        $created = $memorialService->create(mb_substr($deceasedName, 0, 160), $photoPath);
+        $action = (string) ($_POST['action'] ?? 'create');
+
+        if ($action === 'delete') {
+            $memorialId = (int) ($_POST['memorial_id'] ?? 0);
+
+            if ($memorialId <= 0) {
+                throw new RuntimeException('Memorial invalido para exclusao.');
+            }
+
+            if (!$memorialService->deleteById($memorialId)) {
+                throw new RuntimeException('Memorial nao encontrado para exclusao.');
+            }
+
+            $success = 'Memorial excluido com sucesso.';
+        } else {
+            $deceasedName = trim((string) ($_POST['nome_falecido'] ?? ''));
+            $photoPath = $uploadService->uploadImage($_FILES['foto_falecido'] ?? []);
+            $created = $memorialService->create(mb_substr($deceasedName, 0, 160), $photoPath);
+        }
     }
 
     $total = $memorialService->count();
@@ -75,6 +92,10 @@ try {
             <div class="flash-message is-error"><?= e($error) ?></div>
         <?php endif; ?>
 
+        <?php if ($success !== ''): ?>
+            <div class="flash-message is-success"><?= e($success) ?></div>
+        <?php endif; ?>
+
         <?php if ($created): ?>
             <div class="flash-message is-success">
                 Key criada com sucesso:
@@ -88,6 +109,7 @@ try {
         <?php endif; ?>
 
         <form method="post" enctype="multipart/form-data">
+            <input type="hidden" name="action" value="create">
             <label class="field">
                 <span>Nome do memorial</span>
                 <input type="text" name="nome_falecido" maxlength="160" placeholder="Opcional">
@@ -137,6 +159,11 @@ try {
                                 <button class="copy-button" type="button" data-copy-text="<?= e(appUrl('?memorial_key=' . $memorial['memorial_key'])) ?>">Copy</button>
                             </p>
                         </div>
+                        <form method="post" class="form-actions" style="justify-content:flex-start;margin-top:14px" onsubmit="return window.confirm('Deseja excluir este memorial? Isso tambem removera as postagens e comentarios vinculados.');">
+                            <input type="hidden" name="action" value="delete">
+                            <input type="hidden" name="memorial_id" value="<?= (int) $memorial['id'] ?>">
+                            <button class="secondary-button" type="submit">Excluir memorial</button>
+                        </form>
                     </div>
                 </article>
             <?php endforeach; ?>

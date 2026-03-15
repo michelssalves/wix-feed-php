@@ -62,6 +62,41 @@ class MemorialService
         return (int) $this->pdo->query('SELECT COUNT(*) FROM memorials')->fetchColumn();
     }
 
+    public function deleteById(int $id): bool
+    {
+        $statement = $this->pdo->prepare(
+            'SELECT memorial_key
+             FROM memorials
+             WHERE id = :id
+             LIMIT 1'
+        );
+        $statement->execute(['id' => $id]);
+        $memorialKey = $statement->fetchColumn();
+
+        if (!$memorialKey) {
+            return false;
+        }
+
+        $this->pdo->beginTransaction();
+
+        try {
+            $deletePosts = $this->pdo->prepare('DELETE FROM posts WHERE memorial_key = :memorial_key');
+            $deletePosts->execute(['memorial_key' => $memorialKey]);
+
+            $deleteMemorial = $this->pdo->prepare('DELETE FROM memorials WHERE id = :id');
+            $deleteMemorial->execute(['id' => $id]);
+
+            $this->pdo->commit();
+            return $deleteMemorial->rowCount() > 0;
+        } catch (\Throwable $throwable) {
+            if ($this->pdo->inTransaction()) {
+                $this->pdo->rollBack();
+            }
+
+            throw $throwable;
+        }
+    }
+
     private function generateKey(): string
     {
         return (string) random_int(100000, 99999999);
