@@ -64,4 +64,12 @@ class ThemeService
 
         return $statement->rowCount() > 0;
     }
+
+    public function deleteById(int $id): bool
+    {
+        $statement = $this->pdo->prepare('DELETE FROM themes WHERE id = :id');
+        $statement->execute(['id' => $id]);
+
+        return $statement->rowCount() > 0;
+    }
 }

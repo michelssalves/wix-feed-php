@@ -100,6 +100,20 @@ try {
 
                 $memorialService->updateById($memorialId, mb_substr($deceasedName, 0, 160), $photoPath, $themeId);
                 setFlashValue('success_message', 'Memorial atualizado com sucesso.');
+            } elseif ($action === 'delete-theme') {
+                $activeTab = 'temas';
+                $themeId = (int) ($_POST['theme_id'] ?? 0);
+                $redirectParams['tab'] = 'temas';
+
+                if ($themeId <= 0) {
+                    throw new RuntimeException('Tema invalido para exclusao.');
+                }
+
+                if (!$themeService->deleteById($themeId)) {
+                    throw new RuntimeException('Tema nao encontrado para exclusao.');
+                }
+
+                setFlashValue('success_message', 'Tema excluido com sucesso.');
             } elseif ($action === 'update-theme') {
                 $activeTab = 'temas';
                 $themeId = (int) ($_POST['theme_id'] ?? 0);
@@ -489,6 +503,7 @@ try {
 
                                     <div class="theme-manager-actions">
                                         <button class="primary-button primary-button--large" type="submit">Salvar tema</button>
+                                        <button class="secondary-button memorial-delete-button" type="submit" name="action" value="delete-theme" onclick="return window.confirm('Deseja excluir este tema? Os memoriais vinculados passarao a usar o tema padrao.');">Excluir tema</button>
                                     </div>
                                 </form>
                             </details>
