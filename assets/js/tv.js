@@ -93,9 +93,20 @@
     const post = posts[currentIndex];
     const hasImage = Boolean(post.imagem);
     const hasText = Boolean(post.texto);
+    const placeholderImage = config.memorialPhoto
+      ? `<img class="tv-slide__placeholder-image" src="${absolutize(config.memorialPhoto)}" alt="${config.memorialName || 'Memorial'}">`
+      : `<span class="tv-slide__placeholder-mark" aria-hidden="true">✦</span>`;
+
     const imageHtml = post.imagem
       ? `<div class="tv-slide__media"><img src="${absolutize(post.imagem)}" alt="Imagem da homenagem"></div>`
-      : `<div class="tv-slide__media tv-slide__media--empty" aria-hidden="true"></div>`;
+      : `
+        <div class="tv-slide__media tv-slide__media--empty">
+          <div class="tv-slide__placeholder">
+            ${placeholderImage}
+            <span class="tv-slide__placeholder-text">Homenagem em exibicao</span>
+          </div>
+        </div>
+      `;
 
     const bylineHtml = `
       <div class="tv-slide__byline">

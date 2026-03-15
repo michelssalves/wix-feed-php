@@ -131,6 +131,13 @@ try {
                 gap: 18px;
             }
 
+            .entry--text-only {
+                padding: 34px;
+                background:
+                    linear-gradient(180deg, rgba(182, 147, 75, 0.06) 0%, rgba(255, 253, 249, 1) 24%),
+                    var(--paper);
+            }
+
             .entry__meta {
                 display: grid;
                 gap: 6px;
@@ -155,9 +162,30 @@ try {
                 gap: 18px;
             }
 
+            .entry--text-only .entry__body {
+                gap: 22px;
+            }
+
             .entry__text {
                 font-size: 24px;
                 line-height: 1.7;
+            }
+
+            .entry--text-only .entry__text {
+                position: relative;
+                padding: 6px 0 0 28px;
+                font-size: clamp(28px, 3.4vw, 42px);
+                line-height: 1.55;
+            }
+
+            .entry--text-only .entry__text::before {
+                content: "“";
+                position: absolute;
+                left: 0;
+                top: -8px;
+                color: var(--accent);
+                font-size: 58px;
+                line-height: 1;
             }
 
             .entry__text p,
@@ -186,6 +214,29 @@ try {
                 display: block;
             }
 
+            .entry__signature {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                gap: 18px;
+                padding-top: 16px;
+                border-top: 1px solid rgba(217, 207, 189, 0.9);
+                font-family: Arial, sans-serif;
+            }
+
+            .entry__signature-author {
+                font-size: 15px;
+                font-weight: 700;
+                letter-spacing: 0.04em;
+                text-transform: uppercase;
+                color: var(--text);
+            }
+
+            .entry__signature-date {
+                color: var(--muted);
+                font-size: 13px;
+            }
+
             .empty {
                 padding: 48px 28px;
                 text-align: center;
@@ -212,6 +263,48 @@ try {
                     page-break-inside: avoid;
                 }
             }
+
+            @media (max-width: 760px) {
+                .album {
+                    width: min(100% - 24px, 1080px);
+                    margin: 12px auto;
+                    gap: 16px;
+                }
+
+                .cover,
+                .entry,
+                .entry--text-only,
+                .empty {
+                    padding: 20px;
+                }
+
+                .cover h1 {
+                    font-size: 34px;
+                }
+
+                .entry__author {
+                    font-size: 22px;
+                }
+
+                .entry__text {
+                    font-size: 20px;
+                }
+
+                .entry--text-only .entry__text {
+                    padding-left: 22px;
+                    font-size: 24px;
+                }
+
+                .entry--text-only .entry__text::before {
+                    font-size: 42px;
+                    top: -4px;
+                }
+
+                .entry__signature {
+                    flex-direction: column;
+                    align-items: flex-start;
+                }
+            }
         </style>
     </head>
 
@@ -229,7 +322,11 @@ try {
                 <section class="empty">Nenhuma homenagem foi publicada neste memorial ate o momento.</section>
             <?php else: ?>
                 <?php foreach ($posts as $post): ?>
-                    <article class="entry">
+                    <?php
+                    $hasText = trim((string) ($post['texto'] ?? '')) !== '';
+                    $hasImage = !empty($post['imagem']);
+                    ?>
+                    <article class="entry<?= $hasText && !$hasImage ? ' entry--text-only' : '' ?>">
                         <div class="entry__meta">
                             <div class="entry__author"><?= e($post['nome_autor'] !== '' ? $post['nome_autor'] : 'Homenagem anonima') ?></div>
                             <?php if (!empty($post['criado_em'])): ?>
@@ -237,12 +334,20 @@ try {
                             <?php endif; ?>
                         </div>
                         <div class="entry__body">
-                            <?php if (trim((string) ($post['texto'] ?? '')) !== ''): ?>
+                            <?php if ($hasText): ?>
                                 <div class="entry__text"><?= $post['texto'] ?></div>
                             <?php endif; ?>
-                            <?php if (!empty($post['imagem'])): ?>
+                            <?php if ($hasImage): ?>
                                 <div class="entry__image">
                                     <img src="<?= e(appUrl($post['imagem'])) ?>" alt="Imagem da homenagem">
+                                </div>
+                            <?php endif; ?>
+                            <?php if ($hasText && !$hasImage): ?>
+                                <div class="entry__signature">
+                                    <span class="entry__signature-author"><?= e($post['nome_autor'] !== '' ? $post['nome_autor'] : 'Homenagem anonima') ?></span>
+                                    <?php if (!empty($post['criado_em'])): ?>
+                                        <span class="entry__signature-date"><?= e(formatDateTimeBr($post['criado_em'])) ?></span>
+                                    <?php endif; ?>
                                 </div>
                             <?php endif; ?>
                         </div>

@@ -279,6 +279,48 @@ body.is-lightbox-open {
     #080808;
 }
 
+.tv-slide__placeholder {
+  width: 100%;
+  height: 100%;
+  min-height: 320px;
+  display: grid;
+  place-items: center;
+  gap: 18px;
+  align-content: center;
+  text-align: center;
+  background:
+    radial-gradient(circle at center, rgba(255, 255, 255, 0.05), transparent 58%),
+    rgba(0, 0, 0, 0.16);
+}
+
+.tv-slide__placeholder-image {
+  width: min(240px, 42%);
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border: 1px solid var(--tv-line);
+  opacity: 0.34;
+  filter: grayscale(0.1);
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.24);
+}
+
+.tv-slide__placeholder-mark {
+  width: 92px;
+  height: 92px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--tv-line);
+  color: rgba(255, 255, 255, 0.48);
+  font-size: 40px;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.tv-slide__placeholder-text {
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 0.96rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
 .tv-slide__media img {
   width: 100%;
   height: 100%;
@@ -1257,10 +1299,9 @@ textarea {
   flex-wrap: wrap;
 }
 
-.created-links__download-button,
 .memorial-album-button {
   min-height: 40px;
-  padding: 0 16px;
+  padding: 0;
 }
 
 .created-links__label,
@@ -1710,6 +1751,11 @@ textarea {
   background: rgba(221, 113, 113, 0.12);
 }
 
+.copy-icon-button.is-loading {
+  opacity: 0.72;
+  cursor: wait;
+}
+
 .memorial-card {
   padding: 18px 20px;
   display: grid;
@@ -1795,13 +1841,11 @@ textarea {
 
 .memorial-album-button {
   justify-self: start;
-  min-width: 168px;
-  background: linear-gradient(180deg, rgba(227, 197, 110, 0.12) 0%, rgba(227, 197, 110, 0.04) 100%);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  min-width: 40px;
 }
 
 .memorial-album-button:hover {
-  background: linear-gradient(180deg, rgba(227, 197, 110, 0.2) 0%, rgba(227, 197, 110, 0.08) 100%);
+  background: rgba(255, 255, 255, 0.08);
 }
 
 .memorial-card__actions {
@@ -1912,6 +1956,15 @@ textarea {
 
   .tv-slide__media img {
     max-height: 40vh;
+  }
+
+  .tv-slide__placeholder {
+    min-height: 220px;
+    gap: 12px;
+  }
+
+  .tv-slide__placeholder-image {
+    width: min(160px, 52%);
   }
 
   .tv-footer__meta {
@@ -2223,9 +2276,9 @@ textarea {
   }
 
   .memorial-album-button {
-    width: 100%;
-    justify-self: stretch;
-    min-width: 0;
+    width: 40px;
+    justify-self: start;
+    min-width: 40px;
   }
 
   .memorial-card__actions {

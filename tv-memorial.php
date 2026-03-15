@@ -106,13 +106,14 @@ try {
 
     <script>
         window.TV_APP_CONFIG = {
-            apiBase: <?= json_encode(appUrl('api'), JSON_UNESCAPED_SLASHES) ?>,
-            appBase: <?= json_encode(appUrl(), JSON_UNESCAPED_SLASHES) ?>,
-            memorialKey: <?= json_encode($memorialKey, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) ?>,
-            memorialExists: <?= json_encode((bool) $memorial) ?>,
-            memorialName: <?= json_encode($memorial['nome_falecido'] ?? 'Memorial', JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) ?>
-        };
-    </script>
+        apiBase: <?= json_encode(appUrl('api'), JSON_UNESCAPED_SLASHES) ?>,
+        appBase: <?= json_encode(appUrl(), JSON_UNESCAPED_SLASHES) ?>,
+        memorialKey: <?= json_encode($memorialKey, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) ?>,
+        memorialExists: <?= json_encode((bool) $memorial) ?>,
+        memorialName: <?= json_encode($memorial['nome_falecido'] ?? 'Memorial', JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) ?>,
+        memorialPhoto: <?= json_encode(!empty($memorial['foto_falecido']) ? appUrl($memorial['foto_falecido']) : '', JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) ?>
+    };
+</script>
     <script src="./assets/js/tv.js" defer></script>
 </body>
 
