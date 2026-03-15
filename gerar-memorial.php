@@ -23,6 +23,18 @@ spl_autoload_register(function (string $class): void {
     }
 });
 
+function memorialPanelUrl(array $params = []): string
+{
+    $query = array_filter($params, static fn(mixed $value): bool => $value !== null && $value !== '');
+    $url = appUrl('gerar-memorial.php');
+
+    if ($query !== []) {
+        $url .= '?' . http_build_query($query);
+    }
+
+    return $url . '#memorial-panel';
+}
+
 try {
     $config = config();
     date_default_timezone_set($config['timezone'] ?? 'UTC');
@@ -41,89 +53,105 @@ try {
         $activeTab = 'memoriais';
     }
 
-    $created = null;
-    $error = '';
-    $success = '';
+    $created = getFlashValue('created_memorial');
+    $error = (string) getFlashValue('error_message', '');
+    $success = (string) getFlashValue('success_message', '');
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $action = (string) ($_POST['action'] ?? 'create');
+        $redirectParams = [
+            'tab' => (string) ($_POST['redirect_tab'] ?? $activeTab),
+            'page' => (int) ($_POST['redirect_page'] ?? $page) > 1 ? (int) ($_POST['redirect_page'] ?? $page) : null,
+            'search_nome' => trim((string) ($_POST['redirect_search_nome'] ?? $searchName)),
+            'search_memorial_key' => trim((string) ($_POST['redirect_search_memorial_key'] ?? $searchMemorialKey)),
+        ];
 
-        if ($action === 'delete') {
-            $activeTab = 'memoriais';
-            $memorialId = (int) ($_POST['memorial_id'] ?? 0);
+        try {
+            if ($action === 'delete') {
+                $activeTab = 'memoriais';
+                $memorialId = (int) ($_POST['memorial_id'] ?? 0);
 
-            if ($memorialId <= 0) {
-                throw new RuntimeException('Memorial invalido para exclusao.');
+                if ($memorialId <= 0) {
+                    throw new RuntimeException('Memorial invalido para exclusao.');
+                }
+
+                if (!$memorialService->deleteById($memorialId)) {
+                    throw new RuntimeException('Memorial nao encontrado para exclusao.');
+                }
+
+                setFlashValue('success_message', 'Memorial excluido com sucesso.');
+            } elseif ($action === 'update-memorial') {
+                $activeTab = 'memoriais';
+                $memorialId = (int) ($_POST['memorial_id'] ?? 0);
+
+                if ($memorialId <= 0) {
+                    throw new RuntimeException('Memorial invalido para edicao.');
+                }
+
+                $existingMemorial = $memorialService->findById($memorialId);
+                if (!$existingMemorial) {
+                    throw new RuntimeException('Memorial nao encontrado para edicao.');
+                }
+
+                $deceasedName = trim((string) ($_POST['nome_falecido'] ?? ''));
+                $photoPath = $uploadService->uploadImage($_FILES['foto_falecido'] ?? []);
+                $themeId = (int) ($_POST['theme_id'] ?? 0);
+                $themeId = $themeId > 0 ? $themeId : null;
+
+                $memorialService->updateById($memorialId, mb_substr($deceasedName, 0, 160), $photoPath, $themeId);
+                setFlashValue('success_message', 'Memorial atualizado com sucesso.');
+            } elseif ($action === 'update-theme') {
+                $activeTab = 'temas';
+                $themeId = (int) ($_POST['theme_id'] ?? 0);
+                $redirectParams['tab'] = 'temas';
+
+                if ($themeId <= 0) {
+                    throw new RuntimeException('Tema invalido para edicao.');
+                }
+
+                $existingTheme = $themeService->findById($themeId);
+                if (!$existingTheme) {
+                    throw new RuntimeException('Tema nao encontrado para edicao.');
+                }
+
+                $themePayload = themePayloadFromRequest($_POST, $existingTheme);
+                if ($themePayload['nome'] === '') {
+                    throw new RuntimeException('Informe um nome para o tema.');
+                }
+
+                $themeService->update($themeId, $themePayload);
+                setFlashValue('success_message', 'Tema atualizado com sucesso.');
+            } else {
+                $activeTab = 'memoriais';
+                $redirectParams = ['tab' => 'memoriais'];
+                $deceasedName = trim((string) ($_POST['nome_falecido'] ?? ''));
+                $photoPath = $uploadService->uploadImage($_FILES['foto_falecido'] ?? []);
+                $selectedThemeId = (int) ($_POST['theme_id'] ?? 0);
+                $newThemeName = trim((string) ($_POST['new_theme_name'] ?? ''));
+                $themeId = $selectedThemeId > 0 ? $selectedThemeId : null;
+
+                if ($newThemeName !== '') {
+                    $themePayload = themePayloadFromRequest([
+                        'nome' => $newThemeName,
+                        'cor_fundo_pagina' => $_POST['new_cor_fundo_pagina'] ?? null,
+                        'cor_fundo_formulario' => $_POST['new_cor_fundo_formulario'] ?? null,
+                        'cor_fontes_principais' => $_POST['new_cor_fontes_principais'] ?? null,
+                        'cor_bordas' => $_POST['new_cor_bordas'] ?? null,
+                        'cor_botao_enviar' => $_POST['new_cor_botao_enviar'] ?? null,
+                        'cor_texto_botao_enviar' => $_POST['new_cor_texto_botao_enviar'] ?? null,
+                    ], $defaultTheme);
+                    $themeId = $themeService->create($themePayload);
+                }
+
+                $created = $memorialService->create(mb_substr($deceasedName, 0, 160), $photoPath, $themeId);
+                setFlashValue('created_memorial', $created);
             }
-
-            if (!$memorialService->deleteById($memorialId)) {
-                throw new RuntimeException('Memorial nao encontrado para exclusao.');
-            }
-
-            $success = 'Memorial excluido com sucesso.';
-        } elseif ($action === 'update-memorial') {
-            $activeTab = 'memoriais';
-            $memorialId = (int) ($_POST['memorial_id'] ?? 0);
-
-            if ($memorialId <= 0) {
-                throw new RuntimeException('Memorial invalido para edicao.');
-            }
-
-            $existingMemorial = $memorialService->findById($memorialId);
-            if (!$existingMemorial) {
-                throw new RuntimeException('Memorial nao encontrado para edicao.');
-            }
-
-            $deceasedName = trim((string) ($_POST['nome_falecido'] ?? ''));
-            $photoPath = $uploadService->uploadImage($_FILES['foto_falecido'] ?? []);
-            $themeId = (int) ($_POST['theme_id'] ?? 0);
-            $themeId = $themeId > 0 ? $themeId : null;
-
-            $memorialService->updateById($memorialId, mb_substr($deceasedName, 0, 160), $photoPath, $themeId);
-            $success = 'Memorial atualizado com sucesso.';
-        } elseif ($action === 'update-theme') {
-            $activeTab = 'temas';
-            $themeId = (int) ($_POST['theme_id'] ?? 0);
-
-            if ($themeId <= 0) {
-                throw new RuntimeException('Tema invalido para edicao.');
-            }
-
-            $existingTheme = $themeService->findById($themeId);
-            if (!$existingTheme) {
-                throw new RuntimeException('Tema nao encontrado para edicao.');
-            }
-
-            $themePayload = themePayloadFromRequest($_POST, $existingTheme);
-            if ($themePayload['nome'] === '') {
-                throw new RuntimeException('Informe um nome para o tema.');
-            }
-
-            $themeService->update($themeId, $themePayload);
-            $success = 'Tema atualizado com sucesso.';
-        } else {
-            $activeTab = 'memoriais';
-            $deceasedName = trim((string) ($_POST['nome_falecido'] ?? ''));
-            $photoPath = $uploadService->uploadImage($_FILES['foto_falecido'] ?? []);
-            $selectedThemeId = (int) ($_POST['theme_id'] ?? 0);
-            $newThemeName = trim((string) ($_POST['new_theme_name'] ?? ''));
-            $themeId = $selectedThemeId > 0 ? $selectedThemeId : null;
-
-            if ($newThemeName !== '') {
-                $themePayload = themePayloadFromRequest([
-                    'nome' => $newThemeName,
-                    'cor_fundo_pagina' => $_POST['new_cor_fundo_pagina'] ?? null,
-                    'cor_fundo_formulario' => $_POST['new_cor_fundo_formulario'] ?? null,
-                    'cor_fontes_principais' => $_POST['new_cor_fontes_principais'] ?? null,
-                    'cor_bordas' => $_POST['new_cor_bordas'] ?? null,
-                    'cor_botao_enviar' => $_POST['new_cor_botao_enviar'] ?? null,
-                    'cor_texto_botao_enviar' => $_POST['new_cor_texto_botao_enviar'] ?? null,
-                ], $defaultTheme);
-                $themeId = $themeService->create($themePayload);
-            }
-
-            $created = $memorialService->create(mb_substr($deceasedName, 0, 160), $photoPath, $themeId);
+        } catch (Throwable $postThrowable) {
+            setFlashValue('error_message', $postThrowable->getMessage());
         }
+
+        header('Location: ' . memorialPanelUrl($redirectParams));
+        exit;
     }
 
     $themes = $themeService->all();
@@ -410,6 +438,7 @@ try {
                                 <form method="post" class="theme-manager-form">
                                     <input type="hidden" name="action" value="update-theme">
                                     <input type="hidden" name="theme_id" value="<?= (int) $theme['id'] ?>">
+                                    <input type="hidden" name="redirect_tab" value="temas">
 
                                     <div class="theme-manager-layout">
                                         <div class="theme-manager-main">
@@ -555,6 +584,10 @@ try {
                                     <form method="post" enctype="multipart/form-data" class="memorial-edit-form">
                                         <input type="hidden" name="action" value="update-memorial">
                                         <input type="hidden" name="memorial_id" value="<?= (int) $memorial['id'] ?>">
+                                        <input type="hidden" name="redirect_tab" value="memoriais">
+                                        <input type="hidden" name="redirect_page" value="<?= (int) $page ?>">
+                                        <input type="hidden" name="redirect_search_nome" value="<?= e($searchName) ?>">
+                                        <input type="hidden" name="redirect_search_memorial_key" value="<?= e($searchMemorialKey) ?>">
                                         <label class="field">
                                             <span>Nome do memorial</span>
                                             <input type="text" name="nome_falecido" maxlength="160" value="<?= e($memorial['nome_falecido']) ?>">
@@ -581,6 +614,10 @@ try {
                                 <form method="post" class="form-actions memorial-card__actions memorial-card__actions--danger" onsubmit="return window.confirm('Deseja excluir este memorial? Isso tambem removera as postagens e comentarios vinculados.');">
                                     <input type="hidden" name="action" value="delete">
                                     <input type="hidden" name="memorial_id" value="<?= (int) $memorial['id'] ?>">
+                                    <input type="hidden" name="redirect_tab" value="memoriais">
+                                    <input type="hidden" name="redirect_page" value="<?= (int) $page ?>">
+                                    <input type="hidden" name="redirect_search_nome" value="<?= e($searchName) ?>">
+                                    <input type="hidden" name="redirect_search_memorial_key" value="<?= e($searchMemorialKey) ?>">
                                     <button class="secondary-button memorial-delete-button" type="submit">Excluir memorial</button>
                                 </form>
                             </div>

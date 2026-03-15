@@ -22,3 +22,24 @@ function startAppSession(array $config): void
 
     session_start();
 }
+
+function setFlashValue(string $key, mixed $value): void
+{
+    $_SESSION['_flash'][$key] = $value;
+}
+
+function getFlashValue(string $key, mixed $default = null): mixed
+{
+    if (!isset($_SESSION['_flash']) || !array_key_exists($key, $_SESSION['_flash'])) {
+        return $default;
+    }
+
+    $value = $_SESSION['_flash'][$key];
+    unset($_SESSION['_flash'][$key]);
+
+    if ($_SESSION['_flash'] === []) {
+        unset($_SESSION['_flash']);
+    }
+
+    return $value;
+}
