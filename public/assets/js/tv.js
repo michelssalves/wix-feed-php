@@ -97,24 +97,18 @@
       ? `<div class="tv-slide__media"><img src="${absolutize(post.imagem)}" alt="Imagem da homenagem"></div>`
       : '';
 
-    const authorPhoto = post.foto_autor
-      ? `<img src="${absolutize(post.foto_autor)}" alt="${post.nome_autor || 'Autor'}">`
-      : `<span>${String(post.nome_autor || 'M').trim().charAt(0).toUpperCase()}</span>`;
+    const bylineHtml = `
+      <div class="tv-slide__byline">
+        <span class="tv-slide__byline-name">${post.nome_autor || 'Mensagem anonima'}</span>
+        <span class="tv-slide__byline-separator">•</span>
+        <span class="tv-slide__byline-date">${formatDate(post.criado_em)}</span>
+      </div>
+    `;
 
     stage.innerHTML = `
       <article class="tv-slide${hasImage ? ' tv-slide--with-media' : ' tv-slide--text-only'}">
-        <div class="tv-slide__header">
-          <div class="tv-slide__author">
-            <div class="tv-slide__avatar">${authorPhoto}</div>
-            <div class="tv-slide__meta">
-              <span class="tv-slide__meta-label">Homenagem de</span>
-              <strong>${post.nome_autor || 'Mensagem anonima'}</strong>
-              <span>${formatDate(post.criado_em)}</span>
-            </div>
-          </div>
-        </div>
         <div class="tv-slide__body">
-          ${hasText ? `<div class="tv-slide__text">${post.texto}</div>` : ''}
+          ${hasText ? `<div class="tv-slide__text-wrap"><div class="tv-slide__text">${post.texto}</div>${bylineHtml}</div>` : `<div class="tv-slide__text-wrap tv-slide__text-wrap--meta-only">${bylineHtml}</div>`}
           ${imageHtml}
         </div>
       </article>
