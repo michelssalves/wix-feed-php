@@ -29,6 +29,8 @@ const elements = {
   logoutButton: document.getElementById('logout-button'),
 };
 
+let savedEditorRange = null;
+
 function showMessage(message, type = 'success') {
   elements.flash.textContent = message;
   elements.flash.className = `flash-message is-${type}`;
@@ -528,20 +530,67 @@ function syncEditorInput() {
   elements.postText.value = html;
 }
 
+function isSelectionInsideEditor() {
+  const selection = window.getSelection();
+  if (!selection || selection.rangeCount === 0) {
+    return false;
+  }
+
+  const range = selection.getRangeAt(0);
+  return elements.postEditor.contains(range.commonAncestorContainer);
+}
+
+function saveEditorSelection() {
+  const selection = window.getSelection();
+  if (!selection || selection.rangeCount === 0 || !isSelectionInsideEditor()) {
+    return;
+  }
+
+  savedEditorRange = selection.getRangeAt(0).cloneRange();
+}
+
+function restoreEditorSelection() {
+  if (!savedEditorRange) {
+    return;
+  }
+
+  const selection = window.getSelection();
+  if (!selection) {
+    return;
+  }
+
+  selection.removeAllRanges();
+  selection.addRange(savedEditorRange);
+}
+
 document.querySelectorAll('[data-editor-command]').forEach((button) => {
+  button.addEventListener('mousedown', (event) => {
+    event.preventDefault();
+    saveEditorSelection();
+  });
+
   button.addEventListener('click', () => {
     const command = button.getAttribute('data-editor-command');
     elements.postEditor.focus();
+    restoreEditorSelection();
     document.execCommand(command, false);
+    saveEditorSelection();
     syncEditorInput();
   });
 });
 
 document.querySelectorAll('[data-editor-emoji]').forEach((button) => {
+  button.addEventListener('mousedown', (event) => {
+    event.preventDefault();
+    saveEditorSelection();
+  });
+
   button.addEventListener('click', () => {
     const emoji = button.getAttribute('data-editor-emoji') || '';
     elements.postEditor.focus();
+    restoreEditorSelection();
     document.execCommand('insertText', false, emoji);
+    saveEditorSelection();
     syncEditorInput();
   });
 });
@@ -566,6 +615,9 @@ elements.postImageTrigger.addEventListener('click', (event) => {
 });
 
 elements.postEditor.addEventListener('input', syncEditorInput);
+elements.postEditor.addEventListener('input', saveEditorSelection);
+elements.postEditor.addEventListener('keyup', saveEditorSelection);
+elements.postEditor.addEventListener('mouseup', saveEditorSelection);
 elements.postEditor.addEventListener('blur', syncEditorInput);
 
 elements.postImage.addEventListener('change', () => {
