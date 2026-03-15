@@ -545,9 +545,56 @@ textarea:focus {
   overflow: hidden;
 }
 
+.theme-manager-accordion {
+  display: grid;
+}
+
+.theme-manager-accordion__summary {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  flex-wrap: wrap;
+  padding: 22px;
+  cursor: pointer;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.032) 0%, rgba(255, 255, 255, 0.016) 100%);
+  transition: background 0.18s ease, border-color 0.18s ease;
+}
+
+.theme-manager-accordion__summary::-webkit-details-marker {
+  display: none;
+}
+
+.theme-manager-accordion__summary:hover {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.048) 0%, rgba(255, 255, 255, 0.024) 100%);
+}
+
+.theme-manager-accordion__summary-side {
+  display: inline-flex;
+  align-items: center;
+  gap: 16px;
+  margin-left: auto;
+}
+
+.theme-manager-accordion__icon {
+  width: 12px;
+  height: 12px;
+  border-right: 2px solid rgba(255, 255, 255, 0.7);
+  border-bottom: 2px solid rgba(255, 255, 255, 0.7);
+  transform: rotate(45deg);
+  transition: transform 0.18s ease;
+  flex: none;
+}
+
+.theme-manager-accordion[open] .theme-manager-accordion__icon {
+  transform: rotate(225deg);
+}
+
 .theme-manager-form {
   display: grid;
   gap: 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
 }
 
 .theme-manager-card__header {
@@ -1579,12 +1626,14 @@ textarea {
 
   .theme-manager-card__header,
   .theme-manager-layout,
-  .theme-manager-actions {
+  .theme-manager-actions,
+  .theme-manager-accordion__summary {
     padding-left: 16px;
     padding-right: 16px;
   }
 
-  .theme-manager-card__header {
+  .theme-manager-card__header,
+  .theme-manager-accordion__summary {
     padding-top: 18px;
     padding-bottom: 16px;
   }
@@ -1609,6 +1658,12 @@ textarea {
 
   .theme-manager-actions .primary-button {
     width: 100%;
+  }
+
+  .theme-manager-accordion__summary-side {
+    width: 100%;
+    justify-content: space-between;
+    margin-left: 0;
   }
 
   .editor-shell {

@@ -311,17 +311,14 @@ try {
                 <div class="feed-list">
                     <?php foreach ($themes as $theme): ?>
                         <article class="post-card theme-manager-card">
-                            <form method="post" class="theme-manager-form">
-                                <input type="hidden" name="action" value="update-theme">
-                                <input type="hidden" name="theme_id" value="<?= (int) $theme['id'] ?>">
-
-                                <div class="theme-manager-card__header">
+                            <details class="theme-manager-accordion">
+                                <summary class="theme-manager-accordion__summary">
                                     <div class="theme-manager-card__header-main">
                                         <p class="theme-manager-card__eyebrow">Tema reutilizavel</p>
                                         <h3 class="theme-manager-card__title"><?= e($theme['nome']) ?></h3>
                                         <span class="theme-manager-card__date">Atualizado em <?= e(formatDateTimeBr($theme['atualizado_em'] ?? $theme['criado_em'])) ?></span>
                                     </div>
-                                    <div class="theme-manager-card__header-side">
+                                    <div class="theme-manager-accordion__summary-side">
                                         <div class="theme-swatches theme-swatches--compact" aria-label="Previa das cores do tema">
                                             <span class="theme-swatch">
                                                 <span class="theme-swatch__color" style="background:<?= e($theme['cor_fundo_pagina']) ?>"></span>
@@ -348,60 +345,66 @@ try {
                                                 <span class="theme-swatch__label">Texto botao</span>
                                             </span>
                                         </div>
+                                        <span class="theme-manager-accordion__icon" aria-hidden="true"></span>
                                     </div>
-                                </div>
+                                </summary>
 
-                                <div class="theme-manager-layout">
-                                    <div class="theme-manager-main">
-                                        <label class="field">
-                                            <span>Nome do tema</span>
-                                            <input type="text" name="nome" maxlength="120" value="<?= e($theme['nome']) ?>">
-                                        </label>
+                                <form method="post" class="theme-manager-form">
+                                    <input type="hidden" name="action" value="update-theme">
+                                    <input type="hidden" name="theme_id" value="<?= (int) $theme['id'] ?>">
 
-                                        <div class="theme-grid theme-grid--theme-manager">
+                                    <div class="theme-manager-layout">
+                                        <div class="theme-manager-main">
                                             <label class="field">
-                                                <span>Cor de fundo da pagina</span>
-                                                <input type="color" name="cor_fundo_pagina" value="<?= e($theme['cor_fundo_pagina']) ?>">
+                                                <span>Nome do tema</span>
+                                                <input type="text" name="nome" maxlength="120" value="<?= e($theme['nome']) ?>">
                                             </label>
-                                            <label class="field">
-                                                <span>Cor de fundo do formulario</span>
-                                                <input type="color" name="cor_fundo_formulario" value="<?= e($theme['cor_fundo_formulario']) ?>">
-                                            </label>
-                                            <label class="field">
-                                                <span>Cor das fontes principais</span>
-                                                <input type="color" name="cor_fontes_principais" value="<?= e($theme['cor_fontes_principais']) ?>">
-                                            </label>
-                                            <label class="field">
-                                                <span>Cor das bordas</span>
-                                                <input type="color" name="cor_bordas" value="<?= e($theme['cor_bordas']) ?>">
-                                            </label>
-                                            <label class="field">
-                                                <span>Cor do botao Enviar</span>
-                                                <input type="color" name="cor_botao_enviar" value="<?= e($theme['cor_botao_enviar']) ?>">
-                                            </label>
-                                            <label class="field">
-                                                <span>Cor do texto do botao</span>
-                                                <input type="color" name="cor_texto_botao_enviar" value="<?= e($theme['cor_texto_botao_enviar']) ?>">
-                                            </label>
-                                        </div>
-                                    </div>
 
-                                    <aside class="theme-manager-side">
-                                        <div class="theme-preview theme-preview--small theme-preview--theme-card" style="<?= e('background:' . $theme['cor_fundo_pagina'] . ';border-color:' . $theme['cor_bordas'] . ';color:' . $theme['cor_fontes_principais']) ?>">
-                                            <div class="theme-preview__panel" style="<?= e('background:' . $theme['cor_fundo_formulario'] . ';border-color:' . $theme['cor_bordas']) ?>">
-                                                <span class="theme-preview__eyebrow">Preview aplicado</span>
-                                                <span class="theme-preview__title"><?= e($theme['nome']) ?></span>
-                                                <p class="theme-preview__text">Visual resumido do mural usando essa combinacao de cores.</p>
-                                                <button type="button" class="theme-preview__button" style="<?= e('background:' . $theme['cor_botao_enviar'] . ';color:' . $theme['cor_texto_botao_enviar']) ?>">Enviar</button>
+                                            <div class="theme-grid theme-grid--theme-manager">
+                                                <label class="field">
+                                                    <span>Cor de fundo da pagina</span>
+                                                    <input type="color" name="cor_fundo_pagina" value="<?= e($theme['cor_fundo_pagina']) ?>">
+                                                </label>
+                                                <label class="field">
+                                                    <span>Cor de fundo do formulario</span>
+                                                    <input type="color" name="cor_fundo_formulario" value="<?= e($theme['cor_fundo_formulario']) ?>">
+                                                </label>
+                                                <label class="field">
+                                                    <span>Cor das fontes principais</span>
+                                                    <input type="color" name="cor_fontes_principais" value="<?= e($theme['cor_fontes_principais']) ?>">
+                                                </label>
+                                                <label class="field">
+                                                    <span>Cor das bordas</span>
+                                                    <input type="color" name="cor_bordas" value="<?= e($theme['cor_bordas']) ?>">
+                                                </label>
+                                                <label class="field">
+                                                    <span>Cor do botao Enviar</span>
+                                                    <input type="color" name="cor_botao_enviar" value="<?= e($theme['cor_botao_enviar']) ?>">
+                                                </label>
+                                                <label class="field">
+                                                    <span>Cor do texto do botao</span>
+                                                    <input type="color" name="cor_texto_botao_enviar" value="<?= e($theme['cor_texto_botao_enviar']) ?>">
+                                                </label>
                                             </div>
                                         </div>
-                                    </aside>
-                                </div>
 
-                                <div class="theme-manager-actions">
-                                    <button class="primary-button primary-button--large" type="submit">Salvar tema</button>
-                                </div>
-                            </form>
+                                        <aside class="theme-manager-side">
+                                            <div class="theme-preview theme-preview--small theme-preview--theme-card" style="<?= e('background:' . $theme['cor_fundo_pagina'] . ';border-color:' . $theme['cor_bordas'] . ';color:' . $theme['cor_fontes_principais']) ?>">
+                                                <div class="theme-preview__panel" style="<?= e('background:' . $theme['cor_fundo_formulario'] . ';border-color:' . $theme['cor_bordas']) ?>">
+                                                    <span class="theme-preview__eyebrow">Preview aplicado</span>
+                                                    <span class="theme-preview__title"><?= e($theme['nome']) ?></span>
+                                                    <p class="theme-preview__text">Visual resumido do mural usando essa combinacao de cores.</p>
+                                                    <button type="button" class="theme-preview__button" style="<?= e('background:' . $theme['cor_botao_enviar'] . ';color:' . $theme['cor_texto_botao_enviar']) ?>">Enviar</button>
+                                                </div>
+                                            </div>
+                                        </aside>
+                                    </div>
+
+                                    <div class="theme-manager-actions">
+                                        <button class="primary-button primary-button--large" type="submit">Salvar tema</button>
+                                    </div>
+                                </form>
+                            </details>
                         </article>
                     <?php endforeach; ?>
                 </div>
