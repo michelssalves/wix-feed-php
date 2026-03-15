@@ -90,16 +90,16 @@ try {
                     <div class="editor-toolbar">
                         <div class="emoji-group" aria-label="Emocoes de condolencias">
                             <button class="toolbar-button" type="button" data-editor-emoji="&#128330;" title="Pomba">&#128330;</button>
-                            <button class="toolbar-button" type="button" data-editor-emoji="Ã¢Å“Å¾" title="Cruz">Ã¢Å“Å¾</button>
-                            <button class="toolbar-button" type="button" data-editor-emoji="Ã°Å¸â„¢Â" title="Oracao">Ã°Å¸â„¢Â</button>
-                            <button class="toolbar-button" type="button" data-editor-emoji="Ã°Å¸â€¢Â¯Ã¯Â¸Â" title="Vela">Ã°Å¸â€¢Â¯Ã¯Â¸Â</button>
-                            <button class="toolbar-button" type="button" data-editor-emoji="Ã°Å¸Å’Â¹" title="Flor">Ã°Å¸Å’Â¹</button>
-                            <button class="toolbar-button" type="button" data-editor-emoji="Ã°Å¸Â¥â‚¬" title="Flor murcha">Ã°Å¸Â¥â‚¬</button>
-                            <button class="toolbar-button" type="button" data-editor-emoji="Ã°Å¸Â¤Â" title="Coracao branco">Ã°Å¸Â¤Â</button>
-                            <button class="toolbar-button" type="button" data-editor-emoji="Ã¢ÂÂ¤Ã¯Â¸Â" title="Coracao vermelho">Ã¢ÂÂ¤Ã¯Â¸Â</button>
-                            <button class="toolbar-button" type="button" data-editor-emoji="Ã°Å¸â€“Â¤" title="Coracao preto">Ã°Å¸â€“Â¤</button>
-                            <button class="toolbar-button" type="button" data-editor-emoji="Ã°Å¸Â«â€š" title="Abraco">Ã°Å¸Â«â€š</button>
-                            <button class="toolbar-button" type="button" data-editor-emoji="Ã°Å¸ËœÂ¢" title="Choro">Ã°Å¸ËœÂ¢</button>
+                            <button class="toolbar-button" type="button" data-editor-emoji="&#10014;" title="Cruz">&#10014;</button>
+                            <button class="toolbar-button" type="button" data-editor-emoji="&#128591;" title="Oracao">&#128591;</button>
+                            <button class="toolbar-button" type="button" data-editor-emoji="&#128367;&#65039;" title="Vela">&#128367;&#65039;</button>
+                            <button class="toolbar-button" type="button" data-editor-emoji="&#127801;" title="Flor">&#127801;</button>
+                            <button class="toolbar-button" type="button" data-editor-emoji="&#129704;" title="Flor murcha">&#129704;</button>
+                            <button class="toolbar-button" type="button" data-editor-emoji="&#129293;" title="Coracao branco">&#129293;</button>
+                            <button class="toolbar-button" type="button" data-editor-emoji="&#10084;&#65039;" title="Coracao vermelho">&#10084;&#65039;</button>
+                            <button class="toolbar-button" type="button" data-editor-emoji="&#128420;" title="Coracao preto">&#128420;</button>
+                            <button class="toolbar-button" type="button" data-editor-emoji="&#129730;" title="Abraco">&#129730;</button>
+                            <button class="toolbar-button" type="button" data-editor-emoji="&#128546;" title="Choro">&#128546;</button>
                         </div>
                     </div>
                     <div id="post-editor" class="rich-editor" contenteditable="true" data-placeholder="Escreva aqui"></div>
