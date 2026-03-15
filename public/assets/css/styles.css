@@ -794,6 +794,8 @@ textarea:focus {
   align-items: center;
   gap: 10px;
   flex-wrap: wrap;
+  align-self: start;
+  padding-top: 31px;
 }
 
 .memorial-filter-icon-button {
@@ -2176,10 +2178,10 @@ textarea {
 
   .memorial-filter-form__actions {
     width: 100%;
+    padding-top: 0;
   }
 
-  .memorial-filter-form__actions .secondary-button,
-  .memorial-filter-form__actions .ghost-button {
+  .memorial-filter-form__actions .memorial-filter-icon-button {
     flex: 1 1 0;
     justify-content: center;
   }
