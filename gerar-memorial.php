@@ -128,6 +128,8 @@ try {
     $totalPages = max(1, (int) ceil($total / $perPage));
     $page = min($page, $totalPages);
     $offset = ($page - 1) * $perPage;
+    $resultStart = $total > 0 ? $offset + 1 : 0;
+    $resultEnd = min($offset + $perPage, $total);
     $memorials = $memorialService->latest($perPage, $offset);
 } catch (Throwable $throwable) {
     http_response_code(500);
@@ -414,18 +416,20 @@ try {
             </div>
 
             <?php if ($totalPages > 1): ?>
-                <div class="form-actions" style="justify-content:space-between;margin-top:18px">
-                    <div>
-                        <?php if ($page > 1): ?>
-                            <a class="secondary-button" href="?tab=memoriais&page=<?= $page - 1 ?>">Pagina anterior</a>
-                        <?php endif; ?>
+                <nav class="pagination-bar" aria-label="Paginacao dos memoriais">
+                    <span class="pagination-summary">Showing <?= (int) $resultStart ?> to <?= (int) $resultEnd ?> of <?= (int) $total ?> results</span>
+                    <div class="pagination-controls">
+                        <a class="pagination-button<?= $page <= 1 ? ' is-disabled' : '' ?>" href="<?= $page > 1 ? '?tab=memoriais&page=' . ($page - 1) : '#' ?>" aria-label="Pagina anterior"<?= $page <= 1 ? ' tabindex="-1" aria-disabled="true"' : '' ?>>
+                            <span aria-hidden="true">&lsaquo;</span>
+                        </a>
+                        <?php for ($i = 1; $i <= $totalPages; $i++): ?>
+                            <a class="pagination-button<?= $i === $page ? ' is-active' : '' ?>" href="?tab=memoriais&page=<?= $i ?>" aria-current="<?= $i === $page ? 'page' : 'false' ?>"><?= $i ?></a>
+                        <?php endfor; ?>
+                        <a class="pagination-button<?= $page >= $totalPages ? ' is-disabled' : '' ?>" href="<?= $page < $totalPages ? '?tab=memoriais&page=' . ($page + 1) : '#' ?>" aria-label="Proxima pagina"<?= $page >= $totalPages ? ' tabindex="-1" aria-disabled="true"' : '' ?>>
+                            <span aria-hidden="true">&rsaquo;</span>
+                        </a>
                     </div>
-                    <div>
-                        <?php if ($page < $totalPages): ?>
-                            <a class="secondary-button" href="?tab=memoriais&page=<?= $page + 1 ?>">Proxima pagina</a>
-                        <?php endif; ?>
-                    </div>
-                </div>
+                </nav>
             <?php endif; ?>
         <?php endif; ?>
     </section>
