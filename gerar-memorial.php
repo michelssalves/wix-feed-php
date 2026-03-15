@@ -115,6 +115,7 @@ try {
                     'cor_fontes_principais' => $_POST['new_cor_fontes_principais'] ?? null,
                     'cor_bordas' => $_POST['new_cor_bordas'] ?? null,
                     'cor_botao_enviar' => $_POST['new_cor_botao_enviar'] ?? null,
+                    'cor_texto_botao_enviar' => $_POST['new_cor_texto_botao_enviar'] ?? null,
                 ], $defaultTheme);
                 $themeId = $themeService->create($themePayload);
             }
@@ -255,6 +256,10 @@ try {
                                     <span>Cor do botao Enviar</span>
                                     <input type="color" name="new_cor_botao_enviar" value="<?= e($defaultTheme['cor_botao_enviar']) ?>">
                                 </label>
+                                <label class="field">
+                                    <span>Cor do texto do botao</span>
+                                    <input type="color" name="new_cor_texto_botao_enviar" value="<?= e($defaultTheme['cor_texto_botao_enviar']) ?>">
+                                </label>
                             </div>
                         </div>
 
@@ -270,7 +275,7 @@ try {
                                     <span class="theme-preview__eyebrow">Preview ao vivo</span>
                                     <strong class="theme-preview__title" id="new-theme-preview-name">Tema padrao</strong>
                                     <p class="theme-preview__text">Assim o mural sera exibido para esse memorial.</p>
-                                    <button type="button" class="theme-preview__button" id="new-theme-preview-button" style="<?= e('background:' . $defaultTheme['cor_botao_enviar']) ?>">Enviar</button>
+                                    <button type="button" class="theme-preview__button" id="new-theme-preview-button" style="<?= e('background:' . $defaultTheme['cor_botao_enviar'] . ';color:' . $defaultTheme['cor_texto_botao_enviar']) ?>">Enviar</button>
                                 </div>
                             </div>
                         </div>
@@ -338,6 +343,10 @@ try {
                                                 <span class="theme-swatch__color" style="background:<?= e($theme['cor_botao_enviar']) ?>"></span>
                                                 <span class="theme-swatch__label">Botao</span>
                                             </span>
+                                            <span class="theme-swatch">
+                                                <span class="theme-swatch__color" style="background:<?= e($theme['cor_texto_botao_enviar']) ?>"></span>
+                                                <span class="theme-swatch__label">Texto botao</span>
+                                            </span>
                                         </div>
                                     </div>
                                 </div>
@@ -370,6 +379,10 @@ try {
                                                 <span>Cor do botao Enviar</span>
                                                 <input type="color" name="cor_botao_enviar" value="<?= e($theme['cor_botao_enviar']) ?>">
                                             </label>
+                                            <label class="field">
+                                                <span>Cor do texto do botao</span>
+                                                <input type="color" name="cor_texto_botao_enviar" value="<?= e($theme['cor_texto_botao_enviar']) ?>">
+                                            </label>
                                         </div>
                                     </div>
 
@@ -379,7 +392,7 @@ try {
                                                 <span class="theme-preview__eyebrow">Preview aplicado</span>
                                                 <span class="theme-preview__title"><?= e($theme['nome']) ?></span>
                                                 <p class="theme-preview__text">Visual resumido do mural usando essa combinacao de cores.</p>
-                                                <button type="button" class="theme-preview__button" style="<?= e('background:' . $theme['cor_botao_enviar']) ?>">Enviar</button>
+                                                <button type="button" class="theme-preview__button" style="<?= e('background:' . $theme['cor_botao_enviar'] . ';color:' . $theme['cor_texto_botao_enviar']) ?>">Enviar</button>
                                             </div>
                                         </div>
                                     </aside>
@@ -514,10 +527,11 @@ try {
             themePreviewElements.panel.style.background = getValue('new_cor_fundo_formulario', '<?= e($defaultTheme['cor_fundo_formulario']) ?>');
             themePreviewElements.panel.style.borderColor = getValue('new_cor_bordas', '<?= e($defaultTheme['cor_bordas']) ?>');
             themePreviewElements.button.style.background = getValue('new_cor_botao_enviar', '<?= e($defaultTheme['cor_botao_enviar']) ?>');
+            themePreviewElements.button.style.color = getValue('new_cor_texto_botao_enviar', '<?= e($defaultTheme['cor_texto_botao_enviar']) ?>');
             themePreviewElements.name.textContent = themeNameInput && themeNameInput.value.trim() !== '' ? themeNameInput.value.trim() : 'Tema padrao';
         }
 
-        ['new_theme_name', 'new_cor_fundo_pagina', 'new_cor_fundo_formulario', 'new_cor_fontes_principais', 'new_cor_bordas', 'new_cor_botao_enviar'].forEach((name) => {
+        ['new_theme_name', 'new_cor_fundo_pagina', 'new_cor_fundo_formulario', 'new_cor_fontes_principais', 'new_cor_bordas', 'new_cor_botao_enviar', 'new_cor_texto_botao_enviar'].forEach((name) => {
             const input = document.querySelector(`[name="${name}"]`);
             if (input) {
                 input.addEventListener('input', syncThemePreview);

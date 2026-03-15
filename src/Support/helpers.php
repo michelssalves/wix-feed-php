@@ -167,6 +167,7 @@ function defaultThemeConfig(): array
         'cor_fontes_principais' => '#f4f0e7',
         'cor_bordas' => '#3f3a2c',
         'cor_botao_enviar' => '#e3c56e',
+        'cor_texto_botao_enviar' => '#231c09',
     ];
 }
 
@@ -191,6 +192,7 @@ function themePayloadFromRequest(array $payload, ?array $fallback = null): array
         'cor_fontes_principais' => normalizedThemeColor($payload['cor_fontes_principais'] ?? null, $defaults['cor_fontes_principais']),
         'cor_bordas' => normalizedThemeColor($payload['cor_bordas'] ?? null, $defaults['cor_bordas']),
         'cor_botao_enviar' => normalizedThemeColor($payload['cor_botao_enviar'] ?? null, $defaults['cor_botao_enviar']),
+        'cor_texto_botao_enviar' => normalizedThemeColor($payload['cor_texto_botao_enviar'] ?? null, $defaults['cor_texto_botao_enviar']),
     ];
 }
 
@@ -202,6 +204,7 @@ function memorialThemeCssVariables(?array $theme): string
     $text = normalizedThemeColor($theme['cor_fontes_principais'] ?? null, '#F4F0E7');
     $border = normalizedThemeColor($theme['cor_bordas'] ?? null, '#3F3A2C');
     $button = normalizedThemeColor($theme['cor_botao_enviar'] ?? null, '#E3C56E');
+    $buttonText = normalizedThemeColor($theme['cor_texto_botao_enviar'] ?? null, '#231C09');
 
     return implode("\n", [
         ':root {',
@@ -210,6 +213,7 @@ function memorialThemeCssVariables(?array $theme): string
         '  --theme-text: ' . $text . ';',
         '  --theme-border: ' . $border . ';',
         '  --theme-submit-bg: ' . $button . ';',
+        '  --theme-submit-text: ' . $buttonText . ';',
         '}',
     ]);
 }

@@ -15,7 +15,7 @@ class ThemeService
     public function all(): array
     {
         return $this->pdo->query(
-            'SELECT id, nome, cor_fundo_pagina, cor_fundo_formulario, cor_fontes_principais, cor_bordas, cor_botao_enviar, criado_em, atualizado_em
+            'SELECT id, nome, cor_fundo_pagina, cor_fundo_formulario, cor_fontes_principais, cor_bordas, cor_botao_enviar, cor_texto_botao_enviar, criado_em, atualizado_em
              FROM themes
              ORDER BY nome ASC, id DESC'
         )->fetchAll();
@@ -24,7 +24,7 @@ class ThemeService
     public function findById(int $id): ?array
     {
         $statement = $this->pdo->prepare(
-            'SELECT id, nome, cor_fundo_pagina, cor_fundo_formulario, cor_fontes_principais, cor_bordas, cor_botao_enviar, criado_em, atualizado_em
+            'SELECT id, nome, cor_fundo_pagina, cor_fundo_formulario, cor_fontes_principais, cor_bordas, cor_botao_enviar, cor_texto_botao_enviar, criado_em, atualizado_em
              FROM themes
              WHERE id = :id
              LIMIT 1'
@@ -38,8 +38,8 @@ class ThemeService
     public function create(array $data): int
     {
         $statement = $this->pdo->prepare(
-            'INSERT INTO themes (nome, cor_fundo_pagina, cor_fundo_formulario, cor_fontes_principais, cor_bordas, cor_botao_enviar, criado_em, atualizado_em)
-             VALUES (:nome, :cor_fundo_pagina, :cor_fundo_formulario, :cor_fontes_principais, :cor_bordas, :cor_botao_enviar, NOW(), NOW())'
+            'INSERT INTO themes (nome, cor_fundo_pagina, cor_fundo_formulario, cor_fontes_principais, cor_bordas, cor_botao_enviar, cor_texto_botao_enviar, criado_em, atualizado_em)
+             VALUES (:nome, :cor_fundo_pagina, :cor_fundo_formulario, :cor_fontes_principais, :cor_bordas, :cor_botao_enviar, :cor_texto_botao_enviar, NOW(), NOW())'
         );
         $statement->execute($data);
 
@@ -56,6 +56,7 @@ class ThemeService
                  cor_fontes_principais = :cor_fontes_principais,
                  cor_bordas = :cor_bordas,
                  cor_botao_enviar = :cor_botao_enviar,
+                 cor_texto_botao_enviar = :cor_texto_botao_enviar,
                  atualizado_em = NOW()
              WHERE id = :id'
         );

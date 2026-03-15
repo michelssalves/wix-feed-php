@@ -12,6 +12,7 @@
   --theme-text: #f4f0e7;
   --theme-border: #3f3a2c;
   --theme-submit-bg: #e3c56e;
+  --theme-submit-text: #231c09;
 }
 
 * {
@@ -459,7 +460,7 @@ textarea:focus {
   justify-self: start;
   border: none;
   padding: 12px 18px;
-  color: #231c09;
+  color: var(--theme-submit-text);
   font-weight: 700;
   cursor: default;
 }
@@ -883,7 +884,7 @@ textarea {
 
 .primary-button {
   background: var(--theme-submit-bg);
-  color: #231c09;
+  color: var(--theme-submit-text);
   font-weight: 700;
 }
 

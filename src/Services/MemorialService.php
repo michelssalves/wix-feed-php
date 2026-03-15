@@ -74,7 +74,8 @@ class MemorialService
                     t.cor_fundo_formulario,
                     t.cor_fontes_principais,
                     t.cor_bordas,
-                    t.cor_botao_enviar
+                    t.cor_botao_enviar,
+                    t.cor_texto_botao_enviar
              FROM memorials m
              LEFT JOIN themes t ON t.id = m.theme_id
              WHERE m.memorial_key = :memorial_key
