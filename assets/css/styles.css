@@ -1215,6 +1215,9 @@ textarea {
   background: #efefef;
   padding: 16px;
   outline: none;
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow-wrap: anywhere;
 }
 
 .rich-editor:empty::before {
@@ -1562,12 +1565,17 @@ textarea {
   color: #d6d2db;
   line-height: 1.58;
   font-size: 0.97rem;
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow-wrap: anywhere;
 }
 
 .post-rich-text p,
 .post-rich-text ul,
 .post-rich-text ol {
   margin: 0 0 12px;
+  word-break: break-word;
+  overflow-wrap: anywhere;
 }
 
 .post-rich-text p:last-child,
