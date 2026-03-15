@@ -29,7 +29,7 @@ const elements = {
   logoutButton: document.getElementById('logout-button'),
 };
 
-let quillEditor = null;
+let savedEditorRange = null;
 
 function showMessage(message, type = 'success') {
   elements.flash.textContent = message;
@@ -83,11 +83,6 @@ function plainTextFromHtml(html) {
   return (temp.textContent || temp.innerText || '').trim();
 }
 
-function normalizeEditorHtml(html) {
-  const clean = String(html || '').trim();
-  return clean === '<p><br></p>' ? '' : clean;
-}
-
 async function request(url, options = {}) {
   const response = await fetch(url, {
     credentials: 'include',
@@ -127,13 +122,8 @@ function syncSessionUI() {
 
 function syncMemorialState() {
   const disabled = !state.memorialKey || !state.memorialExists;
-  if (quillEditor) {
-    quillEditor.enable(!disabled);
-    elements.postEditor.classList.toggle('is-disabled', disabled);
-  } else {
-    elements.postEditor.setAttribute('contenteditable', disabled ? 'false' : 'true');
-    elements.postEditor.classList.toggle('is-disabled', disabled);
-  }
+  elements.postEditor.setAttribute('contenteditable', disabled ? 'false' : 'true');
+  elements.postEditor.classList.toggle('is-disabled', disabled);
   elements.postImageTrigger.disabled = disabled;
   elements.postSubmitButton.disabled = disabled;
 }
@@ -536,43 +526,74 @@ function renderGoogleButtons() {
 }
 
 function syncEditorInput() {
-  const html = quillEditor ? normalizeEditorHtml(quillEditor.root.innerHTML) : elements.postEditor.innerHTML.trim();
+  const html = elements.postEditor.innerHTML.trim();
   elements.postText.value = html;
 }
 
-function initQuillEditor() {
-  if (!elements.postEditor || !window.Quill) {
+function isSelectionInsideEditor() {
+  const selection = window.getSelection();
+  if (!selection || selection.rangeCount === 0) {
+    return false;
+  }
+
+  const range = selection.getRangeAt(0);
+  return elements.postEditor.contains(range.commonAncestorContainer);
+}
+
+function saveEditorSelection() {
+  const selection = window.getSelection();
+  if (!selection || selection.rangeCount === 0 || !isSelectionInsideEditor()) {
     return;
   }
 
-  quillEditor = new window.Quill('#post-editor', {
-    theme: 'snow',
-    placeholder: 'Escreva aqui',
-    modules: {
-      toolbar: '#quill-toolbar',
-      history: {
-        delay: 500,
-        maxStack: 100,
-        userOnly: true,
-      },
-    },
-  });
-
-  quillEditor.on('text-change', syncEditorInput);
-
-  document.querySelectorAll('[data-quill-emoji]').forEach((button) => {
-    button.addEventListener('click', () => {
-      const emoji = button.getAttribute('data-quill-emoji') || '';
-      const selection = quillEditor.getSelection(true);
-      const index = selection ? selection.index : quillEditor.getLength();
-      quillEditor.insertText(index, emoji, 'user');
-      quillEditor.setSelection(index + emoji.length, 0, 'user');
-      syncEditorInput();
-    });
-  });
-
-  syncEditorInput();
+  savedEditorRange = selection.getRangeAt(0).cloneRange();
 }
+
+function restoreEditorSelection() {
+  if (!savedEditorRange) {
+    return;
+  }
+
+  const selection = window.getSelection();
+  if (!selection) {
+    return;
+  }
+
+  selection.removeAllRanges();
+  selection.addRange(savedEditorRange);
+}
+
+document.querySelectorAll('[data-editor-command]').forEach((button) => {
+  button.addEventListener('mousedown', (event) => {
+    event.preventDefault();
+    saveEditorSelection();
+  });
+
+  button.addEventListener('click', () => {
+    const command = button.getAttribute('data-editor-command');
+    elements.postEditor.focus();
+    restoreEditorSelection();
+    document.execCommand(command, false);
+    saveEditorSelection();
+    syncEditorInput();
+  });
+});
+
+document.querySelectorAll('[data-editor-emoji]').forEach((button) => {
+  button.addEventListener('mousedown', (event) => {
+    event.preventDefault();
+    saveEditorSelection();
+  });
+
+  button.addEventListener('click', () => {
+    const emoji = button.getAttribute('data-editor-emoji') || '';
+    elements.postEditor.focus();
+    restoreEditorSelection();
+    document.execCommand('insertText', false, emoji);
+    saveEditorSelection();
+    syncEditorInput();
+  });
+});
 
 elements.postImageTrigger.addEventListener('click', (event) => {
   event.preventDefault();
@@ -593,10 +614,11 @@ elements.postImageTrigger.addEventListener('click', (event) => {
   elements.postImage.click();
 });
 
-if (elements.postEditor) {
-  elements.postEditor.addEventListener('input', syncEditorInput);
-  elements.postEditor.addEventListener('blur', syncEditorInput);
-}
+elements.postEditor.addEventListener('input', syncEditorInput);
+elements.postEditor.addEventListener('input', saveEditorSelection);
+elements.postEditor.addEventListener('keyup', saveEditorSelection);
+elements.postEditor.addEventListener('mouseup', saveEditorSelection);
+elements.postEditor.addEventListener('blur', syncEditorInput);
 
 elements.postImage.addEventListener('change', () => {
   const file = elements.postImage.files?.[0];
@@ -620,11 +642,7 @@ elements.postForm.addEventListener('submit', async (event) => {
     });
     showMessage('Postagem criada com sucesso.');
     elements.postText.value = '';
-    if (quillEditor) {
-      quillEditor.setContents([]);
-    } else {
-      elements.postEditor.innerHTML = '';
-    }
+    elements.postEditor.innerHTML = '';
     elements.postImage.value = '';
     elements.selectedFileName.classList.remove('is-active');
     elements.attachmentStatusText.textContent = 'Nenhum anexo';
@@ -668,9 +686,7 @@ window.addEventListener('load', () => {
     document.body.classList.add('is-embedded');
   }
 
-  initQuillEditor();
   syncSessionUI();
-  syncMemorialState();
 
   if (!window.APP_CONFIG.googleEnabled) {
     document.querySelectorAll('.google-login-slot').forEach((slot) => {
