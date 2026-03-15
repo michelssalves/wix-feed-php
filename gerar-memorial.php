@@ -159,8 +159,6 @@ try {
             <div class="section-divider"></div>
             <p class="panel-eyebrow">Painel administrativo</p>
             <h1 class="panel-title">Gerar Memorial Key</h1>
-            <p class="panel-intro">Organize os dados do memorial, escolha um tema reutilizavel e acompanhe o preview antes de gerar a chave final.</p>
-
             <?php if ($error !== ''): ?>
                 <div class="flash-message is-error"><?= e($error) ?></div>
             <?php endif; ?>
